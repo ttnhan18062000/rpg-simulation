@@ -1,0 +1,2 @@
+class CharacterInventory:
+    pass

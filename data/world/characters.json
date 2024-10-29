@@ -1,0 +1,68 @@
+{
+    "0": {
+        "pos": [1, 1],
+        "name": "Kari",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "1": {
+        "pos": [5, 5],
+        "name": "Tare",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "2": {
+        "pos": [6, 8],
+        "name": "Ezt1",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "3": {
+        "pos": [4, 3],
+        "name": "Ezt2",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "4": {
+        "pos": [3, 4],
+        "name": "Ezt3",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "5": {
+        "pos": [2, 7],
+        "name": "Ezt4",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "6": {
+        "pos": [7, 2],
+        "name": "Ezt5",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "7": {
+        "pos": [9, 9],
+        "name": "Ezt6",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "8": {
+        "pos": [2, 5],
+        "name": "Ezt7",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "9": {
+        "pos": [1, 5],
+        "name": "Ezt8",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    },
+    "10": {
+        "pos": [5, 6],
+        "name": "Ezt9",
+        "stats": "",
+        "img": "data/sprites/character3.png"
+    }
+}
