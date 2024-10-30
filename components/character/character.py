@@ -35,6 +35,8 @@ class Character(GameObject):
         tile = store.get(EntityType.TILE, self.tile_id)
         tile.add_character_id(character_info.id)
 
+        self.is_just_changed_location = True
+
     def get_info(self):
         return self.character_info
 
@@ -67,4 +69,11 @@ class Character(GameObject):
 
     def do_action(self):
         next_action = self.character_action.get_next_action()
-        next_action.execute(self)
+        if self.is_just_changed_location == False:
+            self.is_just_changed_location = next_action.execute(self)
+
+    def should_redraw(self):
+        return self.is_just_changed_location
+
+    def reset_redraw_status(self):
+        self.is_just_changed_location = False

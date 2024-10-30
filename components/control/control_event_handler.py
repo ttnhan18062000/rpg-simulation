@@ -29,9 +29,10 @@ class ControlEventHandler:
                 self.dragging = True
                 self.holding_timestamp = time.time()
                 self.drag_start_pos = event.pos
+                return True
             elif event.button == 1:  # Left mouse button (for cell click, no drag)
                 # Click
-                pass
+                return False
             elif event.button == 4:  # Scroll up for zoom in
                 new_cell_size = min(
                     display_setting.cell_size + 5, display_setting.max_cell_size
@@ -54,6 +55,7 @@ class ControlEventHandler:
 
                 display_setting.cell_size = new_cell_size
                 display_setting.map_size = new_cell_size * display_setting.max_n_cell
+                return True
             elif event.button == 5:  # Scroll down for zoom out
                 new_cell_size = max(
                     display_setting.cell_size - 5, display_setting.min_cell_size
@@ -76,6 +78,7 @@ class ControlEventHandler:
 
                 display_setting.cell_size = new_cell_size
                 display_setting.map_size = new_cell_size * display_setting.max_n_cell
+                return True
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:  # Stop dragging
                 self.dragging = False
@@ -89,7 +92,7 @@ class ControlEventHandler:
                     delta_distance > self.dragging_distance_threshold
                 ):
                     # Actual dragging
-                    pass
+                    return True
         elif event.type == pygame.MOUSEMOTION:
             if self.dragging:  # If dragging, update offsets
                 mouse_x, mouse_y = event.pos
@@ -110,3 +113,4 @@ class ControlEventHandler:
                     ),
                 )
                 self.drag_start_pos = event.pos  # Update the drag start point
+                return True

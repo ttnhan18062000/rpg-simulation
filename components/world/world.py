@@ -21,23 +21,26 @@ class World:
         return self.grid.is_moveable_tile(pos)
 
     def draw_world(
-        self, surface: pygame.Surface, font, display_setting: DisplaySetting, offset
+        self,
+        surface: pygame.Surface,
+        font,
+        display_setting: DisplaySetting,
+        offset,
+        is_display_changed: bool,
     ):
-        cell_size = display_setting.cell_size
-
-        # Clear screen
-        surface.fill((0, 0, 0))
 
         store = get_store()
+        if is_display_changed:
+            # Clear screen
+            surface.fill((0, 0, 0))
 
         # Draw grid cells
+        cell_size = display_setting.cell_size
         grid = store.get(EntityType.GRID, 0)
         # Draw only screen tiles
         offset_x, offset_y = offset
         cell_size = display_setting.cell_size
         window_width, window_height = display_setting.window_size
-        map_width = display_setting.map_size
-        map_height = display_setting.map_size
         start_x = offset_x // cell_size * cell_size
         start_y = offset_y // cell_size * cell_size
         for x in range(start_x, start_x + window_width + cell_size, cell_size):
@@ -49,12 +52,14 @@ class World:
                     and 0 <= cell_y < display_setting.max_n_cell
                 ):
                     tile = store.get(EntityType.TILE, grid.tiles[cell_x][cell_y])
-                    cell_image = tile.image
-                    cell_image = pygame.transform.scale(
-                        cell_image, (cell_size, cell_size)
-                    )
-                    # Draw cell image at position
-                    surface.blit(cell_image, (x - offset_x, y - offset_y))
+                    if is_display_changed or tile.should_redraw():
+                        cell_image = tile.image
+                        cell_image = pygame.transform.scale(
+                            cell_image, (cell_size, cell_size)
+                        )
+                        # Draw cell image at position
+                        surface.blit(cell_image, (x - offset_x, y - offset_y))
+                        tile.reset_redraw_status()
 
         # Draw character icons on top of cells
         all_characters = store.get_all(EntityType.CHARACTER)
@@ -67,21 +72,24 @@ class World:
                 start_x <= x <= start_x + window_width + cell_size
                 and start_y <= y <= start_y + window_height + cell_size
             ) and ((x, y) not in drawn_characters):
-                drawn_characters[(x, y)] = 1
-                # Blit character icon on top of the tile
-                character_icon = pygame.transform.scale(
-                    character.img, (cell_size, cell_size)
-                )
-                surface.blit(character_icon, (x - offset_x, y - offset_y))
+                if is_display_changed or character.should_redraw():
+                    drawn_characters[(x, y)] = 1
+                    # Blit character icon on top of the tile
+                    character_icon = pygame.transform.scale(
+                        character.img, (cell_size, cell_size)
+                    )
+                    surface.blit(character_icon, (x - offset_x, y - offset_y))
 
-                # Write number of character on the tile
-                tile_id = store.get(EntityType.GRID, 0).tiles[character.pos.x][
-                    character.pos.y
-                ]
-                tile = store.get(EntityType.TILE, tile_id)
-                n_of_chars = len(tile.character_ids)
-                text_surface = font.render(str(n_of_chars), True, (255, 0, 0))
-                surface.blit(text_surface, (x - offset_x, y - offset_y))
+                    # Write number of character on the tile
+                    tile_id = store.get(EntityType.GRID, 0).tiles[character.pos.x][
+                        character.pos.y
+                    ]
+                    tile = store.get(EntityType.TILE, tile_id)
+                    n_of_chars = len(tile.character_ids)
+                    text_surface = font.render(str(n_of_chars), True, (255, 0, 0))
+                    surface.blit(text_surface, (x - offset_x, y - offset_y))
+
+                    character.reset_redraw_status()
 
     def update(self):
         for generator in self.generators:

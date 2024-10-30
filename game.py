@@ -24,6 +24,7 @@ class Game:
         self.max_n_cell = 30
         self.display_setting = DisplaySetting(self.max_n_cell)
         self.control_event_handler = ControlEventHandler()
+        self.is_display_changed = True
         self.surface = None
         self.world = None
         self.store = get_store()
@@ -50,11 +51,22 @@ class Game:
 
     def initialize_world(self):
         grid_data = generate_voronoi_map(self.max_n_cell, self.max_n_cell)
+        print(grid_data)
         generators = self.initialize_generators(grid_data)
         self.world = World(grid_data, generators)
 
-    def draw(self, offset):
-        self.world.draw_world(self.surface, self.font, self.display_setting, offset)
+    def draw(self):
+        self.world.draw_world(
+            self.surface,
+            self.font,
+            self.display_setting,
+            (
+                self.control_event_handler.offset_x,
+                self.control_event_handler.offset_y,
+            ),
+            self.is_display_changed,
+        )
+        self.is_display_changed = False
 
     def update(self):
         self.fps_check.check()
@@ -66,19 +78,23 @@ class Game:
                 if event.type == pygame.QUIT:
                     self.running = False
                 else:
-                    self.control_event_handler.handle(event, self.display_setting)
+                    is_display_changed = self.control_event_handler.handle(
+                        event, self.display_setting
+                    )
+                    if (
+                        is_display_changed and self.is_display_changed == False
+                    ) or self.is_display_changed:
+                        self.is_display_changed = True
+                    else:
+                        self.is_display_changed = False
 
             self.update()
 
-            self.draw(
-                (
-                    self.control_event_handler.offset_x,
-                    self.control_event_handler.offset_y,
-                )
-            )
+            self.draw()
 
             # Update display
-            pygame.display.flip()
+            # pygame.display.flip()
+            pygame.display.update()
 
         # Quit Pygame
         pygame.quit()

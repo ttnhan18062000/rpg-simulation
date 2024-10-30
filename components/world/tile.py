@@ -9,6 +9,7 @@ class Tile:
         Tile.id_counter += 1
         self.image = None
         self.character_ids = {}
+        self.is_all_characters_just_move_out = False
 
     def is_obstacle(self):
         return False
@@ -18,9 +19,18 @@ class Tile:
 
     def add_character_id(self, character_id):
         self.character_ids[character_id] = 1
+        self.is_all_characters_just_move_out = False
 
     def remove_character_id(self, character_id):
         self.character_ids.pop(character_id)
+        if len(self.character_ids) == 0:
+            self.is_all_characters_just_move_out = True
+
+    def should_redraw(self):
+        return self.is_all_characters_just_move_out
+
+    def reset_redraw_status(self):
+        self.is_all_characters_just_move_out = False
 
 
 class GroundTile(Tile):

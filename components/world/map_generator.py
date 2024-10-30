@@ -48,7 +48,7 @@ def generate_voronoi_map(width, height):
             # Find the closest seed to this cell
             closest_seed = min(seeds, key=lambda s: abs(s[0] - x) + abs(s[1] - y))
             # Assign the cell the type of the closest seed
-            map_matrix[y, x] = closest_seed[2]
+            map_matrix[x, y] = closest_seed[2]
 
     for x, y, type in seeds:
         map_matrix[x][y] = type + 3
