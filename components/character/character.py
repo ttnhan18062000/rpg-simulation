@@ -1,7 +1,11 @@
 from components.common.point import Point
 from components.common.game_object import GameObject
 from components.character.character_info import CharacterInfo
-from components.character.character_action import CharacterAction
+from components.character.character_action import (
+    CharacterAction,
+    BasicCharacterAction,
+    CombatCharacterAction,
+)
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_class import CharacterClass
 from components.character.character_level import CharacterLevel
@@ -24,7 +28,7 @@ class Character(GameObject):
         self.pos = pos
         self.img = img
         self.character_info = character_info
-        self.character_action = CharacterAction()
+        self.character_action = BasicCharacterAction()
         self.character_stats = character_stats
         self.character_class = character_class
         self.level = CharacterLevel(character_class.class_level, level)
@@ -68,12 +72,23 @@ class Character(GameObject):
         logger.debug(f"f{self.get_info()} has leveled up: {self.character_stats}")
 
     def do_action(self):
-        next_action = self.character_action.get_next_action()
         if self.is_just_changed_location == False:
-            self.is_just_changed_location = next_action.execute(self)
+            self.is_just_changed_location = self.character_action.do_action(self)
 
     def should_redraw(self):
         return self.is_just_changed_location
 
     def reset_redraw_status(self):
         self.is_just_changed_location = False
+
+    def exit_combat(self):
+        self.character_action = BasicCharacterAction()
+        tile = get_store().get(EntityType.TILE, self.tile_id)
+        tile.change_tile_combat_status(False)
+
+    def enter_combat(self, target_character_ids):
+        self.character_action = CombatCharacterAction(
+            **{"target_character_ids": target_character_ids}
+        )
+        tile = get_store().get(EntityType.TILE, self.tile_id)
+        tile.change_tile_combat_status(True)

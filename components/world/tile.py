@@ -9,28 +9,37 @@ class Tile:
         Tile.id_counter += 1
         self.image = None
         self.character_ids = {}
-        self.is_all_characters_just_move_out = False
+        self.is_tile_display_changed = False
+        self.is_combat = False
 
     def is_obstacle(self):
         return False
+
+    def is_combat_happen(self):
+        return self.is_combat
+
+    def change_tile_combat_status(self, is_combat: bool):
+        if self.is_combat != is_combat:
+            self.is_tile_display_changed = True
+        self.is_combat = is_combat
 
     def get_character_ids(self):
         return self.character_ids
 
     def add_character_id(self, character_id):
         self.character_ids[character_id] = 1
-        self.is_all_characters_just_move_out = False
+        self.is_tile_display_changed = False
 
     def remove_character_id(self, character_id):
         self.character_ids.pop(character_id)
         if len(self.character_ids) == 0:
-            self.is_all_characters_just_move_out = True
+            self.is_tile_display_changed = True
 
     def should_redraw(self):
-        return self.is_all_characters_just_move_out
+        return self.is_tile_display_changed
 
     def reset_redraw_status(self):
-        self.is_all_characters_just_move_out = False
+        self.is_tile_display_changed = False
 
 
 class GroundTile(Tile):

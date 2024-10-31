@@ -3,6 +3,7 @@ import random
 from components.world.store import get_store, EntityType
 from components.common.point import Point
 from components.action.event import CombatEvent, TrainingEvent
+from components.character.character_stat import StatDefinition
 from data.logs.logger import logger
 
 
@@ -12,9 +13,9 @@ class Action:
     def do_action(self, character):
         pass
 
-    def execute(self, character):
+    def execute(self, character, **kwargs):
         logger.debug(f"{character.get_info()} do {self.action_name}")
-        self.do_action(character)
+        return self.do_action(character, **kwargs)
 
 
 class Move(Action):
@@ -28,7 +29,7 @@ class Move(Action):
             return False
         return tile
 
-    def do_action(self, character):
+    def do_action(self, character, **kwargs):
         direction = random.randint(0, 3)
         next_move = Point(0, 0)
         if direction == 0:
@@ -59,22 +60,75 @@ class Move(Action):
             ]
             for other_character in other_characters:
                 if character.is_hostile_with(other_character):
-                    CombatEvent().execute(character, other_character)
-                    return
+                    # CombatEvent().execute(character, other_character)
+                    character.enter_combat([other_character.get_info().id])
+                    other_character.enter_combat([character.get_info().id])
+                    # Create a combat event to manage all the characters from Human/Demon
+                    # Dead characters remove from the event -> update all targets -> won't kill the already dead characters
+                    return True
 
         else:
             self.do_action(character)
+
+        return True
 
 
 class Interact(Action):
     action_name = "Interact"
 
-    def do_action(self, character):
-        pass
+    def do_action(self, character, **kwargs):
+        return False
 
 
 class Standby(Action):
     action_name = "Standby"
 
-    def do_action(self, character):
+    def do_action(self, character, **kwargs):
         TrainingEvent().execute(character)
+        return False
+
+
+class Fight(Action):
+    action_name = "Fight"
+
+    def do_action(self, character, **kwargs):
+        store = get_store()
+        target_character_ids = kwargs.get("target_character_ids")
+        # TODO: smarter target selection
+        target_character_id = random.choice(target_character_ids)
+        target_character = store.get(EntityType.CHARACTER, target_character_id)
+        target_character.character_stats.update_stat(
+            StatDefinition.HEALTH,
+            -character.character_stats.get_stat(StatDefinition.POWER).value,
+        )
+        logger.debug(f"{character.get_info()} hit {target_character.get_info()}")
+        if not target_character.is_alive():
+            logger.debug(f"{character.get_info()} killed {target_character.get_info()}")
+            is_level_up = character.level.add_exp(
+                target_character.level.class_level.get_next_level_required_exp(
+                    target_character.level.current_level
+                )
+            )
+            if is_level_up:
+                character.level_up()
+
+            # Remove dead character corpse
+            target_character.set_status("dead")
+            tile_id = target_character.tile_id
+            tile = store.get(EntityType.TILE, tile_id)
+            tile.remove_character_id(target_character.get_info().id)
+
+            target_character_ids.remove(target_character_id)
+
+            if len(target_character_ids) == 0:
+                character.exit_combat()
+                return True
+
+        return False
+
+
+class Escape(Action):
+    action_name = "Escape"
+
+    def do_action(self, character, **kwargs):
+        return False
