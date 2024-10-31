@@ -24,7 +24,7 @@ class FPSCheck:
         dead_count = {}
         alive_count = {}
         for character in all_characters:
-            character_class = character.get_character_class()
+            character_class = character.get_faction()
             if character.is_alive():
                 if character_class not in alive_count:
                     alive_count[character_class] = 1

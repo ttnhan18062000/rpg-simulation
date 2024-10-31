@@ -56,12 +56,13 @@ class World:
                         cell_image = tile.image
                         if tile.is_combat_happen():
                             cell_image = pygame.image.load("data/sprites/combat.png")
+                        else:
+                            tile.reset_redraw_status()
                         cell_image = pygame.transform.scale(
                             cell_image, (cell_size, cell_size)
                         )
                         # Draw cell image at position
                         surface.blit(cell_image, (x - offset_x, y - offset_y))
-                        tile.reset_redraw_status()
 
         # Draw character icons on top of cells
         all_characters = store.get_all(EntityType.CHARACTER)

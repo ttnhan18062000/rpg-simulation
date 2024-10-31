@@ -47,12 +47,15 @@ class Character(GameObject):
     def get_stats(self):
         return self.character_stats
 
-    def get_character_class(self):
+    def get_faction(self):
         return self.character_class.__class__.__name__
+
+    def get_hostile_factions(self):
+        return self.character_class.get_hostile_factions()
 
     def is_alive(self):
         return (
-            self.character_stats.get_stat(StatDefinition.HEALTH).value > 0
+            self.character_stats.get_stat(StatDefinition.CURRENT_HEALTH).value > 0
             and not self.is_dead
         )
 
@@ -83,12 +86,8 @@ class Character(GameObject):
 
     def exit_combat(self):
         self.character_action = BasicCharacterAction()
-        tile = get_store().get(EntityType.TILE, self.tile_id)
-        tile.change_tile_combat_status(False)
 
-    def enter_combat(self, target_character_ids):
+    def enter_combat(self, combat_event_id, target_faction):
         self.character_action = CombatCharacterAction(
-            **{"target_character_ids": target_character_ids}
+            **{"combat_event_id": combat_event_id, "target_faction": target_faction}
         )
-        tile = get_store().get(EntityType.TILE, self.tile_id)
-        tile.change_tile_combat_status(True)

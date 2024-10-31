@@ -37,7 +37,11 @@ class HumanGenerator(CharacterGenerator):
 
     def spawn(self):
         stat = CharacterStat()
-        stat.add_stat(StatDefinition.HEALTH, random.randint(50, 150))
+        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(50, 150))
+        stat.add_stat(
+            StatDefinition.CURRENT_HEALTH,
+            stat.get_stat(StatDefinition.MAX_HEALTH).value,
+        )
         stat.add_stat(StatDefinition.POWER, random.randint(10, 20))
         stat.add_stat(StatDefinition.SPEED, random.randint(80, 120))
         new_human = Character(
@@ -58,7 +62,11 @@ class DemonGenerator(CharacterGenerator):
 
     def spawn(self):
         stat = CharacterStat()
-        stat.add_stat(StatDefinition.HEALTH, random.randint(100, 200))
+        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(150, 250))
+        stat.add_stat(
+            StatDefinition.CURRENT_HEALTH,
+            stat.get_stat(StatDefinition.MAX_HEALTH).value,
+        )
         stat.add_stat(StatDefinition.POWER, random.randint(15, 25))
         stat.add_stat(StatDefinition.SPEED, random.randint(30, 60))
         new_demon = Character(

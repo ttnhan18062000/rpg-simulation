@@ -5,13 +5,15 @@ from components.character.stat import NumericalStat, CategoricalStat, Stat
 
 
 class StatDefinition(Enum):
-    HEALTH = 1
-    POWER = 2
-    SPEED = 3
+    MAX_HEALTH = 1
+    CURRENT_HEALTH = 2
+    POWER = 3
+    SPEED = 4
 
 
 stat_class = {
-    StatDefinition.HEALTH: NumericalStat,
+    StatDefinition.MAX_HEALTH: NumericalStat,
+    StatDefinition.CURRENT_HEALTH: NumericalStat,
     StatDefinition.POWER: NumericalStat,
     StatDefinition.SPEED: NumericalStat,
 }
@@ -38,6 +40,8 @@ class CharacterStat:
 
     def update_stat(self, stat_def: StatDefinition, value):
         if stat_def in self.stats_list:
+            if stat_def == StatDefinition.CURRENT_HEALTH:
+                value = min(self.stats_list[StatDefinition.MAX_HEALTH].value, value)
             if not isinstance(value, Stat):
                 delta_stat = CharacterStat.create_stat(stat_def, value)
             else:

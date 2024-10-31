@@ -1,5 +1,7 @@
 import pygame
 
+from components.action.event import EventType
+
 
 class Tile:
     id_counter = 1
@@ -11,6 +13,7 @@ class Tile:
         self.character_ids = {}
         self.is_tile_display_changed = False
         self.is_combat = False
+        self.event_dict_ids = {}
 
     def is_obstacle(self):
         return False
@@ -18,10 +21,20 @@ class Tile:
     def is_combat_happen(self):
         return self.is_combat
 
-    def change_tile_combat_status(self, is_combat: bool):
+    def get_event(self, event_type: EventType):
+        if event_type in self.event_dict_ids:
+            return self.event_dict_ids[event_type]
+        return None
+
+    def set_tile_combat_status(self, is_combat: bool, combat_event_id=None):
         if self.is_combat != is_combat:
             self.is_tile_display_changed = True
         self.is_combat = is_combat
+
+        if self.is_combat:
+            self.event_dict_ids[EventType.COMBAT] = combat_event_id
+        else:
+            self.event_dict_ids.pop(EventType.COMBAT)
 
     def get_character_ids(self):
         return self.character_ids

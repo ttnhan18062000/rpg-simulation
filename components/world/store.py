@@ -6,6 +6,7 @@ class EntityType(Enum):
     ITEM = "item"
     TILE = "tile"
     GRID = "grid"
+    EVENT = "event"
 
 
 class Store:
