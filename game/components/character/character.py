@@ -91,3 +91,32 @@ class Character(GameObject):
         self.character_action = CombatCharacterAction(
             **{"combat_event_id": combat_event_id, "target_faction": target_faction}
         )
+
+    def get_character_action_type(self):
+        return self.character_action.__class__.__name__
+
+    def to_dict(self):
+        return {
+            "id": self.get_info().id,
+            "type": "character",
+            "info": str(self.get_info()),
+            "faction": self.get_faction(),
+            "is_alive": self.is_alive(),
+            "stats": {
+                "current_health": self.character_stats.get_stat(
+                    StatDefinition.CURRENT_HEALTH
+                ).value,
+                "max_health": self.character_stats.get_stat(
+                    StatDefinition.MAX_HEALTH
+                ).value,
+                "power": self.character_stats.get_stat(StatDefinition.POWER).value,
+                "speed": self.character_stats.get_stat(StatDefinition.SPEED).value,
+            },
+            "level": {
+                "current_level": self.level.current_level,
+                "current_exp": self.level.current_exp,
+                "next_level_exp": self.level.next_level_required_exp,
+            },
+            "tile_id": self.tile_id,
+            "character_action": self.get_character_action_type(),
+        }

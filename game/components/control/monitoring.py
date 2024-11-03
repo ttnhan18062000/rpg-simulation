@@ -1,22 +1,36 @@
 import time
 
 from components.world.store import get_store, EntityType
-
+from components.database.producer import produce_messages
 from data.logs.logger import logger
 
 
-class FPSCheck:
+class Monitoring:
     def __init__(self) -> None:
-        self.timestamp = time.time()
+        self.timestamp_fps = time.time()
+        self.timestamp_data = time.time()
         self.frame_count = 0
 
     def check(self):
+        self.fps_check()
+        self.update_data()
+
+    def fps_check(self):
         self.frame_count += 1
-        if self.timestamp + 1 < time.time():
+        if self.timestamp_fps + 1 < time.time():
             logger.debug(f"FPS: {self.frame_count}")
             self.check_population()
             self.frame_count = 0
-            self.timestamp = time.time()
+            self.timestamp_fps = time.time()
+
+    def update_data(self):
+        if self.timestamp_data + 5 < time.time():
+            store = get_store()
+            all_characters = store.get_all(EntityType.CHARACTER)
+            for character in all_characters:
+                character_dict = character.to_dict()
+                produce_messages(character_dict)
+            self.timestamp_data = time.time()
 
     def check_population(self):
         store = get_store()
