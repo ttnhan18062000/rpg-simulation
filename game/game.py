@@ -11,7 +11,7 @@ from components.character.character import Character
 from components.character.character_info import CharacterInfo
 from components.character.character_stat import CharacterStat
 from components.world.store import get_store, EntityType
-from components.control.fps_check import FPSCheck
+from components.control.monitoring import Monitoring
 from components.common.point import Point
 from components.control.control_event_handler import ControlEventHandler
 from components.world.map_generator import generate_voronoi_map
@@ -31,7 +31,7 @@ class Game:
         self.initialize_game()
         self.initialize_world()
         self.running = True
-        self.fps_check = FPSCheck()
+        self.monitor = Monitoring()
 
     def initialize_game(self):
         pygame.init()
@@ -69,7 +69,7 @@ class Game:
         self.is_display_changed = False
 
     def update(self):
-        self.fps_check.check()
+        self.monitor.check()
         self.world.update()
 
     def run(self):
