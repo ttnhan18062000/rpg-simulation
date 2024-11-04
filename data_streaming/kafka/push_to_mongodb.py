@@ -2,29 +2,21 @@ from kafka import KafkaConsumer
 import json
 from pymongo import MongoClient
 import logging
+import grpc
+import notification_pb2
+import notification_pb2_grpc
 
 # Set pymongo logger to WARNING level to suppress DEBUG and INFO logs
 logging.getLogger("pymongo").setLevel(logging.WARNING)
 
 
 def get_database():
-
     # Provide the mongodb atlas url to connect python to mongodb using pymongo
     CONNECTION_STRING = "mongodb+srv://nhan:852124@cluster0.qmwjy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-
-    # Create a connection using MongoClient. You can import MongoClient or use pymongo.MongoClient
+    # Create a connection using MongoClient
     client = MongoClient(CONNECTION_STRING)
-
-    # Create the database for our example (we will use the same database throughout the tutorial
+    # Create the database
     return client["rpgs"]
-
-
-def add_character(character_dict):
-    db["character"].insert_one(character_dict)
-
-
-def get_character_by_id(cid):
-    return db["character"].find({"id": cid})
 
 
 def insert_or_update_character_by_id(cid, new_char_dict):
@@ -32,8 +24,19 @@ def insert_or_update_character_by_id(cid, new_char_dict):
     return db["character"].update_one({"id": cid}, new_values, upsert=True)
 
 
-db = get_database()
+def notify_nextjs():
+    with grpc.insecure_channel("localhost:50051") as channel:
+        stub = notification_pb2_grpc.NotifierStub(channel)
+        response = stub.NotifyUpdate(  # Correct method name
+            notification_pb2.UpdateRequest(
+                message="New data available"
+            )  # Correct message type
+        )
+        return response.success
 
+
+# Initialize the database connection
+db = get_database()
 
 # Initialize consumer
 consumer = KafkaConsumer(
@@ -49,3 +52,12 @@ for message in consumer:
     data = message.value
     if data["type"] == "character":
         insert_or_update_character_by_id(data["id"], data)
+        # Notify the Next.js server after updating the character data
+        notification_success = notify_nextjs()
+        if notification_success:
+            print("Notification sent successfully to Next.js.")
+        else:
+            print("Failed to notify Next.js.")
+
+
+# python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. notification.proto
