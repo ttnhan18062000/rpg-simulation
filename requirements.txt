@@ -1,0 +1,8 @@
+kafka-python
+kafka-python-ng
+numpy
+pygame
+pymongo
+redis
+grpcio
+grpcio-tools

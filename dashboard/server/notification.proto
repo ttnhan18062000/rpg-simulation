@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package notifier;
+
+service Notifier {
+    rpc notifyUpdate(NotifyRequest) returns (NotifyResponse);
+}
+
+message NotifyRequest {
+    string message = 1;
+}
+
+message NotifyResponse {
+    bool success = 1;
+}

@@ -1,0 +1,14 @@
+// notification.proto
+syntax = "proto3";
+
+service Notifier {
+  rpc NotifyUpdate (UpdateRequest) returns (UpdateResponse);
+}
+
+message UpdateRequest {
+  string message = 1;
+}
+
+message UpdateResponse {
+  bool success = 1;
+}
