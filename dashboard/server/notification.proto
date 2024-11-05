@@ -3,13 +3,13 @@ syntax = "proto3";
 package notifier;
 
 service Notifier {
-    rpc notifyUpdate(NotifyRequest) returns (NotifyResponse);
+  rpc notifyUpdate (updateRequest) returns (updateResponse);
 }
 
-message NotifyRequest {
-    string message = 1;
+message updateRequest {
+  string message = 1;
 }
 
-message NotifyResponse {
-    bool success = 1;
+message updateResponse {
+  bool success = 1;
 }

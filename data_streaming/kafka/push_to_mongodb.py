@@ -5,6 +5,7 @@ import logging
 import grpc
 import notification_pb2
 import notification_pb2_grpc
+import time
 
 # Set pymongo logger to WARNING level to suppress DEBUG and INFO logs
 logging.getLogger("pymongo").setLevel(logging.WARNING)
@@ -27,8 +28,8 @@ def insert_or_update_character_by_id(cid, new_char_dict):
 def notify_nextjs():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = notification_pb2_grpc.NotifierStub(channel)
-        response = stub.NotifyUpdate(  # Correct method name
-            notification_pb2.UpdateRequest(
+        response = stub.notifyUpdate(  # Correct method name
+            notification_pb2.updateRequest(
                 message="New data available"
             )  # Correct message type
         )
@@ -47,17 +48,24 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: json.loads(x.decode("utf-8")),
 )
 
+print("Start data streaming process...")
+
+last_notify_timestamp = time.time()
+notify_interval = 1
+
 # Consuming messages
 for message in consumer:
     data = message.value
     if data["type"] == "character":
         insert_or_update_character_by_id(data["id"], data)
         # Notify the Next.js server after updating the character data
-        notification_success = notify_nextjs()
-        if notification_success:
-            print("Notification sent successfully to Next.js.")
-        else:
-            print("Failed to notify Next.js.")
+        if last_notify_timestamp + notify_interval < time.time():
+            last_notify_timestamp = time.time()
+            notification_success = notify_nextjs()
+            if notification_success:
+                print("Notification sent successfully to Next.js.")
+            else:
+                print("Failed to notify Next.js.")
 
 
 # python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. notification.proto

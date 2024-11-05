@@ -24,17 +24,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12notification.proto\" \n\rUpdateRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"!\n\x0eUpdateResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32;\n\x08Notifier\x12/\n\x0cNotifyUpdate\x12\x0e.UpdateRequest\x1a\x0f.UpdateResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x12notification.proto\x12\x08notifier\" \n\rupdateRequest\x12\x0f\n\x07message\x18\x01 \x01(\t\"!\n\x0eupdateResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x32M\n\x08Notifier\x12\x41\n\x0cnotifyUpdate\x12\x17.notifier.updateRequest\x1a\x18.notifier.updateResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'notification_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_UPDATEREQUEST']._serialized_start=22
-  _globals['_UPDATEREQUEST']._serialized_end=54
-  _globals['_UPDATERESPONSE']._serialized_start=56
-  _globals['_UPDATERESPONSE']._serialized_end=89
-  _globals['_NOTIFIER']._serialized_start=91
-  _globals['_NOTIFIER']._serialized_end=150
+  _globals['_UPDATEREQUEST']._serialized_start=32
+  _globals['_UPDATEREQUEST']._serialized_end=64
+  _globals['_UPDATERESPONSE']._serialized_start=66
+  _globals['_UPDATERESPONSE']._serialized_end=99
+  _globals['_NOTIFIER']._serialized_start=101
+  _globals['_NOTIFIER']._serialized_end=178
 # @@protoc_insertion_point(module_scope)

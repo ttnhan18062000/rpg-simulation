@@ -34,17 +34,17 @@ class NotifierStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.NotifyUpdate = channel.unary_unary(
-                '/Notifier/NotifyUpdate',
-                request_serializer=notification__pb2.UpdateRequest.SerializeToString,
-                response_deserializer=notification__pb2.UpdateResponse.FromString,
+        self.notifyUpdate = channel.unary_unary(
+                '/notifier.Notifier/notifyUpdate',
+                request_serializer=notification__pb2.updateRequest.SerializeToString,
+                response_deserializer=notification__pb2.updateResponse.FromString,
                 _registered_method=True)
 
 
 class NotifierServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def NotifyUpdate(self, request, context):
+    def notifyUpdate(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -53,16 +53,16 @@ class NotifierServicer(object):
 
 def add_NotifierServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'NotifyUpdate': grpc.unary_unary_rpc_method_handler(
-                    servicer.NotifyUpdate,
-                    request_deserializer=notification__pb2.UpdateRequest.FromString,
-                    response_serializer=notification__pb2.UpdateResponse.SerializeToString,
+            'notifyUpdate': grpc.unary_unary_rpc_method_handler(
+                    servicer.notifyUpdate,
+                    request_deserializer=notification__pb2.updateRequest.FromString,
+                    response_serializer=notification__pb2.updateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'Notifier', rpc_method_handlers)
+            'notifier.Notifier', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('Notifier', rpc_method_handlers)
+    server.add_registered_method_handlers('notifier.Notifier', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -70,7 +70,7 @@ class Notifier(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def NotifyUpdate(request,
+    def notifyUpdate(request,
             target,
             options=(),
             channel_credentials=None,
@@ -83,9 +83,9 @@ class Notifier(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/Notifier/NotifyUpdate',
-            notification__pb2.UpdateRequest.SerializeToString,
-            notification__pb2.UpdateResponse.FromString,
+            '/notifier.Notifier/notifyUpdate',
+            notification__pb2.updateRequest.SerializeToString,
+            notification__pb2.updateResponse.FromString,
             options,
             channel_credentials,
             insecure,
