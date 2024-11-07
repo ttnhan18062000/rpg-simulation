@@ -5,6 +5,7 @@ import logging
 import grpc
 import notification_pb2
 import notification_pb2_grpc
+import time
 
 # Set pymongo logger to WARNING level to suppress DEBUG and INFO logs
 logging.getLogger("pymongo").setLevel(logging.WARNING)
@@ -24,15 +25,31 @@ def insert_or_update_character_by_id(cid, new_char_dict):
     return db["character"].update_one({"id": cid}, new_values, upsert=True)
 
 
-def notify_nextjs():
+def insert_or_update_combat_by_id(cid, new_combat_dict):
+    new_values = {"$set": new_combat_dict}
+    return db["combat"].update_one({"id": cid}, new_values, upsert=True)
+
+
+def notify_nextjs(type):
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = notification_pb2_grpc.NotifierStub(channel)
-        response = stub.NotifyUpdate(  # Correct method name
-            notification_pb2.UpdateRequest(
-                message="New data available"
+        response = stub.notifyUpdate(  # Correct method name
+            notification_pb2.updateRequest(
+                message="New data available", type=type
             )  # Correct message type
         )
         return response.success
+
+
+def check_timestamp_for_notification_type(type):
+    # Notify the Next.js server after updating the character data
+    if last_notify_timestamp[type] + notify_interval < time.time():
+        last_notify_timestamp[type] = time.time()
+        notification_success = notify_nextjs(type)
+        if notification_success:
+            print("Notification sent successfully to Next.js.")
+        else:
+            print("Failed to notify Next.js.")
 
 
 # Initialize the database connection
@@ -47,17 +64,19 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: json.loads(x.decode("utf-8")),
 )
 
+print("Start data streaming process...")
+
+last_notify_timestamp = {"character": time.time(), "event": time.time()}
+notify_interval = 1
+
 # Consuming messages
 for message in consumer:
     data = message.value
     if data["type"] == "character":
         insert_or_update_character_by_id(data["id"], data)
-        # Notify the Next.js server after updating the character data
-        notification_success = notify_nextjs()
-        if notification_success:
-            print("Notification sent successfully to Next.js.")
-        else:
-            print("Failed to notify Next.js.")
+    elif data["type"] == "event":
+        insert_or_update_combat_by_id(data["id"], data)
+    check_timestamp_for_notification_type(data["type"])
 
 
 # python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. notification.proto

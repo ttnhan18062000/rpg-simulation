@@ -97,11 +97,16 @@ const CharacterDataGrid: React.FC = () => {
 
     const socket = new WebSocket('ws://localhost:3001'); // Change this URL if needed
 
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
     socket.onopen = function() {
         console.log("Connected to WebSocket server");
     };
 
     socket.onmessage = (event) => {
+      console.log("Receive update notification through Websocket")
       const message = JSON.parse(event.data);
       if (message.type === 'update') {
         fetchCharacters(); // Reload data on update notification
