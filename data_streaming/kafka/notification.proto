@@ -8,6 +8,7 @@ service Notifier {
 
 message updateRequest {
   string message = 1;
+  string type = 2;
 }
 
 message updateResponse {

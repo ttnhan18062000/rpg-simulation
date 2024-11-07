@@ -68,6 +68,17 @@ class CombatEvent(Event):
             tile = store.get(EntityType.TILE, self.tile_id)
             tile.set_tile_combat_status(is_combat=False)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "type": "event",
+            "event_type": "combat",
+            "data": {
+                faction: self.character_faction_ids[faction]
+                for faction in self.character_faction_ids.keys()
+            },
+        }
+
     # @staticmethod
     # def execute(first_character, second_character):
     #     logger.debug(

@@ -18,11 +18,17 @@ const wss = new WebSocket.Server({ port: 3001 });
 
 function notifyUpdate(call, callback) {
     console.log("Receive notifyUpdate");
+    const { message, type } = call.request;  // Access the message and type fields
+
+    // Log the incoming message and type for debugging
+    console.log(`Message: ${message}, Type: ${type}`);
+
     wss.clients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(JSON.stringify({ type: 'update' }));
+            client.send(JSON.stringify({ type, message }));  // Send both type and message
         }
     });
+
     callback(null, { success: true });
 }
 
