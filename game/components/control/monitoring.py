@@ -26,14 +26,16 @@ class Monitoring:
     def update_data(self):
         if self.timestamp_data + 1 < time.time():
             store = get_store()
-            # all_characters = store.get_all(EntityType.CHARACTER)
-            # for character in all_characters:
-            #     character_dict = character.to_dict()
-            #     produce_messages(character_dict)
+            all_characters = store.get_all(EntityType.CHARACTER)
+            for character in all_characters:
+                character_dict = character.to_dict()
+                character_dict["data_action"] = "update"
+                produce_messages(character_dict)
 
             all_events = store.get_all(EntityType.EVENT)
             for event in all_events:
                 event_dict = event.to_dict()
+                event_dict["data_action"] = "update"
                 produce_messages(event_dict)
 
             self.timestamp_data = time.time()

@@ -108,7 +108,7 @@ const CharacterDataGrid: React.FC = () => {
     socket.onmessage = (event) => {
       console.log("Receive update notification through Websocket")
       const message = JSON.parse(event.data);
-      if (message.type === 'update') {
+      if (message.type === 'character') {
         fetchCharacters(); // Reload data on update notification
       }
     };
