@@ -7,7 +7,7 @@ export async function GET() {
   try {
     const client = await clientPromise;
     const db = client.db('rpgs');
-    const combats = await db.collection('combat').find({}).toArray();
+    const combats = await db.collection('event').find({event_type: 'combat'}).toArray();
 
     // Transform data for each combat
     const transformedCombats = combats.map(combat => {
