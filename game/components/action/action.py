@@ -4,6 +4,7 @@ from components.world.store import get_store, EntityType
 from components.common.point import Point
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
 from components.character.character_stat import StatDefinition
+from components.common.path_finding import get_move_to_target
 from data.logs.logger import logger
 
 
@@ -29,7 +30,7 @@ class Move(Action):
             return False
         return tile
 
-    def do_action(self, character, **kwargs):
+    def random_move(self, character):
         direction = random.randint(0, 3)
         next_move = Point(0, 0)
         if direction == 0:
@@ -40,79 +41,97 @@ class Move(Action):
             next_move = Point(-1, 0)
         elif direction == 3:
             next_move = Point(1, 0)
+        if not self.check_valid_step(character.pos + next_move):
+            return self.random_move(character)
+        return next_move
 
-        if self.check_valid_step(character.pos + next_move):
-            store = get_store()
+    def get_next_move(self, character):
+        store = get_store()
+        visible_points = character.get_vision().get_visible_tiles(character.pos)
+        for point in visible_points:
+            tile_id = store.get(EntityType.GRID, 0).get_tile(point)
+            character_ids_on_tile = store.get(
+                EntityType.TILE, tile_id
+            ).get_character_ids()
+            if len(character_ids_on_tile) > 0:
+                for cid in character_ids_on_tile:
+                    other_character = store.get(EntityType.CHARACTER, cid)
+                    if character.is_hostile_with(other_character):
+                        return get_move_to_target(character.pos, other_character.pos)
 
-            previous_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
-            previous_tile = store.get(EntityType.TILE, previous_tile_id)
-            previous_tile.remove_character_id(character.get_info().id)
+        # Not found any enemy, random movement
+        return self.random_move(character)
 
-            character.pos += next_move
-            new_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
-            new_tile = store.get(EntityType.TILE, new_tile_id)
-            new_tile.add_character_id(character.get_info().id)
-            character.tile_id = new_tile.id
+    def do_action(self, character, **kwargs):
 
-            if new_tile.is_combat_happen():
-                combat_event_id = new_tile.get_event(EventType.COMBAT)
-                combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
-                all_factions = combat_event.get_factions()
-                for hostile_faction in character.get_hostile_factions():
-                    if hostile_faction in all_factions:
-                        combat_event.add_character_id(
-                            character.get_faction(), character.get_info().id
-                        )
-                        character.enter_combat(combat_event_id, hostile_faction)
-                        return False
+        store = get_store()
 
-            all_characters = [
-                store.get(EntityType.CHARACTER, cid)
-                for cid in new_tile.get_character_ids()
-                if cid != character.get_info().id
-            ]
-            hostile_faction_to_characters = {}
+        next_move = self.get_next_move(character)
+
+        previous_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
+        previous_tile = store.get(EntityType.TILE, previous_tile_id)
+        previous_tile.remove_character_id(character.get_info().id)
+
+        character.pos += next_move
+        new_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
+        new_tile = store.get(EntityType.TILE, new_tile_id)
+        new_tile.add_character_id(character.get_info().id)
+        character.tile_id = new_tile.id
+
+        if new_tile.is_combat_happen():
+            combat_event_id = new_tile.get_event(EventType.COMBAT)
+            combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
+            all_factions = combat_event.get_factions()
             for hostile_faction in character.get_hostile_factions():
-                hostile_faction_to_characters[hostile_faction] = []
-                for other_character in all_characters:
-                    if other_character.get_faction() == hostile_faction:
-                        hostile_faction_to_characters[hostile_faction].append(
-                            other_character
-                        )
-            for hostile_faction in character.get_hostile_factions():
-                if len(hostile_faction_to_characters[hostile_faction]) > 0:
-                    new_combat_event: CombatEvent = CombatEvent(new_tile_id)
-                    new_combat_event_id = new_combat_event.id
-                    for enemy_character in hostile_faction_to_characters[
-                        hostile_faction
-                    ]:
-                        new_combat_event.add_character_id(
-                            hostile_faction, enemy_character.get_info().id
-                        )
-                        enemy_character.enter_combat(
-                            new_combat_event_id, character.get_faction()
-                        )
-
-                    new_combat_event.add_character_id(
+                if hostile_faction in all_factions:
+                    combat_event.add_character_id(
                         character.get_faction(), character.get_info().id
                     )
-                    character.enter_combat(new_combat_event_id, hostile_faction)
-
-                    store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
-
+                    character.enter_combat(combat_event_id, hostile_faction)
                     return False
 
-            # for other_character in other_characters:
-            #     if character.is_hostile_with(other_character):
-            #         # CombatEvent().execute(character, other_character)
-            #         character.enter_combat([other_character.get_info().id])
-            #         other_character.enter_combat([character.get_info().id])
-            #         # Create a combat event to manage all the characters from Human/Demon
-            #         # Dead characters remove from the event -> update all targets -> won't kill the already dead characters
-            #         return True
+        all_characters = [
+            store.get(EntityType.CHARACTER, cid)
+            for cid in new_tile.get_character_ids()
+            if cid != character.get_info().id
+        ]
+        hostile_faction_to_characters = {}
+        for hostile_faction in character.get_hostile_factions():
+            hostile_faction_to_characters[hostile_faction] = []
+            for other_character in all_characters:
+                if other_character.get_faction() == hostile_faction:
+                    hostile_faction_to_characters[hostile_faction].append(
+                        other_character
+                    )
+        for hostile_faction in character.get_hostile_factions():
+            if len(hostile_faction_to_characters[hostile_faction]) > 0:
+                new_combat_event: CombatEvent = CombatEvent(new_tile_id)
+                new_combat_event_id = new_combat_event.id
+                for enemy_character in hostile_faction_to_characters[hostile_faction]:
+                    new_combat_event.add_character_id(
+                        hostile_faction, enemy_character.get_info().id
+                    )
+                    enemy_character.enter_combat(
+                        new_combat_event_id, character.get_faction()
+                    )
 
-        else:
-            self.do_action(character)
+                new_combat_event.add_character_id(
+                    character.get_faction(), character.get_info().id
+                )
+                character.enter_combat(new_combat_event_id, hostile_faction)
+
+                store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
+
+                return False
+
+        # for other_character in other_characters:
+        #     if character.is_hostile_with(other_character):
+        #         # CombatEvent().execute(character, other_character)
+        #         character.enter_combat([other_character.get_info().id])
+        #         other_character.enter_combat([character.get_info().id])
+        #         # Create a combat event to manage all the characters from Human/Demon
+        #         # Dead characters remove from the event -> update all targets -> won't kill the already dead characters
+        #         return True
 
         return True
 

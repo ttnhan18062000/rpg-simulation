@@ -44,9 +44,9 @@ class Game:
             for y in range(len(grid_data[0])):
                 # TODO: Avoid hard-coded tile value
                 if grid_data[x][y] == 3:
-                    generators.append(DemonGenerator(5, 1, Point(x, y)))
+                    generators.append(DemonGenerator(1, 1, Point(x, y)))
                 if grid_data[x][y] == 4:
-                    generators.append(HumanGenerator(5, 1, Point(x, y)))
+                    generators.append(HumanGenerator(1, 1, Point(x, y)))
         return generators
 
     def initialize_world(self):
