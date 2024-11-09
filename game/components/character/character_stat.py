@@ -47,7 +47,10 @@ class CharacterStat:
             self.stats_list[stat_def] += delta_stat
 
             if stat_def == StatDefinition.CURRENT_HEALTH:
-                value = min(self.stats_list[StatDefinition.MAX_HEALTH].value, value)
+                self.stats_list[stat_def].value = min(
+                    self.stats_list[StatDefinition.MAX_HEALTH].value,
+                    self.stats_list[stat_def].value,
+                )
         else:
             raise Exception(f"No {stat_def} found")
 

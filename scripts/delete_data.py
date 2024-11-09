@@ -20,4 +20,6 @@ def get_database():
 
 db = get_database()
 
+db["combat"].delete_many({})
 db["character"].delete_many({})
+db["event"].delete_many({})

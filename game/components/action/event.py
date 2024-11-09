@@ -1,6 +1,5 @@
 from components.character.character_stat import StatDefinition
 from components.world.store import get_store, EntityType
-from components.database.producer import produce_messages
 from enum import Enum
 
 from data.logs.logger import logger
@@ -64,10 +63,6 @@ class CombatEvent(Event):
         self.character_faction_ids.pop(faction)
 
         if len(self.character_faction_ids.keys()) == 0:
-            event_dict = self.to_dict()
-            event_dict["data_action"] = "delete"
-            produce_messages(event_dict)
-
             store = get_store()
             store.remove(EntityType.EVENT, self.id)
             tile = store.get(EntityType.TILE, self.tile_id)

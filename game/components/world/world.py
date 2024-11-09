@@ -96,7 +96,8 @@ class World:
 
     def update(self):
         for generator in self.generators:
-            generator.update()
+            if not generator.is_stop():
+                generator.update()
 
         all_characters = get_store().get_all(EntityType.CHARACTER)
         for character in all_characters:

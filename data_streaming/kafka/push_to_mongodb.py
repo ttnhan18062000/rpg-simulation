@@ -31,8 +31,10 @@ def insert_or_update_combat_by_id(cid, new_combat_dict):
     return db["combat"].update_one({"id": cid}, new_values, upsert=True)
 
 
-def bulk_insert_or_update_collection(data_list, collection_type):
+def bulk_insert_or_update_collection_and_notify(collection_type):
     operations = []
+    data_list = store_data_for_batch_write[collection_type]
+    store_data_for_batch_write[collection_type] = []
     for d in data_list:
         data_action = d.pop("data_action")
         if data_action == "update":
@@ -40,7 +42,23 @@ def bulk_insert_or_update_collection(data_list, collection_type):
             operations.append(UpdateOne({"id": d["id"]}, new_values, upsert=True))
         elif data_action == "delete":
             operations.append(DeleteOne({"id": d["id"]}))
+
+    notification_success = notify_nextjs(collection_type)
+    if notification_success:
+        print("Notification sent successfully to Next.js.")
+    else:
+        print("Failed to notify Next.js.")
     return db[collection_type].bulk_write(operations)
+
+
+# Function to run bulk update asynchronously
+def run_bulk_update_and_notify_in_thread(data_type):
+    if len(store_data_for_batch_write[data_type]) > 0:
+        thread = threading.Thread(
+            target=bulk_insert_or_update_collection_and_notify,
+            args=(data_type,),
+        )
+        thread.start()
 
 
 def notify_nextjs(type):
@@ -54,70 +72,78 @@ def notify_nextjs(type):
         return response.success
 
 
-def check_timestamp_for_notification_type(data_type, timestamp_now):
-    # Notify the Next.js server after updating the character data
-    if last_notify_timestamp[data_type] + notify_interval < timestamp_now:
-        last_notify_timestamp[data_type] = timestamp_now
-        notification_success = notify_nextjs(data_type)
-        if notification_success:
-            print("Notification sent successfully to Next.js.")
-        else:
-            print("Failed to notify Next.js.")
+def flush_batch():
+    for data_type in store_data_for_batch_write.keys():
+        run_bulk_update_and_notify_in_thread(data_type)
 
+
+def periodic_flush():
+    while not shutdown_flag.is_set():
+        time.sleep(flush_interval)
+        flush_batch()
+
+
+# Initialize consumer
+def consume_kafka():
+    consumer = KafkaConsumer(
+        "rpgs",
+        bootstrap_servers="localhost:9092",
+        auto_offset_reset="earliest",
+        group_id="rpgs_group",
+        value_deserializer=lambda x: json.loads(x.decode("utf-8")),
+    )
+    try:
+        while not shutdown_flag.is_set():
+            for message in consumer:
+                data = message.value
+                data_type = data["type"]
+
+                if len(store_data_for_batch_write[data_type]) >= batch_size:
+                    run_bulk_update_and_notify_in_thread(data_type)
+                else:
+                    store_data_for_batch_write[data_type].append(data)
+    except Exception as e:
+        print(f"Exception in Kafka consumer thread: {e}")
+        shutdown_flag.set()  # Signal to shut down
+    finally:
+        consumer.close()  # Ensure consumer is closed on exit
+
+
+print("Start data streaming process...")
 
 # Initialize the database connection
 db = get_database()
 
-# Initialize consumer
-consumer = KafkaConsumer(
-    "rpgs",
-    bootstrap_servers="localhost:9092",
-    auto_offset_reset="earliest",  # Start from the beginning of the topic
-    group_id="rpgs_group",
-    value_deserializer=lambda x: json.loads(x.decode("utf-8")),
-)
-
-print("Start data streaming process...")
-
-last_notify_timestamp = {"character": time.time(), "event": time.time()}
-notify_interval = 1
-
-last_update_timestamp = {"character": time.time(), "event": time.time()}
-update_interval = 0.1
-
+batch_size = 100
+flush_interval = 0.5
 store_data_for_batch_write = {"character": [], "event": []}
 
-# Function to run bulk update asynchronously
-def run_bulk_update_in_thread(data_list, data_type):
-    thread = threading.Thread(
-        target=bulk_insert_or_update_collection,
-        args=(
-            data_list,
-            data_type,
-        ),
-    )
-    thread.start()
+# Flag for clean shutdown
+shutdown_flag = threading.Event()
 
 
-# Consuming messages
-for message in consumer:
-    data = message.value
-    data_type = data["type"]
-    now = time.time()
+# Main function to start threads and handle shutdown
+def main():
+    try:
+        # Start consumer and flush threads
+        consumer_thread = threading.Thread(target=consume_kafka)
+        flush_thread = threading.Thread(target=periodic_flush)
+        consumer_thread.start()
+        flush_thread.start()
 
-    # Check if we need to update this data type
-    if last_update_timestamp[data_type] + update_interval < now:
-        # Launch a thread to perform bulk update for this data_type
-        if len(store_data_for_batch_write[data_type]) > 0:
-            run_bulk_update_in_thread(store_data_for_batch_write[data_type], data_type)
-            store_data_for_batch_write[data_type] = []
-        last_update_timestamp[data_type] = now
-    else:
-        # Store data to batch update
-        store_data_for_batch_write[data_type].append(data)
+        # Wait for threads to finish
+        consumer_thread.join()
+        flush_thread.join()
 
-    # Check for notifications (assuming this is another function)
-    check_timestamp_for_notification_type(data_type, now)
+    except Exception:
+        print("Shutting down...")
+        shutdown_flag.set()  # Signal threads to terminate
+
+        # Ensure all threads finish their work
+        consumer_thread.join()
+        flush_thread.join()
 
 
+if __name__ == "__main__":
+    main()
 # python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. notification.proto
