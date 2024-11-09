@@ -4,21 +4,11 @@ import random
 
 def generate_voronoi_map(width, height):
     # Define region types (0 for ground, 1 for town)
-    region_types = [
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        1,
-        1,
-        1,
-    ]  # Two ground regions and two town regions
+    region_types = [0, 0, 1, 1]  # Two ground regions and two town regions
 
     # Number of rows and columns to split the map into quadrants
-    num_quadrants_x = 3
-    num_quadrants_y = 3
+    num_quadrants_x = 2
+    num_quadrants_y = 2
 
     # Determine the quadrant size
     quadrant_width = width // num_quadrants_x
