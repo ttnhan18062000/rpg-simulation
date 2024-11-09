@@ -12,6 +12,7 @@ topic = "rpgs"
 
 # Sending messages to Kafka topic
 def produce_messages(data):
+
     producer.send(topic, data)
     # producer.flush()  # Ensure all messages are sent before closing
     # producer.close()

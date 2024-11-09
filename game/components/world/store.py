@@ -1,4 +1,5 @@
 from enum import Enum
+from components.database.producer import produce_messages
 
 
 class EntityType(Enum):
@@ -20,10 +21,23 @@ class Store:
         key = self.get_key(entity_type, id)
         if key in self.data:
             raise Exception(f"Id: '{id}' already exists in data store")
+
+        if hasattr(obj, "to_dict") and callable(getattr(obj, "to_dict")):
+            obj_dict = obj.to_dict()
+            obj_dict["data_action"] = "update"
+            produce_messages(obj_dict)
+
         self.data[key] = obj
 
     def remove(self, entity_type: EntityType, id):
         key = self.get_key(entity_type, id)
+
+        obj = self.data[key]
+        if hasattr(obj, "to_dict") and callable(getattr(obj, "to_dict")):
+            obj_dict = obj.to_dict()
+            obj_dict["data_action"] = "delete"
+            produce_messages(obj_dict)
+
         if key in self.data:
             self.data.pop(key)
 
