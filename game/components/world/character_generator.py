@@ -17,6 +17,7 @@ class CharacterGenerator:
         self.name = "Character"
         self.interval = interval
         self.amount = amount
+        self.spawn_counter = 0
         self.location = location
         self.timestamp = time.time()
 
@@ -28,6 +29,10 @@ class CharacterGenerator:
             logger.debug(f"Spawn one {self.name} at {self.location}")
             self.timestamp = time.time()
             self.spawn()
+            self.spawn_counter += 1
+
+    def is_stop(self):
+        return self.amount == self.spawn_counter
 
 
 class HumanGenerator(CharacterGenerator):
