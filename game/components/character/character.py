@@ -9,6 +9,7 @@ from components.character.character_action import (
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_class import CharacterClass
 from components.character.character_level import CharacterLevel
+from components.character.character_vision import CharacterVision
 from components.world.store import get_store, EntityType
 
 from data.logs.logger import logger
@@ -31,6 +32,7 @@ class Character(GameObject):
         self.character_action = BasicCharacterAction()
         self.character_stats = character_stats
         self.character_class = character_class
+        self.character_vision = CharacterVision(4)
         self.level = CharacterLevel(character_class.class_level, level)
         self.is_dead = False
 
@@ -46,6 +48,9 @@ class Character(GameObject):
 
     def get_stats(self):
         return self.character_stats
+
+    def get_vision(self):
+        return self.character_vision
 
     def get_faction(self):
         return self.character_class.__class__.__name__
