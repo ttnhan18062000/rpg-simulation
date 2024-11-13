@@ -10,6 +10,8 @@ from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_class import CharacterClass
 from components.character.character_level import CharacterLevel
 from components.character.character_vision import CharacterVision
+from components.character.character_power import CharacterPower
+from components.character.memory.character_memory import CharacterMemory
 from components.world.store import get_store, EntityType
 
 from data.logs.logger import logger
@@ -34,6 +36,7 @@ class Character(GameObject):
         self.character_class = character_class
         self.character_vision = CharacterVision(4)
         self.level = CharacterLevel(character_class.class_level, level)
+        self.character_memory = CharacterMemory()
         self.is_dead = False
 
         store = get_store()
@@ -42,6 +45,8 @@ class Character(GameObject):
         tile.add_character_id(character_info.id)
 
         self.is_just_changed_location = True
+
+        logger.debug(f"{self.get_info()} has {self.get_power()} power")
 
     def get_info(self):
         return self.character_info
@@ -58,6 +63,12 @@ class Character(GameObject):
     def get_hostile_factions(self):
         return self.character_class.get_hostile_factions()
 
+    def get_power(self):
+        return CharacterPower.get_power(self.get_stats())
+
+    def get_memory(self):
+        return self.character_memory
+
     def is_alive(self):
         return (
             self.character_stats.get_stat(StatDefinition.CURRENT_HEALTH).value > 0
@@ -69,15 +80,19 @@ class Character(GameObject):
             self.is_dead = True
 
     def is_hostile_with(self, character: "Character"):
-        return (
-            self.character_class.__class__.__name__
-            != character.character_class.__class__.__name__
-        )
+        if isinstance(character, Character):
+            return (
+                self.character_class.__class__.__name__
+                != character.character_class.__class__.__name__
+            )
+        if isinstance(character, str):
+            return self.character_class.__class__.__name__ != character
+        raise NotImplemented
 
     def level_up(self):
         for stat_def, value in self.character_class.stats_gain.items():
             self.character_stats.update_stat(stat_def, value)
-        logger.debug(f"f{self.get_info()} has leveled up: {self.character_stats}")
+        logger.debug(f"f{self.get_info()} has leveled up: {self.get_power()}")
 
     def do_action(self):
         if self.is_just_changed_location == False:

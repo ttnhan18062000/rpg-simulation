@@ -14,11 +14,12 @@ class Store:
     def __init__(self) -> None:
         self.data = {}
 
-    def get_key(self, entity_type: EntityType, id):
+    @staticmethod
+    def get_key(entity_type: EntityType, id):
         return f"{entity_type.value}@{id}"
 
     def add(self, entity_type: EntityType, id, obj):
-        key = self.get_key(entity_type, id)
+        key = Store.get_key(entity_type, id)
         if key in self.data:
             raise Exception(f"Id: '{id}' already exists in data store")
 
@@ -30,7 +31,7 @@ class Store:
         self.data[key] = obj
 
     def remove(self, entity_type: EntityType, id):
-        key = self.get_key(entity_type, id)
+        key = Store.get_key(entity_type, id)
 
         obj = self.data[key]
         if hasattr(obj, "to_dict") and callable(getattr(obj, "to_dict")):
@@ -42,7 +43,7 @@ class Store:
             self.data.pop(key)
 
     def get(self, entity_type: EntityType, id):
-        key = self.get_key(entity_type, id)
+        key = Store.get_key(entity_type, id)
         if key in self.data:
             return self.data[key]
         return None

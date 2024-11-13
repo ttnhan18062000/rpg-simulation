@@ -5,6 +5,7 @@ from components.common.point import Point
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
 from components.character.character_stat import StatDefinition
 from components.common.path_finding import get_move_to_target
+from components.character.memory.memory import MemoryCharacter, PowerEst
 from data.logs.logger import logger
 
 
@@ -16,7 +17,31 @@ class Action:
 
     def execute(self, character, **kwargs):
         logger.debug(f"{character.get_info()} do {self.action_name}")
+        self.inspect_around(character)
         return self.do_action(character, **kwargs)
+
+    def inspect_around(self, character):
+        # TODO: instead of reset memory every action, better delete only old memories, or wrong memories
+        # like doesn't see the remembered character at the location (they already escaped)
+
+        character.get_memory().reset()
+        store = get_store()
+        visible_points = character.get_vision().get_visible_tiles(character.pos)
+        for point in visible_points:
+            tile_id = store.get(EntityType.GRID, 0).get_tile(point)
+            character_ids_on_tile = store.get(
+                EntityType.TILE, tile_id
+            ).get_character_ids()
+            if len(character_ids_on_tile) > 0:
+                for cid in character_ids_on_tile:
+                    other_character = store.get(EntityType.CHARACTER, cid)
+                    memory = MemoryCharacter(
+                        cid, other_character.pos, other_character.get_faction()
+                    )
+                    memory.remember_power(
+                        character, other_character, perception_accuracy=90
+                    )
+                    character.get_memory().add(EntityType.CHARACTER, cid, memory)
 
 
 class Move(Action):
@@ -46,18 +71,22 @@ class Move(Action):
         return next_move
 
     def get_next_move(self, character):
-        store = get_store()
-        visible_points = character.get_vision().get_visible_tiles(character.pos)
-        for point in visible_points:
-            tile_id = store.get(EntityType.GRID, 0).get_tile(point)
-            character_ids_on_tile = store.get(
-                EntityType.TILE, tile_id
-            ).get_character_ids()
-            if len(character_ids_on_tile) > 0:
-                for cid in character_ids_on_tile:
-                    other_character = store.get(EntityType.CHARACTER, cid)
-                    if character.is_hostile_with(other_character):
-                        return get_move_to_target(character.pos, other_character.pos)
+        characters_in_memory = character.get_memory().get_all(EntityType.CHARACTER)
+        for memory_character in characters_in_memory:
+            if character.is_hostile_with(
+                memory_character.get_faction()
+            ) and memory_character.get_power_est() in [
+                PowerEst.MUCH_WEAKER,
+                PowerEst.WEAKER,
+            ]:
+                logger.debug(
+                    f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
+                )
+                return get_move_to_target(
+                    character.pos, memory_character.get_location()
+                )
+            # TODO: Run if the enemy is much stronger
+            # TODO: Add characteristic
 
         # Not found any enemy, random movement
         return self.random_move(character)
