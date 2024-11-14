@@ -80,20 +80,29 @@ class Move(Action):
         if not is_random_move:
             characters_in_memory = character.get_memory().get_all(EntityType.CHARACTER)
             for memory_character in characters_in_memory:
-                if character.is_hostile_with(
-                    memory_character.get_faction()
-                ) and memory_character.get_power_est() in [
-                    PowerEst.MUCH_WEAKER,
-                    PowerEst.WEAKER,
-                ]:
-                    logger.debug(
-                        f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
-                    )
-                    return get_move_to_target(
-                        character.pos, memory_character.get_location()
-                    )
-                # TODO: Run if the enemy is much stronger
-                # TODO: Add characteristic
+                if character.is_hostile_with(memory_character.get_faction()):
+                    # TODO: Path finding movement, avoid obstacle
+                    # TODO: smarter escape
+                    # TODO: Add characteristic for complex movement
+                    if memory_character.get_power_est() in [
+                        PowerEst.MUCH_STRONGER,
+                    ]:
+                        logger.debug(
+                            f"{character.get_info()}:{character.get_power()} is escaping from {memory_character.get_power_est()}"
+                        )
+                        return get_move_to_target(
+                            character.pos, memory_character.get_location()
+                        ).reverse()
+                    elif memory_character.get_power_est() in [
+                        PowerEst.MUCH_WEAKER,
+                        PowerEst.WEAKER,
+                    ]:
+                        logger.debug(
+                            f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
+                        )
+                        return get_move_to_target(
+                            character.pos, memory_character.get_location()
+                        )
 
         # Not found any enemy or is_random_move, random movement
         return Move.random_move(character)
@@ -220,7 +229,9 @@ class Fight(Action):
             # is_end_combat = combat_event.kill_character(character, target_character)
             # return is_end_combat
 
-        return False
+        # There is a twist, if the combat is over, the combat_event will reset the redraw status (True)
+        # but if we return True here, it will be replaced and not drawing the character
+        return character.should_redraw()
 
 
 class Escape(Action):

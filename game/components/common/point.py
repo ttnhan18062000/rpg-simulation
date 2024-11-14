@@ -21,3 +21,7 @@ class Point:
 
     def __str__(self) -> str:
         return f"({self.x},{self.y})"
+
+    def reverse(self):
+        self.x = -self.x
+        self.y = -self.y

@@ -21,7 +21,7 @@ from data.world.grid_data import grid1
 
 class Game:
     def __init__(self) -> None:
-        self.max_n_cell = 10
+        self.max_n_cell = 5
         self.display_setting = DisplaySetting(self.max_n_cell)
         self.control_event_handler = ControlEventHandler()
         self.is_display_changed = True

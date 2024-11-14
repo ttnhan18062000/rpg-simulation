@@ -88,7 +88,7 @@ class HumanGeneratorTile(Tile):
         self.image = pygame.image.load("data/sprites/generator.png")
 
     def is_obstacle(self):
-        return True
+        return False
 
 
 class DemonGeneratorTile(Tile):
@@ -97,7 +97,7 @@ class DemonGeneratorTile(Tile):
         self.image = pygame.image.load("data/sprites/generator.png")
 
     def is_obstacle(self):
-        return True
+        return False
 
 
 class SwampTile(Tile):

@@ -71,8 +71,6 @@ class CombatEvent(Event):
             get_store().get(EntityType.CHARACTER, cid)
             for cid in self.character_faction_ids[faction]
         ]
-        for character in characters:
-            character.exit_combat()
 
         self.character_faction_ids.pop(faction)
 
@@ -81,6 +79,9 @@ class CombatEvent(Event):
             store.remove(EntityType.EVENT, self.id)
             tile = store.get(EntityType.TILE, self.tile_id)
             tile.set_tile_combat_status(is_combat=False)
+
+        for character in characters:
+            character.exit_combat()
 
     def kill_character(self, character, killed_character):
         logger.debug(f"{character.get_info()} killed {killed_character.get_info()}")
