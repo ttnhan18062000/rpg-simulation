@@ -102,7 +102,7 @@ class World:
                     text_surface = font.render(str(n_of_chars), True, (255, 0, 0))
                     surface.blit(text_surface, (x - offset_x, y - offset_y))
 
-                    character.reset_redraw_status()
+                    character.set_redraw_status(False)
 
     def update(self):
         for generator in self.generators:

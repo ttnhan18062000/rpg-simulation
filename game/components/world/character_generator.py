@@ -58,7 +58,9 @@ class HumanGenerator(CharacterGenerator):
             Human(),
             1,
         )
-        new_human.add_behavior(FightingBehavior.create_random_behavior())
+        new_human.add_behavior(
+            FightingBehavior.name, FightingBehavior.create_random_behavior()
+        )
         get_store().add(EntityType.CHARACTER, new_human.get_info().id, new_human)
 
 
@@ -84,5 +86,7 @@ class DemonGenerator(CharacterGenerator):
             Demon(),
             1,
         )
-        new_demon.add_behavior(FightingBehavior.create_random_behavior())
+        new_demon.add_behavior(
+            FightingBehavior.name, FightingBehavior.create_random_behavior()
+        )
         get_store().add(EntityType.CHARACTER, new_demon.get_info().id, new_demon)

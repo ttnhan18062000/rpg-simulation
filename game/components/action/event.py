@@ -44,6 +44,20 @@ class CombatEvent(Event):
             if len(self.character_faction_ids[faction]) == 0:
                 self.character_faction_ids.pop(faction)
 
+                # Exit combat for all characters has no hostile faction in combat
+                all_factions = list(
+                    self.character_faction_ids.keys()
+                )  # clone list to avoid 'dictionary changed size during iteration'
+                for faction in all_factions:
+                    character_of_faction = get_store().get(
+                        EntityType.CHARACTER, self.character_faction_ids[faction][0]
+                    )
+                    if not any(
+                        hostile_faction in all_factions
+                        for hostile_faction in character_of_faction.get_hostile_factions()
+                    ):
+                        self.exit_combat_faction(faction)
+
     def get_character_ids_with_faction(self, faction):
         if faction in self.character_faction_ids:
             return self.character_faction_ids[faction]
@@ -67,6 +81,55 @@ class CombatEvent(Event):
             store.remove(EntityType.EVENT, self.id)
             tile = store.get(EntityType.TILE, self.tile_id)
             tile.set_tile_combat_status(is_combat=False)
+
+    def kill_character(self, character, killed_character):
+        logger.debug(f"{character.get_info()} killed {killed_character.get_info()}")
+
+        store = get_store()
+
+        # TODO: better level up handling
+        is_level_up = character.level.add_exp(
+            killed_character.level.class_level.get_next_level_required_exp(
+                killed_character.level.current_level
+            )
+        )
+        if is_level_up:
+            character.level_up()
+
+        # TODO: Clean killed character and end combat for ally characters should be handled by another component
+        # Remove dead character corpse
+        target_faction = killed_character.get_faction()
+        killed_character_id = killed_character.get_info().id
+        killed_character.set_status("dead")
+        tile_id = killed_character.tile_id
+        tile = store.get(EntityType.TILE, tile_id)
+        tile.remove_character_id(killed_character_id)
+
+        self.remove_character_id(target_faction, killed_character_id)
+
+        # if len(self.get_character_ids_with_faction(target_faction)) == 0:
+        #     self.exit_combat_faction(character.get_faction())
+        #     return True
+
+        # return False
+
+    def get_hostile_power(self, faction):
+        store = get_store()
+        other_factions = [f for f in self.character_faction_ids.keys() if f != faction]
+        sum_power = 0
+        for other_faction in other_factions:
+            character_of_faction = store.get(
+                EntityType.CHARACTER, self.character_faction_ids[other_faction][0]
+            )
+            # TODO: create faction class that can get hostile faction directly
+            if character_of_faction.is_hostile_with(faction):
+                for cid in self.character_faction_ids[other_faction]:
+                    power = store.get(
+                        EntityType.CHARACTER,
+                        cid,
+                    ).get_power()
+                    sum_power += power
+        return sum_power
 
     def to_dict(self):
         return {

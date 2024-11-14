@@ -12,6 +12,7 @@ from components.character.character_level import CharacterLevel
 from components.character.character_vision import CharacterVision
 from components.character.character_power import CharacterPower
 from components.character.memory.character_memory import CharacterMemory
+from components.character.character_behavior import FightingBehavior
 from components.world.store import get_store, EntityType
 
 from data.logs.logger import logger
@@ -34,7 +35,7 @@ class Character(GameObject):
         self.character_action = BasicCharacterAction()
         self.character_stats = character_stats
         self.character_class = character_class
-        self.character_vision = CharacterVision(5)
+        self.character_vision = CharacterVision(8)
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
         self.behaviors = {}
@@ -105,11 +106,12 @@ class Character(GameObject):
     def should_redraw(self):
         return self.is_just_changed_location
 
-    def reset_redraw_status(self):
-        self.is_just_changed_location = False
+    def set_redraw_status(self, status):
+        self.is_just_changed_location = status
 
     def exit_combat(self):
         self.character_action = BasicCharacterAction()
+        self.set_redraw_status(True)
 
     def get_behaviors(self):
         return self.behaviors
@@ -120,6 +122,9 @@ class Character(GameObject):
         return None
 
     def add_behavior(self, key, behavior):
+        logger.debug(
+            f"{self.get_info()} added behavior '{key}':'{behavior.__class__.__name__}'"
+        )
         self.behaviors[key] = behavior
 
     def enter_combat(self, combat_event_id, target_faction):
@@ -127,7 +132,7 @@ class Character(GameObject):
             **{
                 "combat_event_id": combat_event_id,
                 "target_faction": target_faction,
-                "fighting_behavior": self.get_behavior("fighting_behavior"),
+                FightingBehavior.name: self.get_behavior(FightingBehavior.name),
             }
         )
 

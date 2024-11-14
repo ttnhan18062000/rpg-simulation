@@ -12,15 +12,18 @@ from data.logs.logger import logger
 class Action:
     action_name = "Action"
 
-    def do_action(self, character):
+    @classmethod
+    def do_action(cls, character):
         pass
 
-    def execute(self, character, **kwargs):
-        logger.debug(f"{character.get_info()} do {self.action_name}")
-        self.inspect_around(character)
-        return self.do_action(character, **kwargs)
+    @classmethod
+    def execute(cls, character, **kwargs):
+        logger.debug(f"{character.get_info()} do {Action.action_name}")
+        cls.inspect_around(character)
+        return cls.do_action(character, **kwargs)
 
-    def inspect_around(self, character):
+    @classmethod
+    def inspect_around(cls, character):
         # TODO: instead of reset memory every action, better delete only old memories, or wrong memories
         # like doesn't see the remembered character at the location (they already escaped)
 
@@ -47,7 +50,8 @@ class Action:
 class Move(Action):
     action_name = "Move"
 
-    def check_valid_step(self, new_pos: Point):
+    @staticmethod
+    def check_valid_step(new_pos: Point):
         store = get_store()
         tile_id = store.get(EntityType.GRID, 0).get_tile(new_pos)
         tile = store.get(EntityType.TILE, tile_id)
@@ -55,7 +59,8 @@ class Move(Action):
             return False
         return tile
 
-    def random_move(self, character):
+    @staticmethod
+    def random_move(character):
         direction = random.randint(0, 3)
         next_move = Point(0, 0)
         if direction == 0:
@@ -66,36 +71,42 @@ class Move(Action):
             next_move = Point(-1, 0)
         elif direction == 3:
             next_move = Point(1, 0)
-        if not self.check_valid_step(character.pos + next_move):
-            return self.random_move(character)
+        if not Move.check_valid_step(character.pos + next_move):
+            return Move.random_move(character)
         return next_move
 
-    def get_next_move(self, character):
-        characters_in_memory = character.get_memory().get_all(EntityType.CHARACTER)
-        for memory_character in characters_in_memory:
-            if character.is_hostile_with(
-                memory_character.get_faction()
-            ) and memory_character.get_power_est() in [
-                PowerEst.MUCH_WEAKER,
-                PowerEst.WEAKER,
-            ]:
-                logger.debug(
-                    f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
-                )
-                return get_move_to_target(
-                    character.pos, memory_character.get_location()
-                )
-            # TODO: Run if the enemy is much stronger
-            # TODO: Add characteristic
+    @staticmethod
+    def get_next_move(character, is_random_move=False):
+        if not is_random_move:
+            characters_in_memory = character.get_memory().get_all(EntityType.CHARACTER)
+            for memory_character in characters_in_memory:
+                if character.is_hostile_with(
+                    memory_character.get_faction()
+                ) and memory_character.get_power_est() in [
+                    PowerEst.MUCH_WEAKER,
+                    PowerEst.WEAKER,
+                ]:
+                    logger.debug(
+                        f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
+                    )
+                    return get_move_to_target(
+                        character.pos, memory_character.get_location()
+                    )
+                # TODO: Run if the enemy is much stronger
+                # TODO: Add characteristic
 
-        # Not found any enemy, random movement
-        return self.random_move(character)
+        # Not found any enemy or is_random_move, random movement
+        return Move.random_move(character)
 
-    def do_action(self, character, **kwargs):
+    @classmethod
+    def do_action(cls, character, **kwargs):
 
         store = get_store()
 
-        next_move = self.get_next_move(character)
+        if kwargs.get("random_move"):
+            next_move = Move.get_next_move(character, is_random_move=True)
+        else:
+            next_move = Move.get_next_move(character, is_random_move=False)
 
         previous_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
         previous_tile = store.get(EntityType.TILE, previous_tile_id)
@@ -107,6 +118,7 @@ class Move(Action):
         new_tile.add_character_id(character.get_info().id)
         character.tile_id = new_tile.id
 
+        # Enter a tile that holding a combat event
         if new_tile.is_combat_happen():
             combat_event_id = new_tile.get_event(EventType.COMBAT)
             combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
@@ -119,6 +131,7 @@ class Move(Action):
                     character.enter_combat(combat_event_id, hostile_faction)
                     return False
 
+        # Enter a tile with other characters standing on it, may cause a combat event happen
         all_characters = [
             store.get(EntityType.CHARACTER, cid)
             for cid in new_tile.get_character_ids()
@@ -168,14 +181,16 @@ class Move(Action):
 class Interact(Action):
     action_name = "Interact"
 
-    def do_action(self, character, **kwargs):
+    @classmethod
+    def do_action(cls, character, **kwargs):
         return False
 
 
 class Standby(Action):
     action_name = "Standby"
 
-    def do_action(self, character, **kwargs):
+    @classmethod
+    def do_action(cls, character, **kwargs):
         TrainingEvent().execute(character)
         return False
 
@@ -183,41 +198,8 @@ class Standby(Action):
 class Fight(Action):
     action_name = "Fight"
 
-    def do_action(self, character, **kwargs):
-        # store = get_store()
-        # target_character_ids = kwargs.get("target_character_ids")
-        # # TODO: smarter target selection
-        # target_character_id = random.choice(target_character_ids)
-        # target_character = store.get(EntityType.CHARACTER, target_character_id)
-        # target_character.character_stats.update_stat(
-        #     StatDefinition.HEALTH,
-        #     -character.character_stats.get_stat(StatDefinition.POWER).value,
-        # )
-        # logger.debug(f"{character.get_info()} hit {target_character.get_info()}")
-        # if not target_character.is_alive():
-        #     logger.debug(f"{character.get_info()} killed {target_character.get_info()}")
-        #     is_level_up = character.level.add_exp(
-        #         target_character.level.class_level.get_next_level_required_exp(
-        #             target_character.level.current_level
-        #         )
-        #     )
-        #     if is_level_up:
-        #         character.level_up()
-
-        #     # Remove dead character corpse
-        #     target_character.set_status("dead")
-        #     tile_id = target_character.tile_id
-        #     tile = store.get(EntityType.TILE, tile_id)
-        #     tile.remove_character_id(target_character.get_info().id)
-
-        #     target_character_ids.remove(target_character_id)
-
-        #     if len(target_character_ids) == 0:
-        #         character.exit_combat()
-        #         return True
-
-        # return False
-
+    @classmethod
+    def do_action(cls, character, **kwargs):
         store = get_store()
         target_faction = kwargs.get("target_faction")
         combat_event_id = kwargs.get("combat_event_id")
@@ -234,25 +216,9 @@ class Fight(Action):
         )
         logger.debug(f"{character.get_info()} hit {target_character.get_info()}")
         if not target_character.is_alive():
-            logger.debug(f"{character.get_info()} killed {target_character.get_info()}")
-            is_level_up = character.level.add_exp(
-                target_character.level.class_level.get_next_level_required_exp(
-                    target_character.level.current_level
-                )
-            )
-            if is_level_up:
-                character.level_up()
-            # Remove dead character corpse
-            target_character.set_status("dead")
-            tile_id = target_character.tile_id
-            tile = store.get(EntityType.TILE, tile_id)
-            tile.remove_character_id(target_character.get_info().id)
-
-            combat_event.remove_character_id(target_faction, target_character_id)
-
-            if len(combat_event.get_character_ids_with_faction(target_faction)) == 0:
-                combat_event.exit_combat_faction(character.get_faction())
-                return True
+            combat_event.kill_character(character, target_character)
+            # is_end_combat = combat_event.kill_character(character, target_character)
+            # return is_end_combat
 
         return False
 
@@ -260,5 +226,32 @@ class Fight(Action):
 class Escape(Action):
     action_name = "Escape"
 
-    def do_action(self, character, **kwargs):
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        store = get_store()
+
+        combat_event_id = kwargs.get("combat_event_id")
+        combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
+
+        total_hostile_power = combat_event.get_hostile_power(character.get_faction())
+        character_power = character.get_power()
+        escape_chance = 0.3
+        if total_hostile_power > 3 * character_power:
+            escape_chance = 0.05
+        elif total_hostile_power < character_power:
+            escape_chance = 0.9
+
+        if random.random() < escape_chance:
+            logger.debug(f"{character.get_info()} escape successfully")
+            character_id = character.get_info().id
+            combat_event.remove_character_id(character.get_faction(), character_id)
+
+            character.exit_combat()
+
+            # TODO: Random move (should trigger the Move class function => convert Move into classmethod?)
+            Move.do_action(character, **{"random_move": True})
+
+            return True
+
+        logger.debug(f"{character.get_info()} escape failed")
         return False

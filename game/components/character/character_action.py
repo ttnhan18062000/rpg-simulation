@@ -15,7 +15,6 @@ class ActionType(Enum):
 
 
 class CharacterAction:
-
     def __init__(self, **kwargs) -> None:
         self.actions = {}
         self.kwargs = kwargs
@@ -43,12 +42,11 @@ class CharacterAction:
 
 
 class BasicCharacterAction(CharacterAction):
-
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self.actions = {
-            ActionType.MOVE: {"class": Move(), "prob": 50},
-            ActionType.STANDBY: {"class": Standby(), "prob": 50},
+            ActionType.MOVE: {"class": Move, "prob": 50},
+            ActionType.STANDBY: {"class": Standby, "prob": 50},
         }
         self.kwargs = kwargs
 
@@ -57,12 +55,14 @@ class CombatCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self.actions = {
-            ActionType.FIGHT: {"class": Fight(), "prob": 50},
-            ActionType.ESCAPE: {"class": Escape(), "prob": 50},
+            ActionType.FIGHT: {"class": Fight, "prob": 100},
+            ActionType.ESCAPE: {"class": Escape, "prob": 0},
         }
         self.kwargs = kwargs
-        if kwargs.get("fighting_behavior"):
-            self.escape_threshold = kwargs.get("FightingBehavior").get_escape_thresold()
+        if kwargs.get(FightingBehavior.name):
+            self.escape_threshold = kwargs.get(
+                FightingBehavior.name
+            ).get_escape_threshold()
         else:
             self.escape_threshold = 0.25
 
@@ -71,9 +71,16 @@ class CombatCharacterAction(CharacterAction):
         max_health = character.get_stats().get_stat(StatDefinition.MAX_HEALTH).value
         health_ratio = cur_health / max_health
         if health_ratio < self.escape_threshold:
+            new_fight_prob = int(100 * (health_ratio / 2))
             return {
-                ActionType.FIGHT: {"class": Fight(), "prob": health_ratio / 2},
-                ActionType.ESCAPE: {"class": Escape(), "prob": 1 - (health_ratio / 2)},
+                ActionType.FIGHT: {
+                    "class": Fight,
+                    "prob": new_fight_prob,
+                },
+                ActionType.ESCAPE: {
+                    "class": Escape,
+                    "prob": 100 - new_fight_prob,
+                },
             }
         else:
             return self.actions
