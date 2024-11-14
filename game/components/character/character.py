@@ -37,6 +37,7 @@ class Character(GameObject):
         self.character_vision = CharacterVision(5)
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
+        self.behaviors = {}
         self.is_dead = False
 
         store = get_store()
@@ -110,9 +111,24 @@ class Character(GameObject):
     def exit_combat(self):
         self.character_action = BasicCharacterAction()
 
+    def get_behaviors(self):
+        return self.behaviors
+
+    def get_behavior(self, key):
+        if key in self.behaviors:
+            return self.behaviors[key]
+        return None
+
+    def add_behavior(self, key, behavior):
+        self.behaviors[key] = behavior
+
     def enter_combat(self, combat_event_id, target_faction):
         self.character_action = CombatCharacterAction(
-            **{"combat_event_id": combat_event_id, "target_faction": target_faction}
+            **{
+                "combat_event_id": combat_event_id,
+                "target_faction": target_faction,
+                "fighting_behavior": self.get_behavior("fighting_behavior"),
+            }
         )
 
     def get_character_action_type(self):

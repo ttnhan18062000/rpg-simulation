@@ -7,6 +7,7 @@ from components.character.character import Character
 from components.character.character_info import CharacterInfo
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_level import CharacterLevel
+from components.character.character_behavior import FightingBehavior
 from components.common.point import Point
 from components.world.store import get_store, EntityType
 from data.logs.logger import logger
@@ -57,6 +58,7 @@ class HumanGenerator(CharacterGenerator):
             Human(),
             1,
         )
+        new_human.add_behavior(FightingBehavior.create_random_behavior())
         get_store().add(EntityType.CHARACTER, new_human.get_info().id, new_human)
 
 
@@ -82,4 +84,5 @@ class DemonGenerator(CharacterGenerator):
             Demon(),
             1,
         )
+        new_demon.add_behavior(FightingBehavior.create_random_behavior())
         get_store().add(EntityType.CHARACTER, new_demon.get_info().id, new_demon)
