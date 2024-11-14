@@ -42,12 +42,12 @@ class HumanGenerator(CharacterGenerator):
 
     def spawn(self):
         stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(50, 150))
+        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(100, 150))
         stat.add_stat(
             StatDefinition.CURRENT_HEALTH,
             stat.get_stat(StatDefinition.MAX_HEALTH).value,
         )
-        stat.add_stat(StatDefinition.POWER, random.randint(10, 20))
+        stat.add_stat(StatDefinition.POWER, random.randint(15, 30))
         stat.add_stat(StatDefinition.SPEED, random.randint(80, 120))
         new_human = Character(
             self.location,
@@ -67,16 +67,16 @@ class DemonGenerator(CharacterGenerator):
 
     def spawn(self):
         stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(150, 250))
+        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(200, 300))
         stat.add_stat(
             StatDefinition.CURRENT_HEALTH,
             stat.get_stat(StatDefinition.MAX_HEALTH).value,
         )
-        stat.add_stat(StatDefinition.POWER, random.randint(15, 25))
-        stat.add_stat(StatDefinition.SPEED, random.randint(30, 60))
+        stat.add_stat(StatDefinition.POWER, random.randint(30, 50))
+        stat.add_stat(StatDefinition.SPEED, random.randint(50, 70))
         new_demon = Character(
             self.location,
-            pygame.image.load("data/sprites/character5.png"),
+            pygame.image.load("data/sprites/demon2.png"),
             CharacterInfo("Demon"),
             stat,
             Demon(),

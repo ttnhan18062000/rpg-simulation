@@ -83,6 +83,16 @@ class World:
                     )
                     surface.blit(character_icon, (x - offset_x, y - offset_y))
 
+                    # Write character level
+                    text_surface = font.render(
+                        str(character.get_level().get_current_level()),
+                        True,
+                        (0, 255, 0),
+                    )
+                    surface.blit(
+                        text_surface, (x - offset_x + (cell_size - 10), y - offset_y)
+                    )
+
                     # Write number of character on the tile
                     tile_id = store.get(EntityType.GRID, 0).tiles[character.pos.x][
                         character.pos.y

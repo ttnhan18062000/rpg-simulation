@@ -49,11 +49,20 @@ class Store:
         return None
 
     def get_all(self, entity_type: EntityType):
-        return [
+        all_entities = [
             obj
             for key, obj in self.data.items()
             if key.startswith(f"{entity_type.value}")
         ]
+        # Get character descending by level, because when drawing, we should draw the highest level character
+        # if multiple characters are standing on the same tile
+        if entity_type == EntityType.CHARACTER:
+            all_entities = sorted(
+                all_entities,
+                key=lambda char: char.get_level().get_current_level(),
+                reverse=True,
+            )
+        return all_entities
 
 
 store = Store()

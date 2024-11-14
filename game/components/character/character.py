@@ -34,7 +34,7 @@ class Character(GameObject):
         self.character_action = BasicCharacterAction()
         self.character_stats = character_stats
         self.character_class = character_class
-        self.character_vision = CharacterVision(4)
+        self.character_vision = CharacterVision(5)
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
         self.is_dead = False
@@ -68,6 +68,9 @@ class Character(GameObject):
 
     def get_memory(self):
         return self.character_memory
+
+    def get_level(self):
+        return self.level
 
     def is_alive(self):
         return (
