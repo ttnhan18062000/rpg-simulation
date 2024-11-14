@@ -23,3 +23,6 @@ class CharacterLevel:
             return True
 
         return False
+
+    def get_current_level(self):
+        return self.current_level

@@ -7,6 +7,7 @@ from components.character.character import Character
 from components.character.character_info import CharacterInfo
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_level import CharacterLevel
+from components.character.character_behavior import FightingBehavior
 from components.common.point import Point
 from components.world.store import get_store, EntityType
 from data.logs.logger import logger
@@ -42,12 +43,12 @@ class HumanGenerator(CharacterGenerator):
 
     def spawn(self):
         stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(50, 150))
+        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(100, 150))
         stat.add_stat(
             StatDefinition.CURRENT_HEALTH,
             stat.get_stat(StatDefinition.MAX_HEALTH).value,
         )
-        stat.add_stat(StatDefinition.POWER, random.randint(10, 20))
+        stat.add_stat(StatDefinition.POWER, random.randint(15, 30))
         stat.add_stat(StatDefinition.SPEED, random.randint(80, 120))
         new_human = Character(
             self.location,
@@ -57,6 +58,7 @@ class HumanGenerator(CharacterGenerator):
             Human(),
             1,
         )
+        new_human.add_behavior(FightingBehavior.create_random_behavior())
         get_store().add(EntityType.CHARACTER, new_human.get_info().id, new_human)
 
 
@@ -67,19 +69,20 @@ class DemonGenerator(CharacterGenerator):
 
     def spawn(self):
         stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(150, 250))
+        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(200, 300))
         stat.add_stat(
             StatDefinition.CURRENT_HEALTH,
             stat.get_stat(StatDefinition.MAX_HEALTH).value,
         )
-        stat.add_stat(StatDefinition.POWER, random.randint(15, 25))
-        stat.add_stat(StatDefinition.SPEED, random.randint(30, 60))
+        stat.add_stat(StatDefinition.POWER, random.randint(30, 50))
+        stat.add_stat(StatDefinition.SPEED, random.randint(50, 70))
         new_demon = Character(
             self.location,
-            pygame.image.load("data/sprites/character5.png"),
+            pygame.image.load("data/sprites/demon2.png"),
             CharacterInfo("Demon"),
             stat,
             Demon(),
             1,
         )
+        new_demon.add_behavior(FightingBehavior.create_random_behavior())
         get_store().add(EntityType.CHARACTER, new_demon.get_info().id, new_demon)
