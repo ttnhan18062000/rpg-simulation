@@ -22,6 +22,9 @@ class Event:
     def execute(self):
         pass
 
+    def get_id(self):
+        return self.id
+
 
 class CombatEvent(Event):
     # faction = character class name
@@ -31,6 +34,8 @@ class CombatEvent(Event):
         self.tile_id = tile_id
         tile = get_store().get(EntityType.TILE, self.tile_id)
         tile.set_tile_combat_status(is_combat=True, combat_event_id=self.id)
+
+        logger.debug(f"New combat happen: {self.get_id()}:{self.character_faction_ids}")
 
     def add_character_id(self, faction, character_id):
         if faction not in self.character_faction_ids:
@@ -118,18 +123,25 @@ class CombatEvent(Event):
         store = get_store()
         other_factions = [f for f in self.character_faction_ids.keys() if f != faction]
         sum_power = 0
+        # Calculate total power of factions, that hostile with the target faction
         for other_faction in other_factions:
             character_of_faction = store.get(
                 EntityType.CHARACTER, self.character_faction_ids[other_faction][0]
             )
             # TODO: create faction class that can get hostile faction directly
             if character_of_faction.is_hostile_with(faction):
-                for cid in self.character_faction_ids[other_faction]:
-                    power = store.get(
-                        EntityType.CHARACTER,
-                        cid,
-                    ).get_power()
-                    sum_power += power
+                sum_power += self.get_total_power_by_faction(other_faction)
+        return sum_power
+
+    def get_total_power_by_faction(self, faction):
+        store = get_store()
+        sum_power = 0
+        for cid in self.character_faction_ids[faction]:
+            power = store.get(
+                EntityType.CHARACTER,
+                cid,
+            ).get_power()
+            sum_power += power
         return sum_power
 
     def to_dict(self):

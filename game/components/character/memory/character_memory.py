@@ -1,9 +1,12 @@
 from components.world.store import EntityType, Store
-from components.character.memory.memory import Memory, MemoryCharacter
+from components.character.memory.memory import Memory, MemoryCharacter, MemoryEvent
 
 
 class CharacterMemory:
-    memory_map = {EntityType.CHARACTER: MemoryCharacter}
+    memory_map = {
+        EntityType.CHARACTER: MemoryCharacter,
+        EntityType.EVENT: MemoryEvent,
+    }
 
     def __init__(self) -> None:
         self.memories = {}
