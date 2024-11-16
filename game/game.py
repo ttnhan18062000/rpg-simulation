@@ -21,7 +21,7 @@ from data.world.grid_data import grid1
 
 class Game:
     def __init__(self) -> None:
-        self.max_n_cell = 5
+        self.max_n_cell = 7
         self.display_setting = DisplaySetting(self.max_n_cell)
         self.control_event_handler = ControlEventHandler()
         self.is_display_changed = True
@@ -44,9 +44,9 @@ class Game:
             for y in range(len(grid_data[0])):
                 # TODO: Avoid hard-coded tile value
                 if grid_data[x][y] == 3:
-                    generators.append(DemonGenerator(1, 1, Point(x, y)))
+                    generators.append(DemonGenerator(1, 3, Point(x, y)))
                 if grid_data[x][y] == 4:
-                    generators.append(HumanGenerator(1, 1, Point(x, y)))
+                    generators.append(HumanGenerator(1, 3, Point(x, y)))
         return generators
 
     def initialize_world(self):

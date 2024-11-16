@@ -4,8 +4,11 @@ from components.world.store import get_store, EntityType
 from components.common.point import Point
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
 from components.character.character_stat import StatDefinition
-from components.common.path_finding import get_move_to_target
-from components.character.memory.memory import MemoryCharacter, PowerEst
+from components.common.path_finding import (
+    get_move_from_target,
+    check_valid_step,
+)
+from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
 from data.logs.logger import logger
 
 
@@ -32,6 +35,18 @@ class Action:
         visible_points = character.get_vision().get_visible_tiles(character.pos)
         for point in visible_points:
             tile_id = store.get(EntityType.GRID, 0).get_tile(point)
+            tile = store.get(EntityType.TILE, tile_id)
+
+            # Examine combat event on visible tiles
+            if tile.is_combat_happen():
+                combat_id = tile.get_event(EventType.COMBAT)
+                combat = store.get(EntityType.EVENT, combat_id)
+                if character.get_faction() in combat.get_factions():
+                    memory = MemoryEvent(combat_id, point, event_type=EventType.COMBAT)
+                    memory.remember_power(character, combat, perception_accuracy=90)
+                    character.get_memory().add(EntityType.EVENT, combat_id, memory)
+
+            # Examine character powers on visible tiles
             character_ids_on_tile = store.get(
                 EntityType.TILE, tile_id
             ).get_character_ids()
@@ -51,15 +66,6 @@ class Move(Action):
     action_name = "Move"
 
     @staticmethod
-    def check_valid_step(new_pos: Point):
-        store = get_store()
-        tile_id = store.get(EntityType.GRID, 0).get_tile(new_pos)
-        tile = store.get(EntityType.TILE, tile_id)
-        if tile.is_obstacle():
-            return False
-        return tile
-
-    @staticmethod
     def random_move(character):
         direction = random.randint(0, 3)
         next_move = Point(0, 0)
@@ -71,13 +77,31 @@ class Move(Action):
             next_move = Point(-1, 0)
         elif direction == 3:
             next_move = Point(1, 0)
-        if not Move.check_valid_step(character.pos + next_move):
+        if not check_valid_step(character.pos + next_move):
             return Move.random_move(character)
         return next_move
 
     @staticmethod
     def get_next_move(character, is_random_move=False):
         if not is_random_move:
+            # Join nearby combat of own faction if favorable
+            events_in_memory = character.get_memory().get_all(EntityType.EVENT)
+            for memory_event in events_in_memory:
+                if memory_event.get_event_type() is EventType.COMBAT:
+                    if memory_event.get_power_est() in [
+                        PowerEst.MUCH_WEAKER,
+                        PowerEst.WEAKER,
+                    ]:
+                        logger.debug(
+                            f"{character.get_info()}:{character.get_power()} is joining combat {memory_event.get_id()}:{memory_event.get_location()}:{memory_event.get_power_est()}"
+                        )
+                        return get_move_from_target(
+                            character.pos,
+                            memory_event.get_location(),
+                            is_chasing=True,
+                        )
+
+            # Chase or escape nearby enemies
             characters_in_memory = character.get_memory().get_all(EntityType.CHARACTER)
             for memory_character in characters_in_memory:
                 if character.is_hostile_with(memory_character.get_faction()):
@@ -90,9 +114,11 @@ class Move(Action):
                         logger.debug(
                             f"{character.get_info()}:{character.get_power()} is escaping from {memory_character.get_power_est()}"
                         )
-                        return get_move_to_target(
-                            character.pos, memory_character.get_location()
-                        ).reverse()
+                        return get_move_from_target(
+                            character.pos,
+                            memory_character.get_location(),
+                            is_chasing=False,
+                        )
                     elif memory_character.get_power_est() in [
                         PowerEst.MUCH_WEAKER,
                         PowerEst.WEAKER,
@@ -100,8 +126,10 @@ class Move(Action):
                         logger.debug(
                             f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
                         )
-                        return get_move_to_target(
-                            character.pos, memory_character.get_location()
+                        return get_move_from_target(
+                            character.pos,
+                            memory_character.get_location(),
+                            is_chasing=True,
                         )
 
         # Not found any enemy or is_random_move, random movement
