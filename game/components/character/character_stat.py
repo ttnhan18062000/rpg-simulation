@@ -1,7 +1,11 @@
 import random
 from enum import Enum
+import copy
 
 from components.character.stat import NumericalStat, CategoricalStat, Stat
+
+
+from data.logs.logger import logger
 
 
 class StatDefinition(Enum):
@@ -24,8 +28,8 @@ class CharacterStat:
         self.stats_list = {}
 
     @staticmethod
-    def create_stat(stat_def, value):
-        return stat_class[stat_def](value)
+    def create_stat(stat_def, value, **kwargs):
+        return stat_class[stat_def](value, **kwargs)
 
     def add_stat(self, stat_def: StatDefinition, value):
         if stat_def in self.stats_list:
@@ -53,6 +57,32 @@ class CharacterStat:
                 )
         else:
             raise Exception(f"No {stat_def} found")
+
+    def get_applied_statuses_character_stat(self, character_status):
+        """
+        Apply all effects to a given CharacterStats object.
+        :param stats: The CharacterStats instance to modify
+        """
+        applied_character_stat = copy.deepcopy(self)
+
+        stat_effect_statuses = {
+            status_name: status
+            for status_name, status in character_status.get_statuses().items()
+            if status.is_stat_effect_status()
+        }
+
+        for status_name, status in stat_effect_statuses.items():
+            stat_effects = status.get_stat_effects()
+            for stat_def, stat in stat_effects.items():
+                applied_character_stat.get_stat(stat_def).modify(stat)
+
+        return applied_character_stat
+
+    def get_health_ratio(self):
+        return (
+            self.get_stat(StatDefinition.CURRENT_HEALTH).value
+            / self.get_stat(StatDefinition.MAX_HEALTH).value
+        )
 
     def __str__(self) -> str:
         return " ".join([str(stat.value) for stat in list(self.stats_list.values())])

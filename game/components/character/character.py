@@ -7,6 +7,8 @@ from components.character.character_action import (
     CombatCharacterAction,
 )
 from components.character.character_stat import CharacterStat, StatDefinition
+from components.character.character_status import CharacterStatus
+from components.character.status import LightInjury, HeavyInjury
 from components.character.character_class import CharacterClass
 from components.character.character_level import CharacterLevel
 from components.character.character_vision import CharacterVision
@@ -34,6 +36,7 @@ class Character(GameObject):
         self.character_info = character_info
         self.character_action = BasicCharacterAction()
         self.character_stats = character_stats
+        self.character_status = CharacterStatus()
         self.character_class = character_class
         self.character_vision = CharacterVision(8)
         self.level = CharacterLevel(character_class.class_level, level)
@@ -53,8 +56,15 @@ class Character(GameObject):
     def get_info(self):
         return self.character_info
 
-    def get_stats(self):
+    def get_character_stat(self):
         return self.character_stats
+
+    def get_status_applied_character_stat(self):
+        if self.character_status.is_empty():
+            return self.get_character_stat()
+        return self.character_stats.get_applied_statuses_character_stat(
+            self.character_status
+        )
 
     def get_vision(self):
         return self.character_vision
@@ -66,7 +76,7 @@ class Character(GameObject):
         return self.character_class.get_hostile_factions()
 
     def get_power(self):
-        return CharacterPower.get_power(self.get_stats())
+        return CharacterPower.get_power(self.get_status_applied_character_stat())
 
     def get_memory(self):
         return self.character_memory
@@ -103,6 +113,9 @@ class Character(GameObject):
         if self.is_just_changed_location == False:
             self.is_just_changed_location = self.character_action.do_action(self)
 
+        # Decrease all statuses' duration by one
+        self.character_status.change_duration(-1)
+
     def should_redraw(self):
         return self.is_just_changed_location
 
@@ -110,6 +123,19 @@ class Character(GameObject):
         self.is_just_changed_location = status
 
     def exit_combat(self):
+        # TODO: critical health should depend on characteristic
+        # TODO: refactor for a module that manage the status applying
+        health_ratio = self.get_status_applied_character_stat().get_health_ratio()
+        if health_ratio < 0.25:
+            logger.debug(
+                f"{self.get_info()} suffered from HeavyInjury after exit combat"
+            )
+            self.character_status.add_status(HeavyInjury(5))
+        elif health_ratio < 0.5:
+            logger.debug(
+                f"{self.get_info()} suffered from LightInjury after exit combat"
+            )
+            self.character_status.add_status(LightInjury(5))
         self.character_action = BasicCharacterAction()
         self.set_redraw_status(True)
 

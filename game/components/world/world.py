@@ -119,13 +119,17 @@ class World:
                 if cid not in self.character_action_values:
                     self.character_action_values[cid] = (
                         100
-                        / character.character_stats.get_stat(StatDefinition.SPEED).value
+                        / character.get_status_applied_character_stat()
+                        .get_stat(StatDefinition.SPEED)
+                        .value
                         + time.time()
                     )
                 if self.character_action_values[cid] < time.time():
                     character.do_action()
                     self.character_action_values[cid] = (
                         100
-                        / character.character_stats.get_stat(StatDefinition.SPEED).value
+                        / character.get_status_applied_character_stat()
+                        .get_stat(StatDefinition.SPEED)
+                        .value
                         + time.time()
                     )
