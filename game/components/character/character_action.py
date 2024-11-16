@@ -67,8 +67,16 @@ class CombatCharacterAction(CharacterAction):
             self.escape_threshold = 0.25
 
     def get_modified_actions(self, character):
-        cur_health = character.get_stats().get_stat(StatDefinition.CURRENT_HEALTH).value
-        max_health = character.get_stats().get_stat(StatDefinition.MAX_HEALTH).value
+        cur_health = (
+            character.get_status_applied_character_stat()
+            .get_stat(StatDefinition.CURRENT_HEALTH)
+            .value
+        )
+        max_health = (
+            character.get_status_applied_character_stat()
+            .get_stat(StatDefinition.MAX_HEALTH)
+            .value
+        )
         health_ratio = cur_health / max_health
         if health_ratio < self.escape_threshold:
             new_fight_prob = int(100 * (health_ratio / 2))
