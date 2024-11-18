@@ -14,35 +14,67 @@ class StatusType(Enum):
 
 class StatusCategory(Enum):
     STAT_AFFECT = 1
-    MOVEMENT_AFFECT = 2
+    ACTION_AFFECT = 2
+
+
+class StatusClass(Enum):
+    NONE = 1
+    INJURY = 2
+    TOWN_BUFF = 3
+    TOWN_DEBUFF = 4
+    GROUND_BUFF = 5
+    GROUND_DEBUFF = 6
 
 
 class Status:
-    name = ""
+    status_class = StatusClass.NONE
+    status_level = 1
+    affect_stats = {}
+    affect_actions = []
+    type: StatusType = None
+    categories = []
+    img = None
 
     def __init__(self, duration: int) -> None:
         self.duration = duration
-        self.affect_stats = {}
-        self.affect_actions = []
-        self.type: StatusType = None
-        self.categories = []
-        self.img = None
 
     @classmethod
-    def get_name(cls):
-        return cls.name
+    def get_status_class(cls):
+        return cls.status_class
 
-    def get_stat_effects(self):
-        return self.affect_stats
+    @classmethod
+    def get_status_level(cls):
+        return cls.status_level
 
-    def get_categories(self):
-        return self.categories
+    @classmethod
+    def get_stat_effects(cls):
+        if StatusCategory.STAT_AFFECT not in cls.categories:
+            raise f"The {cls.__name__} is not a STAT_AFFECT status StatusCategory"
+        return cls.affect_stats
 
-    def is_stat_effect_status(self):
-        return StatusCategory.STAT_AFFECT in self.get_categories()
+    @classmethod
+    def get_action_effects(cls):
+        if StatusCategory.ACTION_AFFECT not in cls.categories:
+            raise f"The {cls.__name__} is not a ACTION_AFFECT status StatusCategory"
+        return cls.affect_actions
 
-    def change_duration(self, duration_value: int):
-        self.duration += duration_value
+    @classmethod
+    def get_type(cls):
+        return cls.type
+
+    @classmethod
+    def get_categories(cls):
+        return cls.categories
+
+    @classmethod
+    def is_stat_effect_status(cls):
+        return StatusCategory.STAT_AFFECT in cls.get_categories()
+
+    def change_duration(self, delta_duration: int):
+        self.duration += delta_duration
+
+    def set_duration(self, new_duration: int):
+        self.duration = new_duration
 
     def get_duration(self):
         return self.duration
@@ -52,50 +84,90 @@ class Status:
 
 
 class LightInjury(Status):
-    name = "LightInjury"
+    status_class = StatusClass.INJURY
+    status_level = 1
+    affect_stats = {
+        StatDefinition.POWER: CharacterStat.create_stat(
+            StatDefinition.POWER,
+            -0.3,
+            **{
+                NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
+            },
+        ),
+        StatDefinition.SPEED: CharacterStat.create_stat(
+            StatDefinition.SPEED,
+            -0.3,
+            **{
+                NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
+            },
+        ),
+    }
+    type = StatusType.DEBUFF
+    categories = [StatusCategory.STAT_AFFECT]
 
     def __init__(self, duration: int) -> None:
         super().__init__(duration)
-        self.affect_stats = {
-            StatDefinition.POWER: CharacterStat.create_stat(
-                StatDefinition.POWER,
-                -0.15,
-                **{
-                    NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
-                }
-            ),
-            StatDefinition.SPEED: CharacterStat.create_stat(
-                StatDefinition.SPEED,
-                -0.15,
-                **{
-                    NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
-                }
-            ),
-        }
-        self.type = StatusType.DEBUFF
-        self.categories = [StatusCategory.STAT_AFFECT]
 
 
 class HeavyInjury(Status):
-    name = "HeavyInjury"
+    status_class = StatusClass.INJURY
+    status_level = 2
+    affect_stats = {
+        StatDefinition.POWER: CharacterStat.create_stat(
+            StatDefinition.POWER,
+            -0.3,
+            **{
+                NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
+            },
+        ),
+        StatDefinition.SPEED: CharacterStat.create_stat(
+            StatDefinition.SPEED,
+            -0.3,
+            **{
+                NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
+            },
+        ),
+    }
+    type = StatusType.DEBUFF
+    categories = [StatusCategory.STAT_AFFECT]
 
     def __init__(self, duration: int) -> None:
         super().__init__(duration)
-        self.affect_stats = {
-            StatDefinition.POWER: CharacterStat.create_stat(
-                StatDefinition.POWER,
-                -0.3,
-                **{
-                    NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
-                }
-            ),
-            StatDefinition.SPEED: CharacterStat.create_stat(
-                StatDefinition.SPEED,
-                -0.3,
-                **{
-                    NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
-                }
-            ),
-        }
-        self.type = StatusType.DEBUFF
-        self.categories = [StatusCategory.STAT_AFFECT]
+
+
+class TownTileBuff(Status):
+    status_class = StatusClass.TOWN_BUFF
+    status_level = 1
+    affect_stats = {
+        StatDefinition.SPEED: CharacterStat.create_stat(
+            StatDefinition.SPEED,
+            0.3,
+            **{
+                NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
+            },
+        ),
+    }
+    type = StatusType.BUFF
+    categories = [StatusCategory.STAT_AFFECT]
+
+    def __init__(self, duration: int) -> None:
+        super().__init__(duration)
+
+
+class GroundTileBuff(Status):
+    status_class = StatusClass.GROUND_BUFF
+    status_level = 1
+    affect_stats = {
+        StatDefinition.POWER: CharacterStat.create_stat(
+            StatDefinition.POWER,
+            0.3,
+            **{
+                NumericalStat.numerical_type_key: NumericalStat.NumericalType.PERCENTAGE
+            },
+        ),
+    }
+    type = StatusType.BUFF
+    categories = [StatusCategory.STAT_AFFECT]
+
+    def __init__(self, duration: int) -> None:
+        super().__init__(duration)

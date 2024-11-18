@@ -122,6 +122,9 @@ class Character(GameObject):
     def set_redraw_status(self, status):
         self.is_just_changed_location = status
 
+    def add_status(self, status):
+        self.character_status.add_status(status)
+
     def exit_combat(self):
         # TODO: critical health should depend on characteristic
         # TODO: refactor for a module that manage the status applying

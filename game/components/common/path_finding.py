@@ -1,11 +1,11 @@
 from components.common.point import Point
 from components.world.store import get_store, EntityType
+from components.utils.tile_utils import get_tile_object
 
 
 def check_valid_step(new_pos: Point):
     store = get_store()
-    tile_id = store.get(EntityType.GRID, 0).get_tile(new_pos)
-    tile = store.get(EntityType.TILE, tile_id)
+    tile = get_tile_object(new_pos)
     if tile.is_obstacle():
         return False
     return True
