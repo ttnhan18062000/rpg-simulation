@@ -8,6 +8,7 @@ from components.configuration.display_setting import DisplaySetting
 from components.common.point import Point
 from components.character.character import Character
 from components.character.character_stat import StatDefinition
+from components.utils.tile_utils import get_tile_object
 
 
 class World:
@@ -94,10 +95,7 @@ class World:
                     )
 
                     # Write number of character on the tile
-                    tile_id = store.get(EntityType.GRID, 0).tiles[character.pos.x][
-                        character.pos.y
-                    ]
-                    tile = store.get(EntityType.TILE, tile_id)
+                    tile = get_tile_object(character.pos)
                     n_of_chars = len(tile.character_ids)
                     text_surface = font.render(str(n_of_chars), True, (255, 0, 0))
                     surface.blit(text_surface, (x - offset_x, y - offset_y))

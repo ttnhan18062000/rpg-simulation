@@ -1,6 +1,8 @@
 import pygame
 
 from components.action.event import EventType
+from components.character.character_class import Human, Demon
+from components.character.status import GroundTileBuff, TownTileBuff
 
 
 class Tile:
@@ -14,6 +16,9 @@ class Tile:
         self.is_tile_display_changed = False
         self.is_combat = False
         self.event_dict_ids = {}
+
+    def get_id(self):
+        return self.id
 
     def is_obstacle(self):
         return False
@@ -54,6 +59,13 @@ class Tile:
     def reset_redraw_status(self):
         self.is_tile_display_changed = False
 
+    def character_move_in(self, character):
+        self.add_character_id(character.get_info().id)
+        self.check_and_apply_status(character)
+
+    def check_and_apply_status(self, charater):
+        pass
+
 
 class GroundTile(Tile):
     def __init__(self) -> None:
@@ -63,6 +75,10 @@ class GroundTile(Tile):
     def is_obstacle(self):
         return False
 
+    def check_and_apply_status(self, character):
+        if character.get_faction() is Demon.__name__:
+            character.add_status(GroundTileBuff(3))
+
 
 class TownTile(Tile):
     def __init__(self) -> None:
@@ -71,6 +87,10 @@ class TownTile(Tile):
 
     def is_obstacle(self):
         return False
+
+    def check_and_apply_status(self, character):
+        if character.get_faction() is Human.__name__:
+            character.add_status(TownTileBuff(3))
 
 
 class WaterTile(Tile):

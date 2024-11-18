@@ -5,10 +5,26 @@ from data.logs.logger import logger
 
 class CharacterStatus:
     def __init__(self) -> None:
-        self.statuses = {}
+        self.statuses = {}  # StatusClass-Status
 
     def add_status(self, status: Status):
-        self.statuses[status.get_name()] = status
+        status_class = status.get_status_class()
+        status_duration = status.get_duration()
+        if status_class in self.statuses:
+            # Extends the higher level existing status if it has the same class with the new status
+            if (
+                self.statuses[status_class].get_status_level()
+                >= status.get_status_level()
+            ):
+                logger.debug(
+                    f"Extend the {self.statuses[status_class].__class__.__name__} with {status.__class__.__name__} to {status_duration} turns"
+                )
+                self.statuses[status_class].set_duration(status_duration)
+        else:
+            logger.debug(
+                f"Add new status {status.__class__.__name__} for {status_duration} turns"
+            )
+            self.statuses[status_class] = status
 
     def get_statuses(self):
         return self.statuses

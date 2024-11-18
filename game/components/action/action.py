@@ -9,6 +9,7 @@ from components.common.path_finding import (
     check_valid_step,
 )
 from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
+from components.utils.tile_utils import get_tile_object
 from data.logs.logger import logger
 
 
@@ -145,14 +146,13 @@ class Move(Action):
         else:
             next_move = Move.get_next_move(character, is_random_move=False)
 
-        previous_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
-        previous_tile = store.get(EntityType.TILE, previous_tile_id)
+        previous_tile = get_tile_object(character.pos)
         previous_tile.remove_character_id(character.get_info().id)
 
+        # Perform move, move into tile and trigger following logics
         character.pos += next_move
-        new_tile_id = store.get(EntityType.GRID, 0).get_tile(character.pos)
-        new_tile = store.get(EntityType.TILE, new_tile_id)
-        new_tile.add_character_id(character.get_info().id)
+        new_tile = get_tile_object(character.pos)
+        new_tile.character_move_in(character)
         character.tile_id = new_tile.id
 
         # Enter a tile that holding a combat event
@@ -184,7 +184,7 @@ class Move(Action):
                     )
         for hostile_faction in character.get_hostile_factions():
             if len(hostile_faction_to_characters[hostile_faction]) > 0:
-                new_combat_event: CombatEvent = CombatEvent(new_tile_id)
+                new_combat_event: CombatEvent = CombatEvent(new_tile.get_id())
                 new_combat_event_id = new_combat_event.id
                 for enemy_character in hostile_faction_to_characters[hostile_faction]:
                     new_combat_event.add_character_id(
