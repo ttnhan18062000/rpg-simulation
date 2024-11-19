@@ -11,6 +11,7 @@ from components.common.path_finding import (
 from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
 from components.utils.tile_utils import get_tile_object
 from data.logs.logger import logger
+from data.game_settings import ACTION
 
 
 class Action:
@@ -58,7 +59,9 @@ class Action:
                         cid, other_character.pos, other_character.get_faction()
                     )
                     memory.remember_power(
-                        character, other_character, perception_accuracy=90
+                        character,
+                        other_character,
+                        perception_accuracy=ACTION.BASE_POWER_PERCEPTION_ACCURACY,
                     )
                     character.get_memory().add(EntityType.CHARACTER, cid, memory)
 
@@ -274,11 +277,11 @@ class Escape(Action):
 
         total_hostile_power = combat_event.get_hostile_power(character.get_faction())
         character_power = character.get_power()
-        escape_chance = 0.3
-        if total_hostile_power > 3 * character_power:
-            escape_chance = 0.05
-        elif total_hostile_power < character_power:
-            escape_chance = 0.9
+        escape_chance = ACTION.BASE_ESCAPE_CHANCE
+        if total_hostile_power > ACTION.LOW_ESCAPE_POWER_THRESHOLD * character_power:
+            escape_chance = ACTION.LOW_ESCAPE_CHANCE
+        elif total_hostile_power < ACTION.HIGH_ESCAPE_POWER_THRESHOLD * character_power:
+            escape_chance = ACTION.HIGH_ESCAPE_CHANCE
 
         if random.random() < escape_chance:
             logger.debug(f"{character.get_info()} escape successfully")
