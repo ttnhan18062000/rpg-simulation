@@ -1,0 +1,15 @@
+water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water
+water	ground	ground	ground	ground	ground	ground	ground	ground	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	ground	ground	ground	ground	village	village	village	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	ground	ground	ground	ground	village	village	village	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	town	town	ground	ground	village	village	village	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	town	town	ground	ground	village	village	village	ground	forest	forest	battlefield	battlefield	battlefield	battlefield	corrupted	corrupted	ash	ash	ash	castle	castle	castle	ash	ash	water
+water	ground	town	town	ground	ground	ground	ground	ground	ground	forest	forest	battlefield	battlefield	battlefield	battlefield	corrupted	corrupted	ash	ash	ash	castle	castle	castle	ash	ash	water
+water	ground	ground	ground	ground	ground	ground	ground	ground	ground	forest	forest	battlefield	battlefield	battlefield	battlefield	corrupted	corrupted	ash	ash	ash	castle	castle	castle	ash	ash	water
+water	ground	ground	ground	ground	ground	ground	ground	ground	ground	forest	forest	battlefield	battlefield	battlefield	battlefield	corrupted	corrupted	ash	ash	ash	castle	castle	castle	ash	ash	water
+water	ground	ground	swamp	swamp	swamp	swamp	swamp	swamp	ground	forest	forest	battlefield	battlefield	battlefield	battlefield	corrupted	corrupted	ash	ash	ash	castle	castle	castle	ash	ash	water
+water	ground	ground	swamp	swamp	swamp	swamp	swamp	swamp	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	ground	swamp	swamp	swamp	swamp	swamp	swamp	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	ground	swamp	swamp	swamp	swamp	swamp	swamp	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	ground	ground	ground	ground	ground	ground	ground	ground	ground	forest	forest	water	water	water	water	corrupted	corrupted	ash	ash	ash	ash	ash	ash	ash	ash	water
+water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water	water

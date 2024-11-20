@@ -54,7 +54,8 @@ class ControlEventHandler:
                 )
 
                 display_setting.cell_size = new_cell_size
-                display_setting.map_size = new_cell_size * display_setting.max_n_cell
+                display_setting.map_size_x = new_cell_size * display_setting.max_x_cell
+                display_setting.map_size_y = new_cell_size * display_setting.max_y_cell
                 return True
             elif event.button == 5:  # Scroll down for zoom out
                 new_cell_size = max(
@@ -77,7 +78,8 @@ class ControlEventHandler:
                 )
 
                 display_setting.cell_size = new_cell_size
-                display_setting.map_size = new_cell_size * display_setting.max_n_cell
+                display_setting.map_size_x = new_cell_size * display_setting.max_x_cell
+                display_setting.map_size_y = new_cell_size * display_setting.max_y_cell
                 return True
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 3:  # Stop dragging
@@ -101,14 +103,14 @@ class ControlEventHandler:
                 self.offset_x = max(
                     0,
                     min(
-                        display_setting.map_size - display_setting.window_size[0],
+                        display_setting.map_size_x - display_setting.window_size[0],
                         self.offset_x - dx,
                     ),
                 )
                 self.offset_y = max(
                     0,
                     min(
-                        display_setting.map_size - display_setting.window_size[1],
+                        display_setting.map_size_y - display_setting.window_size[1],
                         self.offset_y - dy,
                     ),
                 )

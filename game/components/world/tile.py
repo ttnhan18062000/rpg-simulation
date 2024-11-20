@@ -67,41 +67,6 @@ class Tile:
         pass
 
 
-class GroundTile(Tile):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("data/sprites/ground.png")
-
-    def is_obstacle(self):
-        return False
-
-    def check_and_apply_status(self, character):
-        if character.get_faction() is Demon.__name__:
-            character.add_status(GroundTileBuff(3))
-
-
-class TownTile(Tile):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("data/sprites/town.png")
-
-    def is_obstacle(self):
-        return False
-
-    def check_and_apply_status(self, character):
-        if character.get_faction() is Human.__name__:
-            character.add_status(TownTileBuff(3))
-
-
-class WaterTile(Tile):
-    def __init__(self) -> None:
-        super().__init__()
-        self.image = pygame.image.load("data/sprites/water.png")
-
-    def is_obstacle(self):
-        return True
-
-
 class HumanGeneratorTile(Tile):
     def __init__(self) -> None:
         super().__init__()
@@ -120,14 +85,115 @@ class DemonGeneratorTile(Tile):
         return False
 
 
+class WaterTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/water.png")
+
+    def is_obstacle(self):
+        return True
+
+
+class GroundTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/ground.png")
+
+    def is_obstacle(self):
+        return False
+
+    def check_and_apply_status(self, character):
+        if character.get_faction() is Demon.__name__:
+            character.add_status(GroundTileBuff(3))
+
+
+class VillageTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/village.png")
+
+    def is_obstacle(self):
+        return True
+
+
+class TownTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/town.png")
+
+    def is_obstacle(self):
+        return False
+
+    def check_and_apply_status(self, character):
+        if character.get_faction() is Human.__name__:
+            character.add_status(TownTileBuff(3))
+
+
 class SwampTile(Tile):
-    pass
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/swamp.png")
+
+    def is_obstacle(self):
+        return False
+
+
+class ForestTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/forest.png")
+
+    def is_obstacle(self):
+        return False
+
+
+class CorruptedTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/corrupted.png")
+
+    def is_obstacle(self):
+        return False
+
+
+class AshTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/ash.png")
+
+    def is_obstacle(self):
+        return False
+
+
+class CastleTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/castle.png")
+
+    def is_obstacle(self):
+        return False
+
+
+class BattlefieldTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/battlefield.png")
+
+    def is_obstacle(self):
+        return False
 
 
 tile_map = {
-    0: GroundTile,
-    1: TownTile,
-    2: WaterTile,
-    3: DemonGeneratorTile,
-    4: HumanGeneratorTile,
+    -1: DemonGeneratorTile,
+    -2: HumanGeneratorTile,
+    0: WaterTile,
+    1: GroundTile,
+    2: VillageTile,
+    3: TownTile,
+    4: SwampTile,
+    5: ForestTile,
+    6: CorruptedTile,
+    7: AshTile,
+    8: CastleTile,
+    9: BattlefieldTile,
 }

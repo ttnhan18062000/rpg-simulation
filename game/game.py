@@ -16,20 +16,22 @@ from components.common.point import Point
 from components.control.control_event_handler import ControlEventHandler
 from components.world.map_generator import generate_voronoi_map
 from components.world.character_generator import HumanGenerator, DemonGenerator
-from data.world.grid_data import grid1
+from components.world.map_loader import MapLoader
 
 
 class Game:
+
     def __init__(self) -> None:
-        self.max_n_cell = 7
-        self.display_setting = DisplaySetting(self.max_n_cell)
+        self.max_x_cell = 7
+        self.max_y_cell = 7
+        self.world = None
+        self.initialize_world()
+        self.display_setting = DisplaySetting(self.max_x_cell, self.max_y_cell)
         self.control_event_handler = ControlEventHandler()
         self.is_display_changed = True
         self.surface = None
-        self.world = None
         self.store = get_store()
         self.initialize_game()
-        self.initialize_world()
         self.running = True
         self.monitor = Monitoring()
 
@@ -50,9 +52,13 @@ class Game:
         return generators
 
     def initialize_world(self):
-        grid_data = generate_voronoi_map(self.max_n_cell, self.max_n_cell)
+        # grid_data = generate_voronoi_map(self.max_x_cell, self.max_y_cell) # Random generated map
+        grid_data = MapLoader.load_map("data/world/map1.txt")  # Load defined map
         print(grid_data)
-        generators = self.initialize_generators(grid_data)
+        self.max_x_cell = len(grid_data[0])
+        self.max_y_cell = len(grid_data)
+        # generators = self.initialize_generators(grid_data) # TODO: Temporary not spawn any characters to test regions
+        generators = []
         self.world = World(grid_data, generators)
 
     def draw(self):

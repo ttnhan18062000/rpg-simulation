@@ -2,7 +2,7 @@ from components.constant.default import DefaultSetting
 
 
 class DisplaySetting:
-    def __init__(self, max_n_cell, setting_data={}) -> None:
+    def __init__(self, max_x_cell, max_y_cell, setting_data={}) -> None:
         self.cell_size = (
             setting_data["cell_size"]
             if "cell_size" in setting_data
@@ -23,5 +23,7 @@ class DisplaySetting:
             if "window_size" in setting_data
             else DefaultSetting.WINDOW_SIZE
         )
-        self.max_n_cell = max_n_cell
-        self.map_size = self.max_n_cell * self.cell_size
+        self.max_y_cell = max_x_cell
+        self.max_x_cell = max_y_cell
+        self.map_size_x = self.max_x_cell * self.cell_size
+        self.map_size_y = self.max_y_cell * self.cell_size

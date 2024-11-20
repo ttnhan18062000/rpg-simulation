@@ -49,8 +49,8 @@ class World:
                 cell_x = x // cell_size
                 cell_y = y // cell_size
                 if (
-                    0 <= cell_x < display_setting.max_n_cell
-                    and 0 <= cell_y < display_setting.max_n_cell
+                    0 <= cell_x < display_setting.max_x_cell
+                    and 0 <= cell_y < display_setting.max_y_cell
                 ):
                     tile = store.get(EntityType.TILE, grid.tiles[cell_x][cell_y])
                     if is_display_changed or tile.should_redraw():
