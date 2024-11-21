@@ -15,6 +15,9 @@ class MapLoader:
             "ash": 7,
             "castle": 8,
             "battlefield": 9,
+            "mystic": 10,
+            "ruin": 11,
+            "core": 12,
         }
         grid = []
         with open(file_path, "r") as f:

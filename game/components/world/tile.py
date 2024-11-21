@@ -88,7 +88,7 @@ class DemonGeneratorTile(Tile):
 class WaterTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/water.png")
+        self.image = pygame.image.load("data/sprites/water1.jpg")
 
     def is_obstacle(self):
         return True
@@ -97,7 +97,7 @@ class WaterTile(Tile):
 class GroundTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/ground.png")
+        self.image = pygame.image.load("data/sprites/ground1.jpg")
 
     def is_obstacle(self):
         return False
@@ -110,7 +110,7 @@ class GroundTile(Tile):
 class VillageTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/village.png")
+        self.image = pygame.image.load("data/sprites/village1.jpg")
 
     def is_obstacle(self):
         return True
@@ -119,7 +119,7 @@ class VillageTile(Tile):
 class TownTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/town.png")
+        self.image = pygame.image.load("data/sprites/town1.jpg")
 
     def is_obstacle(self):
         return False
@@ -132,7 +132,7 @@ class TownTile(Tile):
 class SwampTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/swamp.png")
+        self.image = pygame.image.load("data/sprites/swamp1.jpg")
 
     def is_obstacle(self):
         return False
@@ -141,7 +141,7 @@ class SwampTile(Tile):
 class ForestTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/forest.png")
+        self.image = pygame.image.load("data/sprites/forest1.jpg")
 
     def is_obstacle(self):
         return False
@@ -150,7 +150,7 @@ class ForestTile(Tile):
 class CorruptedTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/corrupted.png")
+        self.image = pygame.image.load("data/sprites/corrupted1.jpg")
 
     def is_obstacle(self):
         return False
@@ -159,7 +159,7 @@ class CorruptedTile(Tile):
 class AshTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/ash.png")
+        self.image = pygame.image.load("data/sprites/ash1.jpg")
 
     def is_obstacle(self):
         return False
@@ -168,7 +168,7 @@ class AshTile(Tile):
 class CastleTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/castle.png")
+        self.image = pygame.image.load("data/sprites/castle1.jpg")
 
     def is_obstacle(self):
         return False
@@ -177,7 +177,34 @@ class CastleTile(Tile):
 class BattlefieldTile(Tile):
     def __init__(self) -> None:
         super().__init__()
-        self.image = pygame.image.load("data/sprites/battlefield.png")
+        self.image = pygame.image.load("data/sprites/battlefield1.jpg")
+
+    def is_obstacle(self):
+        return False
+
+
+class MysticTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/mystic1.jpg")
+
+    def is_obstacle(self):
+        return False
+
+
+class RuinTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/ruin1.jpg")
+
+    def is_obstacle(self):
+        return False
+
+
+class CoreTile(Tile):
+    def __init__(self) -> None:
+        super().__init__()
+        self.image = pygame.image.load("data/sprites/core1.jpg")
 
     def is_obstacle(self):
         return False
@@ -196,4 +223,7 @@ tile_map = {
     7: AshTile,
     8: CastleTile,
     9: BattlefieldTile,
+    10: MysticTile,
+    11: RuinTile,
+    12: CoreTile,
 }

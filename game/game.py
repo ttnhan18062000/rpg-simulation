@@ -41,24 +41,28 @@ class Game:
         self.font = pygame.font.Font(None, 20)
 
     def initialize_generators(self, grid_data):
+        demon_spawn = False
+        human_spawn = False
         generators = []
         for x in range(len(grid_data)):
             for y in range(len(grid_data[0])):
                 # TODO: Avoid hard-coded tile value
-                if grid_data[x][y] == 3:
-                    generators.append(DemonGenerator(1, 1, Point(x, y)))
-                if grid_data[x][y] == 4:
-                    generators.append(HumanGenerator(1, 1, Point(x, y)))
+                if grid_data[x][y] == 8 and not demon_spawn:
+                    generators.append(DemonGenerator(1, 3, Point(x, y)))
+                    demon_spawn = True
+                if grid_data[x][y] == 3 and not human_spawn:
+                    generators.append(HumanGenerator(1, 3, Point(x, y)))
+                    human_spawn = True
         return generators
 
     def initialize_world(self):
         # grid_data = generate_voronoi_map(self.max_x_cell, self.max_y_cell) # Random generated map
-        grid_data = MapLoader.load_map("data/world/map1.txt")  # Load defined map
+        grid_data = MapLoader.load_map("data/world/map2.txt")  # Load defined map
         print(grid_data)
         self.max_x_cell = len(grid_data[0])
         self.max_y_cell = len(grid_data)
-        # generators = self.initialize_generators(grid_data) # TODO: Temporary not spawn any characters to test regions
-        generators = []
+        generators = self.initialize_generators(grid_data)
+        # generators = [] # TODO: Temporary not spawn any characters to test regions
         self.world = World(grid_data, generators)
 
     def draw(self):
