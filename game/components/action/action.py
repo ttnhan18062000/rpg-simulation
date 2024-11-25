@@ -226,12 +226,20 @@ class Interact(Action):
         return False
 
 
+class Train(Action):
+    action_name = "Train"
+
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        TrainingEvent().execute(character)
+        return False
+
+
 class Standby(Action):
     action_name = "Standby"
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        TrainingEvent().execute(character)
         return False
 
 

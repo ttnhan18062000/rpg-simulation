@@ -84,6 +84,9 @@ class Character(GameObject):
     def get_level(self):
         return self.level
 
+    def get_restricted_tile_types(self):
+        return self.character_class.get_restricted_tile_types()
+
     def is_alive(self):
         return (
             self.character_stats.get_stat(StatDefinition.CURRENT_HEALTH).value > 0

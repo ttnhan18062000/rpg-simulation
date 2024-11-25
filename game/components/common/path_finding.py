@@ -3,10 +3,10 @@ from components.world.store import get_store, EntityType
 from components.utils.tile_utils import get_tile_object
 
 
-def check_valid_step(new_pos: Point):
-    store = get_store()
+def check_valid_step(new_pos: Point, character):
     tile = get_tile_object(new_pos)
-    if tile.is_obstacle():
+    restricted_tiles = character.get_restricted_tile_types()
+    if tile.is_obstacle() or isinstance(tile, tuple(restricted_tiles)):
         return False
     return True
 
