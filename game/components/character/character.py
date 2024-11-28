@@ -20,6 +20,7 @@ from components.character.character_vision import CharacterVision
 from components.character.character_power import CharacterPower
 from components.character.memory.character_memory import CharacterMemory
 from components.character.character_behavior import FightingBehavior
+from components.character.character_goal import CharacterGoal
 from components.world.store import get_store, EntityType
 
 from data.logs.logger import logger
@@ -47,6 +48,7 @@ class Character(GameObject):
         self.character_vision = CharacterVision(5)
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
+        self.character_goal = CharacterGoal()
         self.behaviors = {}
         self.is_dead = False
 
@@ -104,6 +106,15 @@ class Character(GameObject):
     ):
         self.character_strategy.add(strategy_type, strategy)
 
+    def add_goal(self, priority: int, goal):
+        self.character_goal.add(priority, goal)
+
+    def get_current_goal(self):
+        return self.character_goal.get_current_goal()
+
+    def complete_goal(self):
+        self.character_goal.complete_goal()
+
     def is_alive(self):
         return (
             not self.is_dead
@@ -116,6 +127,9 @@ class Character(GameObject):
 
     def set_vision_range(self, vision_range: int):
         self.character_vision.set_range(vision_range)
+
+    def set_character_action(self, character_action: CharacterAction):
+        self.character_action = character_action
 
     def is_hostile_with(self, character: "Character"):
         hostile_factions = self.character_class.get_hostile_factions()

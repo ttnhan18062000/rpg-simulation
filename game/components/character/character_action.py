@@ -46,8 +46,8 @@ class BasicMobCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self.actions = {
-            ActionType.MOVE: {"class": Move, "prob": 5},
-            ActionType.STANDBY: {"class": Standby, "prob": 95},
+            ActionType.MOVE: {"class": Move, "prob": 20},
+            ActionType.STANDBY: {"class": Standby, "prob": 80},
         }
         self.kwargs = kwargs
 
