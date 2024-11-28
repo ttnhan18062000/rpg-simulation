@@ -10,7 +10,9 @@ from components.common.path_finding import (
 )
 from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
 from components.utils.tile_utils import get_tile_object
+from components.character.character_strategy import CharacterStrategyType
 from data.logs.logger import logger
+from data.game_settings import ACTION
 
 
 class Action:
@@ -58,7 +60,9 @@ class Action:
                         cid, other_character.pos, other_character.get_faction()
                     )
                     memory.remember_power(
-                        character, other_character, perception_accuracy=90
+                        character,
+                        other_character,
+                        perception_accuracy=ACTION.BASE_POWER_PERCEPTION_ACCURACY,
                     )
                     character.get_memory().add(EntityType.CHARACTER, cid, memory)
 
@@ -66,85 +70,14 @@ class Action:
 class Move(Action):
     action_name = "Move"
 
-    @staticmethod
-    def random_move(character):
-        direction = random.randint(0, 3)
-        next_move = Point(0, 0)
-        if direction == 0:
-            next_move = Point(0, -1)
-        elif direction == 1:
-            next_move = Point(0, 1)
-        elif direction == 2:
-            next_move = Point(-1, 0)
-        elif direction == 3:
-            next_move = Point(1, 0)
-        if not check_valid_step(character.pos + next_move):
-            return Move.random_move(character)
-        return next_move
-
-    @staticmethod
-    def get_next_move(character, is_random_move=False):
-        if not is_random_move:
-            # Join nearby combat of own faction if favorable
-            events_in_memory = character.get_memory().get_all(EntityType.EVENT)
-            for memory_event in events_in_memory:
-                if memory_event.get_event_type() is EventType.COMBAT:
-                    if memory_event.get_power_est() in [
-                        PowerEst.MUCH_WEAKER,
-                        PowerEst.WEAKER,
-                    ]:
-                        logger.debug(
-                            f"{character.get_info()}:{character.get_power()} is joining combat {memory_event.get_id()}:{memory_event.get_location()}:{memory_event.get_power_est()}"
-                        )
-                        return get_move_from_target(
-                            character.pos,
-                            memory_event.get_location(),
-                            is_chasing=True,
-                        )
-
-            # Chase or escape nearby enemies
-            characters_in_memory = character.get_memory().get_all(EntityType.CHARACTER)
-            for memory_character in characters_in_memory:
-                if character.is_hostile_with(memory_character.get_faction()):
-                    # TODO: Path finding movement, avoid obstacle
-                    # TODO: smarter escape
-                    # TODO: Add characteristic for complex movement
-                    if memory_character.get_power_est() in [
-                        PowerEst.MUCH_STRONGER,
-                    ]:
-                        logger.debug(
-                            f"{character.get_info()}:{character.get_power()} is escaping from {memory_character.get_power_est()}"
-                        )
-                        return get_move_from_target(
-                            character.pos,
-                            memory_character.get_location(),
-                            is_chasing=False,
-                        )
-                    elif memory_character.get_power_est() in [
-                        PowerEst.MUCH_WEAKER,
-                        PowerEst.WEAKER,
-                    ]:
-                        logger.debug(
-                            f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
-                        )
-                        return get_move_from_target(
-                            character.pos,
-                            memory_character.get_location(),
-                            is_chasing=True,
-                        )
-
-        # Not found any enemy or is_random_move, random movement
-        return Move.random_move(character)
-
     @classmethod
     def do_action(cls, character, **kwargs):
 
         store = get_store()
 
-        if kwargs.get("random_move"):
-            next_move = Move.get_next_move(character, is_random_move=True)
-        else:
-            next_move = Move.get_next_move(character, is_random_move=False)
+        next_move = character.get_strategy(CharacterStrategyType.Move).get_next_move(
+            character
+        )
 
         previous_tile = get_tile_object(character.pos)
         previous_tile.remove_character_id(character.get_info().id)
@@ -223,12 +156,20 @@ class Interact(Action):
         return False
 
 
+class Train(Action):
+    action_name = "Train"
+
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        TrainingEvent().execute(character)
+        return False
+
+
 class Standby(Action):
     action_name = "Standby"
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        TrainingEvent().execute(character)
         return False
 
 
@@ -274,11 +215,11 @@ class Escape(Action):
 
         total_hostile_power = combat_event.get_hostile_power(character.get_faction())
         character_power = character.get_power()
-        escape_chance = 0.3
-        if total_hostile_power > 3 * character_power:
-            escape_chance = 0.05
-        elif total_hostile_power < character_power:
-            escape_chance = 0.9
+        escape_chance = ACTION.BASE_ESCAPE_CHANCE
+        if total_hostile_power > ACTION.LOW_ESCAPE_POWER_THRESHOLD * character_power:
+            escape_chance = ACTION.LOW_ESCAPE_CHANCE
+        elif total_hostile_power < ACTION.HIGH_ESCAPE_POWER_THRESHOLD * character_power:
+            escape_chance = ACTION.HIGH_ESCAPE_CHANCE
 
         if random.random() < escape_chance:
             logger.debug(f"{character.get_info()} escape successfully")
@@ -288,7 +229,7 @@ class Escape(Action):
             character.exit_combat()
 
             # TODO: Random move (should trigger the Move class function => convert Move into classmethod?)
-            Move.do_action(character, **{"random_move": True})
+            Move.do_action(character)
 
             return True
 

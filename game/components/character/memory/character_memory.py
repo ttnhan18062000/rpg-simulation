@@ -1,5 +1,6 @@
 from components.world.store import EntityType, Store
 from components.character.memory.memory import Memory, MemoryCharacter, MemoryEvent
+from components.common.point import Point
 
 
 class CharacterMemory:
@@ -31,6 +32,19 @@ class CharacterMemory:
             for key, obj in self.memories.items()
             if key.startswith(f"{entity_type.value}")
         ]
+
+    def get_all_sorted_distant(self, entity_type: EntityType, target_point: Point):
+        unsorted_memories = [
+            obj
+            for key, obj in self.memories.items()
+            if key.startswith(f"{entity_type.value}")
+        ]
+        return sorted(
+            unsorted_memories,
+            key=lambda memory: Point.get_distance_man(
+                memory.get_location(), target_point
+            ),
+        )
 
     def reset(self):
         self.memories = {}

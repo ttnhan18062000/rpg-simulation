@@ -49,8 +49,8 @@ class World:
                 cell_x = x // cell_size
                 cell_y = y // cell_size
                 if (
-                    0 <= cell_x < display_setting.max_n_cell
-                    and 0 <= cell_y < display_setting.max_n_cell
+                    0 <= cell_x < display_setting.max_x_cell
+                    and 0 <= cell_y < display_setting.max_y_cell
                 ):
                     tile = store.get(EntityType.TILE, grid.tiles[cell_x][cell_y])
                     if is_display_changed or tile.should_redraw():
@@ -76,7 +76,9 @@ class World:
                 start_x <= x <= start_x + window_width + cell_size
                 and start_y <= y <= start_y + window_height + cell_size
             ) and ((x, y) not in drawn_characters):
-                if is_display_changed or character.should_redraw():
+                if character.is_alive() and (
+                    is_display_changed or character.should_redraw()
+                ):
                     drawn_characters[(x, y)] = 1
                     # Blit character icon on top of the tile
                     character_icon = pygame.transform.scale(

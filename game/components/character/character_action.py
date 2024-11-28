@@ -1,7 +1,7 @@
 import numpy
 from enum import Enum
 
-from components.action.action import Move, Interact, Standby, Fight, Escape
+from components.action.action import Move, Interact, Train, Standby, Fight, Escape
 from components.character.character_behavior import FightingBehavior
 from components.character.character_stat import StatDefinition
 
@@ -9,9 +9,10 @@ from components.character.character_stat import StatDefinition
 class ActionType(Enum):
     MOVE = 1
     INTERACT = 2
-    STANDBY = 3
-    FIGHT = 4
-    ESCAPE = 5
+    TRAIN = 3
+    STANDBY = 4
+    FIGHT = 5
+    ESCAPE = 6
 
 
 class CharacterAction:
@@ -41,12 +42,22 @@ class CharacterAction:
         return next_action.execute(character, **self.kwargs)
 
 
+class BasicMobCharacterAction(CharacterAction):
+    def __init__(self, **kwargs) -> None:
+        super().__init__()
+        self.actions = {
+            ActionType.MOVE: {"class": Move, "prob": 5},
+            ActionType.STANDBY: {"class": Standby, "prob": 95},
+        }
+        self.kwargs = kwargs
+
+
 class BasicCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self.actions = {
             ActionType.MOVE: {"class": Move, "prob": 50},
-            ActionType.STANDBY: {"class": Standby, "prob": 50},
+            ActionType.TRAIN: {"class": Train, "prob": 50},
         }
         self.kwargs = kwargs
 

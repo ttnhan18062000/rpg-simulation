@@ -19,3 +19,17 @@ class DemonLevel(ClassLevel):
         super().__init__()
         self.base_required_exp = 200
         self.next_level_mul = 2
+
+
+class RuinMobLevel(ClassLevel):
+    def __init__(self) -> None:
+        super().__init__()
+        self.base_required_exp = 200
+        self.next_level_mul = 2
+
+
+class ForestMobLevel(ClassLevel):
+    def __init__(self) -> None:
+        super().__init__()
+        self.base_required_exp = 200
+        self.next_level_mul = 2

@@ -15,21 +15,28 @@ from components.control.monitoring import Monitoring
 from components.common.point import Point
 from components.control.control_event_handler import ControlEventHandler
 from components.world.map_generator import generate_voronoi_map
-from components.world.character_generator import HumanGenerator, DemonGenerator
-from data.world.grid_data import grid1
+from components.world.character_generator import (
+    HumanGenerator,
+    DemonGenerator,
+    RuinMobGenerator,
+    ForsetMobGenerator,
+)
+from components.world.map_loader import MapLoader
+from components.utils.random_utils import random_once
 
 
 class Game:
     def __init__(self) -> None:
-        self.max_n_cell = 7
-        self.display_setting = DisplaySetting(self.max_n_cell)
+        self.max_x_cell = 7
+        self.max_y_cell = 7
+        self.world = None
+        self.initialize_world()
+        self.display_setting = DisplaySetting(self.max_x_cell, self.max_y_cell)
         self.control_event_handler = ControlEventHandler()
         self.is_display_changed = True
         self.surface = None
-        self.world = None
         self.store = get_store()
         self.initialize_game()
-        self.initialize_world()
         self.running = True
         self.monitor = Monitoring()
 
@@ -39,20 +46,32 @@ class Game:
         self.font = pygame.font.Font(None, 20)
 
     def initialize_generators(self, grid_data):
+        demon_spawn = False
+        human_spawn = False
         generators = []
         for x in range(len(grid_data)):
             for y in range(len(grid_data[0])):
                 # TODO: Avoid hard-coded tile value
-                if grid_data[x][y] == 3:
-                    generators.append(DemonGenerator(1, 1, Point(x, y)))
-                if grid_data[x][y] == 4:
-                    generators.append(HumanGenerator(1, 1, Point(x, y)))
+                if grid_data[x][y] == 8 and not demon_spawn:
+                    generators.append(DemonGenerator(1, 3, Point(x, y)))
+                    demon_spawn = True
+                elif grid_data[x][y] == 3 and not human_spawn:
+                    generators.append(HumanGenerator(1, 3, Point(x, y)))
+                    human_spawn = True
+                elif grid_data[x][y] == 11 and random_once(0.25):
+                    generators.append(RuinMobGenerator(1, 1, Point(x, y)))
+                elif grid_data[x][y] == 5 and random_once(0.25):
+                    generators.append(ForsetMobGenerator(1, 1, Point(x, y)))
         return generators
 
     def initialize_world(self):
-        grid_data = generate_voronoi_map(self.max_n_cell, self.max_n_cell)
+        # grid_data = generate_voronoi_map(self.max_x_cell, self.max_y_cell) # Random generated map
+        grid_data = MapLoader.load_map("data/world/map2.txt")  # Load defined map
         print(grid_data)
+        self.max_x_cell = len(grid_data[0])
+        self.max_y_cell = len(grid_data)
         generators = self.initialize_generators(grid_data)
+        # generators = [] # TODO: Temporary not spawn any characters to test regions
         self.world = World(grid_data, generators)
 
     def draw(self):

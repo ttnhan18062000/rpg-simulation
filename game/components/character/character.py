@@ -6,6 +6,11 @@ from components.character.character_action import (
     BasicCharacterAction,
     CombatCharacterAction,
 )
+from components.character.character_strategy import (
+    CharacterStrategy,
+    CharacterStrategyType,
+)
+from components.action.strategy.base_strategy import BaseStrategy
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_status import CharacterStatus
 from components.character.status import LightInjury, HeavyInjury
@@ -35,10 +40,11 @@ class Character(GameObject):
         self.img = img
         self.character_info = character_info
         self.character_action = BasicCharacterAction()
+        self.character_strategy = CharacterStrategy()
         self.character_stats = character_stats
         self.character_status = CharacterStatus()
         self.character_class = character_class
-        self.character_vision = CharacterVision(8)
+        self.character_vision = CharacterVision(5)
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
         self.behaviors = {}
@@ -52,6 +58,9 @@ class Character(GameObject):
         self.is_just_changed_location = True
 
         logger.debug(f"{self.get_info()} has {self.get_power()} power")
+
+    def get_location(self):
+        return self.pos
 
     def get_info(self):
         return self.character_info
@@ -84,24 +93,45 @@ class Character(GameObject):
     def get_level(self):
         return self.level
 
+    def get_restricted_tile_types(self):
+        return self.character_class.get_restricted_tile_types()
+
+    def get_strategy(self, strategy_type: CharacterStrategyType):
+        return self.character_strategy.get(strategy_type)
+
+    def add_strategy(
+        self, strategy_type: CharacterStrategyType, strategy: BaseStrategy
+    ):
+        self.character_strategy.add(strategy_type, strategy)
+
     def is_alive(self):
         return (
-            self.character_stats.get_stat(StatDefinition.CURRENT_HEALTH).value > 0
-            and not self.is_dead
+            not self.is_dead
+            and self.character_stats.get_stat(StatDefinition.CURRENT_HEALTH).value > 0
         )
 
     def set_status(self, status):
         if status == "dead":
             self.is_dead = True
 
+    def set_vision_range(self, vision_range: int):
+        self.character_vision.set_range(vision_range)
+
     def is_hostile_with(self, character: "Character"):
+        hostile_factions = self.character_class.get_hostile_factions()
         if isinstance(character, Character):
-            return (
-                self.character_class.__class__.__name__
-                != character.character_class.__class__.__name__
-            )
+            return character.character_class.__class__.__name__ in hostile_factions
         if isinstance(character, str):
-            return self.character_class.__class__.__name__ != character
+            return character in hostile_factions
+        raise NotImplemented
+
+    # Same faction can fight each other if need
+    def is_ally_with(self, character: "Character"):
+        ally_factions = self.character_class.get_ally_factions()
+        if isinstance(character, Character):
+            return character.character_class.__class__.__name__ in ally_factions
+        if isinstance(character, str):
+            return character in ally_factions
         raise NotImplemented
 
     def level_up(self):
