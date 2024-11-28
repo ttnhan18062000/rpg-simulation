@@ -6,6 +6,9 @@ class CharacterVision:
     def __init__(self, range) -> None:
         self.range = range
 
+    def set_range(self, range: int):
+        self.range = range
+
     def get_visible_tiles(self, current_pos: Point):
         store = get_store()
         grid = store.get(EntityType.GRID, 0)

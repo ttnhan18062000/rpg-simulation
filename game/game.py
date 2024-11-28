@@ -15,12 +15,17 @@ from components.control.monitoring import Monitoring
 from components.common.point import Point
 from components.control.control_event_handler import ControlEventHandler
 from components.world.map_generator import generate_voronoi_map
-from components.world.character_generator import HumanGenerator, DemonGenerator
+from components.world.character_generator import (
+    HumanGenerator,
+    DemonGenerator,
+    RuinMobGenerator,
+    ForsetMobGenerator,
+)
 from components.world.map_loader import MapLoader
+from components.utils.random_utils import random_once
 
 
 class Game:
-
     def __init__(self) -> None:
         self.max_x_cell = 7
         self.max_y_cell = 7
@@ -50,9 +55,13 @@ class Game:
                 if grid_data[x][y] == 8 and not demon_spawn:
                     generators.append(DemonGenerator(1, 3, Point(x, y)))
                     demon_spawn = True
-                if grid_data[x][y] == 3 and not human_spawn:
+                elif grid_data[x][y] == 3 and not human_spawn:
                     generators.append(HumanGenerator(1, 3, Point(x, y)))
                     human_spawn = True
+                elif grid_data[x][y] == 11 and random_once(0.25):
+                    generators.append(RuinMobGenerator(1, 1, Point(x, y)))
+                elif grid_data[x][y] == 5 and random_once(0.25):
+                    generators.append(ForsetMobGenerator(1, 1, Point(x, y)))
         return generators
 
     def initialize_world(self):

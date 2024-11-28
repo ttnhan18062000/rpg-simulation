@@ -76,7 +76,9 @@ class World:
                 start_x <= x <= start_x + window_width + cell_size
                 and start_y <= y <= start_y + window_height + cell_size
             ) and ((x, y) not in drawn_characters):
-                if is_display_changed or character.should_redraw():
+                if character.is_alive() and (
+                    is_display_changed or character.should_redraw()
+                ):
                     drawn_characters[(x, y)] = 1
                     # Blit character icon on top of the tile
                     character_icon = pygame.transform.scale(
