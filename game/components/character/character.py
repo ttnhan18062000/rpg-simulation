@@ -1,10 +1,12 @@
 from components.common.point import Point
 from components.common.game_object import GameObject
 from components.character.character_info import CharacterInfo
+from components.character.character_action_management import CharacterActionManagement
 from components.character.character_action import (
     CharacterAction,
     BasicCharacterAction,
     CombatCharacterAction,
+    CharacterActionModifyReason,
 )
 from components.character.character_strategy import (
     CharacterStrategy,
@@ -40,7 +42,6 @@ class Character(GameObject):
         self.pos = pos
         self.img = img
         self.character_info = character_info
-        self.character_action = BasicCharacterAction()
         self.character_strategy = CharacterStrategy()
         self.character_stats = character_stats
         self.character_status = CharacterStatus()
@@ -49,6 +50,9 @@ class Character(GameObject):
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
         self.character_goal = CharacterGoal()
+        self.character_action_management = CharacterActionManagement(
+            self.character_goal
+        )
         self.behaviors = {}
         self.is_dead = False
 
@@ -95,6 +99,9 @@ class Character(GameObject):
     def get_level(self):
         return self.level
 
+    def get_current_level(self):
+        return self.level.get_current_level()
+
     def get_restricted_tile_types(self):
         return self.character_class.get_restricted_tile_types()
 
@@ -108,12 +115,15 @@ class Character(GameObject):
 
     def add_goal(self, priority: int, goal):
         self.character_goal.add(priority, goal)
+        self.character_action_management.on_new_goal_added(self)
 
     def get_current_goal(self):
         return self.character_goal.get_current_goal()
 
-    def complete_goal(self):
-        self.character_goal.complete_goal()
+    def check_done_current_goal(self):
+        is_done = self.character_goal.check_done_current_goal(self)
+        if is_done:
+            self.character_action_management.on_goal_completed(self)
 
     def is_alive(self):
         return (
@@ -128,8 +138,15 @@ class Character(GameObject):
     def set_vision_range(self, vision_range: int):
         self.character_vision.set_range(vision_range)
 
-    def set_character_action(self, character_action: CharacterAction):
-        self.character_action = character_action
+    def get_character_action(self):
+        return self.character_action_management.get_character_action()
+
+    def set_character_action(self, character_action):
+        self.character_action_management.set(character_action, self)
+
+        # current_goal = self.get_current_goal()
+        # if current_goal:
+        #     current_goal.apply_to_actions(self)
 
     def is_hostile_with(self, character: "Character"):
         hostile_factions = self.character_class.get_hostile_factions()
@@ -155,10 +172,14 @@ class Character(GameObject):
 
     def do_action(self):
         if self.is_just_changed_location == False:
-            self.is_just_changed_location = self.character_action.do_action(self)
+            self.is_just_changed_location = self.get_character_action().do_action(self)
 
         # Decrease all statuses' duration by one
         self.character_status.change_duration(-1)
+
+        # Check goal is done yet
+        if self.character_goal.has_goal():
+            self.check_done_current_goal()
 
     def should_redraw(self):
         return self.is_just_changed_location
@@ -183,7 +204,7 @@ class Character(GameObject):
                 f"{self.get_info()} suffered from LightInjury after exit combat"
             )
             self.character_status.add_status(LightInjury(5))
-        self.character_action = BasicCharacterAction()
+        self.set_character_action(BasicCharacterAction())
         self.set_redraw_status(True)
 
     def get_behaviors(self):
@@ -201,16 +222,18 @@ class Character(GameObject):
         self.behaviors[key] = behavior
 
     def enter_combat(self, combat_event_id, target_faction):
-        self.character_action = CombatCharacterAction(
-            **{
-                "combat_event_id": combat_event_id,
-                "target_faction": target_faction,
-                FightingBehavior.name: self.get_behavior(FightingBehavior.name),
-            }
+        self.set_character_action(
+            CombatCharacterAction(
+                **{
+                    "combat_event_id": combat_event_id,
+                    "target_faction": target_faction,
+                    FightingBehavior.name: self.get_behavior(FightingBehavior.name),
+                }
+            )
         )
 
     def get_character_action_type(self):
-        return self.character_action.__class__.__name__
+        return self.get_character_action().__class__.__name__
 
     def to_dict(self):
         return {

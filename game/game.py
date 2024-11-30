@@ -67,7 +67,6 @@ class Game:
     def initialize_world(self):
         # grid_data = generate_voronoi_map(self.max_x_cell, self.max_y_cell) # Random generated map
         grid_data = MapLoader.load_map("data/world/map2.txt")  # Load defined map
-        print(grid_data)
         self.max_x_cell = len(grid_data[0])
         self.max_y_cell = len(grid_data)
         generators = self.initialize_generators(grid_data)
