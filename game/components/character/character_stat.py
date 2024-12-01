@@ -58,12 +58,13 @@ class CharacterStat:
         else:
             raise Exception(f"No {stat_def} found")
 
-    def get_applied_statuses_character_stat(self, character_status):
+    # TODO: Refactor this, currently duplicated, inefficient
+    def get_applied_statuses_character_stat(self, character_stat, character_status):
         """
         Apply all effects to a given CharacterStats object.
         :param stats: The CharacterStats instance to modify
         """
-        applied_character_stat = copy.deepcopy(self)
+        applied_character_stat = copy.deepcopy(character_stat)
 
         stat_effect_statuses = {
             status_name: status
@@ -77,6 +78,32 @@ class CharacterStat:
                 applied_character_stat.get_stat(stat_def).modify(stat)
 
         return applied_character_stat
+
+    # TODO: Refactor this, currently duplicated, inefficient
+    def get_applied_equipments_character_stat(self, character_equipment):
+        applied_character_stat = copy.deepcopy(self)
+
+        weapon = character_equipment.get_weapon()
+        armor = character_equipment.get_armor()
+        if weapon:
+            for stat_def, stat in weapon.get_affect_stats().items():
+                applied_character_stat.get_stat(stat_def).modify(stat)
+        if armor:
+            for stat_def, stat in weapon.get_affect_stats().items():
+                applied_character_stat.get_stat(stat_def).modify(stat)
+
+        return applied_character_stat
+
+    def get_final_stat(self, character):
+        equipment_applied_character_stat = self.get_applied_equipments_character_stat(
+            character.get_character_equipment()
+        )
+
+        if character.get_character_status().is_empty():
+            return equipment_applied_character_stat
+        return self.get_applied_statuses_character_stat(
+            equipment_applied_character_stat, character.get_character_status()
+        )
 
     def get_health_ratio(self):
         return (

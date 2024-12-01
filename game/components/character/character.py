@@ -23,6 +23,10 @@ from components.character.character_power import CharacterPower
 from components.character.memory.character_memory import CharacterMemory
 from components.character.character_behavior import FightingBehavior
 from components.character.character_goal import CharacterGoal
+
+from components.character.character_inventory import CharacterInventory
+from components.character.character_equipment import CharacterEquipment
+
 from components.world.store import get_store, EntityType
 
 from data.logs.logger import logger
@@ -54,6 +58,10 @@ class Character(GameObject):
             self.character_goal
         )
         self.behaviors = {}
+
+        self.character_inventory = CharacterInventory()
+        self.character_equipment = CharacterEquipment()
+
         self.is_dead = False
 
         store = get_store()
@@ -74,12 +82,8 @@ class Character(GameObject):
     def get_character_stat(self):
         return self.character_stats
 
-    def get_status_applied_character_stat(self):
-        if self.character_status.is_empty():
-            return self.get_character_stat()
-        return self.character_stats.get_applied_statuses_character_stat(
-            self.character_status
-        )
+    def get_final_stat(self):
+        return self.get_character_stat().get_final_stat(self)
 
     def get_vision(self):
         return self.character_vision
@@ -91,7 +95,7 @@ class Character(GameObject):
         return self.character_class.get_hostile_factions()
 
     def get_power(self):
-        return CharacterPower.get_power(self.get_status_applied_character_stat())
+        return CharacterPower.get_power(self.get_final_stat())
 
     def get_memory(self):
         return self.character_memory
@@ -107,6 +111,18 @@ class Character(GameObject):
 
     def get_strategy(self, strategy_type: CharacterStrategyType):
         return self.character_strategy.get(strategy_type)
+
+    def get_character_status(self):
+        return self.character_status
+
+    def get_character_equipment(self):
+        return self.character_equipment
+
+    def equip(self, equipment):
+        self.get_character_equipment().equip(equipment)
+
+    def get_character_inventory(self):
+        return self.character_inventory
 
     def add_strategy(
         self, strategy_type: CharacterStrategyType, strategy: BaseStrategy
@@ -193,7 +209,7 @@ class Character(GameObject):
     def exit_combat(self):
         # TODO: critical health should depend on characteristic
         # TODO: refactor for a module that manage the status applying
-        health_ratio = self.get_status_applied_character_stat().get_health_ratio()
+        health_ratio = self.get_final_stat().get_health_ratio()
         if health_ratio < 0.25:
             logger.debug(
                 f"{self.get_info()} suffered from HeavyInjury after exit combat"

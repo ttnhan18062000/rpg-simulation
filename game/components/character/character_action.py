@@ -162,14 +162,10 @@ class CombatCharacterAction(CharacterAction):
 
     def get_modified_actions(self, character):
         cur_health = (
-            character.get_status_applied_character_stat()
-            .get_stat(StatDefinition.CURRENT_HEALTH)
-            .value
+            character.get_final_stat().get_stat(StatDefinition.CURRENT_HEALTH).value
         )
         max_health = (
-            character.get_status_applied_character_stat()
-            .get_stat(StatDefinition.MAX_HEALTH)
-            .value
+            character.get_final_stat().get_stat(StatDefinition.MAX_HEALTH).value
         )
         health_ratio = cur_health / max_health
         if health_ratio < self.escape_threshold:
