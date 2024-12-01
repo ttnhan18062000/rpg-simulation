@@ -17,6 +17,14 @@ from components.action.strategy.move_strategy import (
     AgressiveMobMove,
     PassiveMobMove,
 )
+from components.character.character_action import (
+    CharacterAction,
+    BasicCharacterAction,
+    CombatCharacterAction,
+    BasicMobCharacterAction,
+)
+from components.item.equipment import SteelArmor, SteelSword
+from components.action.goal import TrainingGoal
 from components.character.character_strategy import CharacterStrategyType
 from components.common.point import Point
 from components.world.store import get_store, EntityType
@@ -68,11 +76,17 @@ class HumanGenerator(CharacterGenerator):
             Human(),
             1,
         )
+        new_human.set_character_action(BasicCharacterAction())
         new_human.set_vision_range(15)
+
+        new_human.equip(SteelArmor())
+        new_human.equip(SteelSword())
+
         new_human.add_strategy(CharacterStrategyType.Move, ThinkingMove())
         new_human.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
+        new_human.add_goal(1, TrainingGoal(**{"target_level": 3}))
         get_store().add(EntityType.CHARACTER, new_human.get_info().id, new_human)
 
 
@@ -98,11 +112,17 @@ class DemonGenerator(CharacterGenerator):
             Demon(),
             1,
         )
+        new_demon.set_character_action(BasicCharacterAction())
         new_demon.set_vision_range(15)
+
+        new_demon.equip(SteelArmor())
+        new_demon.equip(SteelSword())
+
         new_demon.add_strategy(CharacterStrategyType.Move, ThinkingMove())
         new_demon.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
+        new_demon.add_goal(1, TrainingGoal(**{"target_level": 3}))
         get_store().add(EntityType.CHARACTER, new_demon.get_info().id, new_demon)
 
 
@@ -128,6 +148,7 @@ class RuinMobGenerator(CharacterGenerator):
             RuinMob(),
             1,
         )
+        new_mob.set_character_action(BasicMobCharacterAction())
         new_mob.add_strategy(CharacterStrategyType.Move, AgressiveMobMove())
         new_mob.add_behavior(FightingBehavior.name, AggressiveBehavior())
         get_store().add(EntityType.CHARACTER, new_mob.get_info().id, new_mob)
@@ -155,6 +176,7 @@ class ForsetMobGenerator(CharacterGenerator):
             ForestMob(),
             1,
         )
+        new_mob.set_character_action(BasicMobCharacterAction())
         new_mob.add_strategy(CharacterStrategyType.Move, PassiveMobMove())
         new_mob.add_behavior(FightingBehavior.name, PassiveBehavior())
         get_store().add(EntityType.CHARACTER, new_mob.get_info().id, new_mob)

@@ -1,10 +1,12 @@
 from components.common.point import Point
 from components.common.game_object import GameObject
 from components.character.character_info import CharacterInfo
+from components.character.character_action_management import CharacterActionManagement
 from components.character.character_action import (
     CharacterAction,
     BasicCharacterAction,
     CombatCharacterAction,
+    CharacterActionModifyReason,
 )
 from components.character.character_strategy import (
     CharacterStrategy,
@@ -20,6 +22,11 @@ from components.character.character_vision import CharacterVision
 from components.character.character_power import CharacterPower
 from components.character.memory.character_memory import CharacterMemory
 from components.character.character_behavior import FightingBehavior
+from components.character.character_goal import CharacterGoal
+
+from components.character.character_inventory import CharacterInventory
+from components.character.character_equipment import CharacterEquipment
+
 from components.world.store import get_store, EntityType
 
 from data.logs.logger import logger
@@ -39,7 +46,6 @@ class Character(GameObject):
         self.pos = pos
         self.img = img
         self.character_info = character_info
-        self.character_action = BasicCharacterAction()
         self.character_strategy = CharacterStrategy()
         self.character_stats = character_stats
         self.character_status = CharacterStatus()
@@ -47,7 +53,15 @@ class Character(GameObject):
         self.character_vision = CharacterVision(5)
         self.level = CharacterLevel(character_class.class_level, level)
         self.character_memory = CharacterMemory()
+        self.character_goal = CharacterGoal()
+        self.character_action_management = CharacterActionManagement(
+            self.character_goal
+        )
         self.behaviors = {}
+
+        self.character_inventory = CharacterInventory()
+        self.character_equipment = CharacterEquipment()
+
         self.is_dead = False
 
         store = get_store()
@@ -68,12 +82,8 @@ class Character(GameObject):
     def get_character_stat(self):
         return self.character_stats
 
-    def get_status_applied_character_stat(self):
-        if self.character_status.is_empty():
-            return self.get_character_stat()
-        return self.character_stats.get_applied_statuses_character_stat(
-            self.character_status
-        )
+    def get_final_stat(self):
+        return self.get_character_stat().get_final_stat(self)
 
     def get_vision(self):
         return self.character_vision
@@ -85,7 +95,7 @@ class Character(GameObject):
         return self.character_class.get_hostile_factions()
 
     def get_power(self):
-        return CharacterPower.get_power(self.get_status_applied_character_stat())
+        return CharacterPower.get_power(self.get_final_stat())
 
     def get_memory(self):
         return self.character_memory
@@ -93,16 +103,43 @@ class Character(GameObject):
     def get_level(self):
         return self.level
 
+    def get_current_level(self):
+        return self.level.get_current_level()
+
     def get_restricted_tile_types(self):
         return self.character_class.get_restricted_tile_types()
 
     def get_strategy(self, strategy_type: CharacterStrategyType):
         return self.character_strategy.get(strategy_type)
 
+    def get_character_status(self):
+        return self.character_status
+
+    def get_character_equipment(self):
+        return self.character_equipment
+
+    def equip(self, equipment):
+        self.get_character_equipment().equip(equipment)
+
+    def get_character_inventory(self):
+        return self.character_inventory
+
     def add_strategy(
         self, strategy_type: CharacterStrategyType, strategy: BaseStrategy
     ):
         self.character_strategy.add(strategy_type, strategy)
+
+    def add_goal(self, priority: int, goal):
+        self.character_goal.add(priority, goal)
+        self.character_action_management.on_new_goal_added(self)
+
+    def get_current_goal(self):
+        return self.character_goal.get_current_goal()
+
+    def check_done_current_goal(self):
+        is_done = self.character_goal.check_done_current_goal(self)
+        if is_done:
+            self.character_action_management.on_goal_completed(self)
 
     def is_alive(self):
         return (
@@ -116,6 +153,16 @@ class Character(GameObject):
 
     def set_vision_range(self, vision_range: int):
         self.character_vision.set_range(vision_range)
+
+    def get_character_action(self):
+        return self.character_action_management.get_character_action()
+
+    def set_character_action(self, character_action):
+        self.character_action_management.set(character_action, self)
+
+        # current_goal = self.get_current_goal()
+        # if current_goal:
+        #     current_goal.apply_to_actions(self)
 
     def is_hostile_with(self, character: "Character"):
         hostile_factions = self.character_class.get_hostile_factions()
@@ -141,10 +188,14 @@ class Character(GameObject):
 
     def do_action(self):
         if self.is_just_changed_location == False:
-            self.is_just_changed_location = self.character_action.do_action(self)
+            self.is_just_changed_location = self.get_character_action().do_action(self)
 
         # Decrease all statuses' duration by one
         self.character_status.change_duration(-1)
+
+        # Check goal is done yet
+        if self.character_goal.has_goal():
+            self.check_done_current_goal()
 
     def should_redraw(self):
         return self.is_just_changed_location
@@ -158,7 +209,7 @@ class Character(GameObject):
     def exit_combat(self):
         # TODO: critical health should depend on characteristic
         # TODO: refactor for a module that manage the status applying
-        health_ratio = self.get_status_applied_character_stat().get_health_ratio()
+        health_ratio = self.get_final_stat().get_health_ratio()
         if health_ratio < 0.25:
             logger.debug(
                 f"{self.get_info()} suffered from HeavyInjury after exit combat"
@@ -169,7 +220,7 @@ class Character(GameObject):
                 f"{self.get_info()} suffered from LightInjury after exit combat"
             )
             self.character_status.add_status(LightInjury(5))
-        self.character_action = BasicCharacterAction()
+        self.set_character_action(BasicCharacterAction())
         self.set_redraw_status(True)
 
     def get_behaviors(self):
@@ -187,16 +238,18 @@ class Character(GameObject):
         self.behaviors[key] = behavior
 
     def enter_combat(self, combat_event_id, target_faction):
-        self.character_action = CombatCharacterAction(
-            **{
-                "combat_event_id": combat_event_id,
-                "target_faction": target_faction,
-                FightingBehavior.name: self.get_behavior(FightingBehavior.name),
-            }
+        self.set_character_action(
+            CombatCharacterAction(
+                **{
+                    "combat_event_id": combat_event_id,
+                    "target_faction": target_faction,
+                    FightingBehavior.name: self.get_behavior(FightingBehavior.name),
+                }
+            )
         )
 
     def get_character_action_type(self):
-        return self.character_action.__class__.__name__
+        return self.get_character_action().__class__.__name__
 
     def to_dict(self):
         return {

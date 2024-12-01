@@ -1,9 +1,12 @@
 import numpy
 from enum import Enum
+import copy
 
 from components.action.action import Move, Interact, Train, Standby, Fight, Escape
 from components.character.character_behavior import FightingBehavior
 from components.character.character_stat import StatDefinition
+
+from data.logs.logger import logger
 
 
 class ActionType(Enum):
@@ -15,9 +18,14 @@ class ActionType(Enum):
     ESCAPE = 6
 
 
+class CharacterActionModifyReason(Enum):
+    APPLY_GOAL = 1
+
+
 class CharacterAction:
     def __init__(self, **kwargs) -> None:
         self.actions = {}
+        self.base_actions = {}
         self.kwargs = kwargs
 
     def get_modified_actions(self, character):
@@ -41,13 +49,80 @@ class CharacterAction:
         next_action = self.get_next_action(character)
         return next_action.execute(character, **self.kwargs)
 
+    def modify_probabilities(
+        self,
+        target: ActionType,
+        multiplier: int,
+        reason: CharacterActionModifyReason,
+        **kwargs,
+    ):
+        # if reason == CharacterActionModifyReason.APPLY_GOAL:
+        #     if self.applied_goal:
+        #         logger.debug(f"Already applied goal")
+        #     else:
+        #         self.applied_goal = kwargs.get("goal")
+        if target not in self.base_actions:
+            logger.debug(f"Cannot find action '{target}'")
+
+        new_total_prob = self.base_actions[target]["prob"] * multiplier + (
+            100 - self.base_actions[target]["prob"]
+        )
+
+        total_assigned_prob = 0
+        last_action_type = None
+        for idx, action_type in enumerate(self.base_actions.keys()):
+            if idx == len(self.base_actions) - 1:
+                # Save the last action to adjust later
+                last_action_type = action_type
+                continue
+
+            if action_type == target:
+                new_prob = int(
+                    100
+                    * self.base_actions[action_type]["prob"]
+                    * multiplier
+                    / new_total_prob
+                )
+            else:
+                new_prob = int(
+                    100 * self.base_actions[action_type]["prob"] / new_total_prob
+                )
+
+            self.actions[action_type]["prob"] = new_prob
+            total_assigned_prob += new_prob
+
+        # Assign remaining probability to the last action
+        if last_action_type:
+            self.actions[last_action_type]["prob"] = 100 - total_assigned_prob
+
+        logger.debug(
+            f"Applied multiplier to action: {target}={self.actions[target]["prob"]}"
+        )
+
+    def on_change(self):
+        # Trigger when the character action is being replaced
+        pass
+
+    def reset_probabilities(self, reason: CharacterActionModifyReason):
+        # if reason == CharacterActionModifyReason.APPLY_GOAL:
+        #     self.is_applied_goal = False
+        #     logger.debug(f"Reset applied goal")
+        self.actions = copy.deepcopy(self.base_actions)
+
+    def has_action(self, action_type: ActionType):
+        return action_type in self.base_actions
+
 
 class BasicMobCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
+        self.base_actions = {
+            ActionType.MOVE: {"class": Move, "prob": 20},
+            ActionType.STANDBY: {"class": Standby, "prob": 80},
+        }
         self.actions = {
-            ActionType.MOVE: {"class": Move, "prob": 5},
-            ActionType.STANDBY: {"class": Standby, "prob": 95},
+            ActionType.MOVE: {"class": Move, "prob": 20},
+            ActionType.STANDBY: {"class": Standby, "prob": 80},
         }
         self.kwargs = kwargs
 
@@ -55,6 +130,10 @@ class BasicMobCharacterAction(CharacterAction):
 class BasicCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
+        self.base_actions = {
+            ActionType.MOVE: {"class": Move, "prob": 50},
+            ActionType.TRAIN: {"class": Train, "prob": 50},
+        }
         self.actions = {
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
@@ -65,6 +144,10 @@ class BasicCharacterAction(CharacterAction):
 class CombatCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
+        self.base_actions = {
+            ActionType.FIGHT: {"class": Fight, "prob": 100},
+            ActionType.ESCAPE: {"class": Escape, "prob": 0},
+        }
         self.actions = {
             ActionType.FIGHT: {"class": Fight, "prob": 100},
             ActionType.ESCAPE: {"class": Escape, "prob": 0},
@@ -79,14 +162,10 @@ class CombatCharacterAction(CharacterAction):
 
     def get_modified_actions(self, character):
         cur_health = (
-            character.get_status_applied_character_stat()
-            .get_stat(StatDefinition.CURRENT_HEALTH)
-            .value
+            character.get_final_stat().get_stat(StatDefinition.CURRENT_HEALTH).value
         )
         max_health = (
-            character.get_status_applied_character_stat()
-            .get_stat(StatDefinition.MAX_HEALTH)
-            .value
+            character.get_final_stat().get_stat(StatDefinition.MAX_HEALTH).value
         )
         health_ratio = cur_health / max_health
         if health_ratio < self.escape_threshold:

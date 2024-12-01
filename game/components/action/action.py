@@ -24,7 +24,7 @@ class Action:
 
     @classmethod
     def execute(cls, character, **kwargs):
-        logger.debug(f"{character.get_info()} do {Action.action_name}")
+        logger.debug(f"{character.get_info()} do {cls.action_name}")
         cls.inspect_around(character)
         return cls.do_action(character, **kwargs)
 
