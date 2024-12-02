@@ -29,7 +29,7 @@ class CharacterActionManagement:
         self.on_start_character_action(character)
 
         logger.debug(
-            f"{character.get_info()} has changed character action to {character_action}"
+            f"{character.get_info()} has changed character action to {character_action.get_name()}"
         )
 
     def check_and_apply_goal(self, character):

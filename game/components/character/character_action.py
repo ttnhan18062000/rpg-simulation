@@ -28,6 +28,10 @@ class CharacterAction:
         self.base_actions = {}
         self.kwargs = kwargs
 
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
     def get_modified_actions(self, character):
         return self.actions
 
@@ -96,7 +100,7 @@ class CharacterAction:
             self.actions[last_action_type]["prob"] = 100 - total_assigned_prob
 
         logger.debug(
-            f"Applied multiplier to action: {target}={self.actions[target]["prob"]}"
+            f"Applied multiplier to action: {target}={self.actions[target]['prob']}"
         )
 
     def on_change(self):

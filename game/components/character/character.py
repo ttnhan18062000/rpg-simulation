@@ -97,6 +97,9 @@ class Character(GameObject):
     def get_power(self):
         return CharacterPower.get_power(self.get_final_stat())
 
+    def get_detailed_power(self):
+        return CharacterPower.get_detailed_character_power(self)
+
     def get_memory(self):
         return self.character_memory
 
@@ -147,6 +150,12 @@ class Character(GameObject):
             and self.character_stats.get_stat(StatDefinition.CURRENT_HEALTH).value > 0
         )
 
+    def is_mob(self):
+        return self.character_class.is_mob()
+
+    def get_character_class_name(self):
+        return self.character_class.__class__.__name__
+
     def set_status(self, status):
         if status == "dead":
             self.is_dead = True
@@ -159,10 +168,6 @@ class Character(GameObject):
 
     def set_character_action(self, character_action):
         self.character_action_management.set(character_action, self)
-
-        # current_goal = self.get_current_goal()
-        # if current_goal:
-        #     current_goal.apply_to_actions(self)
 
     def is_hostile_with(self, character: "Character"):
         hostile_factions = self.character_class.get_hostile_factions()
@@ -186,25 +191,20 @@ class Character(GameObject):
             self.character_stats.update_stat(stat_def, value)
         logger.debug(f"f{self.get_info()} has leveled up: {self.get_power()}")
 
-    def do_action(self):
-        if self.is_just_changed_location == False:
-            self.is_just_changed_location = self.get_character_action().do_action(self)
+    def gain_experience(self, exp_value: int):
+        is_level_up = self.level.add_exp(exp_value)
+        if is_level_up:
+            self.level_up()
 
-        # Decrease all statuses' duration by one
-        self.character_status.change_duration(-1)
-
-        # Check goal is done yet
-        if self.character_goal.has_goal():
-            self.check_done_current_goal()
-
-    def should_redraw(self):
-        return self.is_just_changed_location
-
-    def set_redraw_status(self, status):
-        self.is_just_changed_location = status
-
-    def add_status(self, status):
-        self.character_status.add_status(status)
+    def enter_combat(self, combat_event_id):
+        self.set_character_action(
+            CombatCharacterAction(
+                **{
+                    "combat_event_id": combat_event_id,
+                    FightingBehavior.name: self.get_behavior(FightingBehavior.name),
+                }
+            )
+        )
 
     def exit_combat(self):
         # TODO: critical health should depend on characteristic
@@ -223,6 +223,28 @@ class Character(GameObject):
         self.set_character_action(BasicCharacterAction())
         self.set_redraw_status(True)
 
+    def do_action(self):
+        is_just_changed_location = self.get_character_action().do_action(self)
+
+        if self.is_just_changed_location == False:
+            self.is_just_changed_location = is_just_changed_location
+
+        # Decrease all statuses' duration by one
+        self.character_status.change_duration(-1)
+
+        # Check goal is done yet
+        if self.character_goal.has_goal():
+            self.check_done_current_goal()
+
+    def should_redraw(self):
+        return self.is_just_changed_location
+
+    def set_redraw_status(self, status):
+        self.is_just_changed_location = status
+
+    def add_status(self, status):
+        self.character_status.add_status(status)
+
     def get_behaviors(self):
         return self.behaviors
 
@@ -236,17 +258,6 @@ class Character(GameObject):
             f"{self.get_info()} added behavior '{key}':'{behavior.__class__.__name__}'"
         )
         self.behaviors[key] = behavior
-
-    def enter_combat(self, combat_event_id, target_faction):
-        self.set_character_action(
-            CombatCharacterAction(
-                **{
-                    "combat_event_id": combat_event_id,
-                    "target_faction": target_faction,
-                    FightingBehavior.name: self.get_behavior(FightingBehavior.name),
-                }
-            )
-        )
 
     def get_character_action_type(self):
         return self.get_character_action().__class__.__name__

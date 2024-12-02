@@ -24,7 +24,17 @@ class Action:
 
     @classmethod
     def execute(cls, character, **kwargs):
-        logger.debug(f"{character.get_info()} do {cls.action_name}")
+        if not character.is_mob():
+            # TODO: The total power should be total value of three powers, this for validation
+            (
+                base_stat_power,
+                equipment_power,
+                status_power,
+            ) = character.get_detailed_power()
+            total_power = character.get_power()
+            logger.debug(
+                f"{character.get_info()} do {cls.action_name}. Stat: base='{base_stat_power}' equipment='{equipment_power}' status='{status_power}' total='{total_power}'"
+            )
         cls.inspect_around(character)
         return cls.do_action(character, **kwargs)
 
@@ -95,10 +105,13 @@ class Move(Action):
             all_factions = combat_event.get_factions()
             for hostile_faction in character.get_hostile_factions():
                 if hostile_faction in all_factions:
+                    combat_event.add_hostile_faction(
+                        character.get_faction(), hostile_faction
+                    )
                     combat_event.add_character_id(
                         character.get_faction(), character.get_info().id
                     )
-                    character.enter_combat(combat_event_id, hostile_faction)
+                    character.enter_combat(combat_event_id)
                     return False
 
         # Enter a tile with other characters standing on it, may cause a combat event happen
@@ -119,31 +132,24 @@ class Move(Action):
             if len(hostile_faction_to_characters[hostile_faction]) > 0:
                 new_combat_event: CombatEvent = CombatEvent(new_tile.get_id())
                 new_combat_event_id = new_combat_event.id
+                character_faction = character.get_faction()
+
+                new_combat_event.add_hostile_faction(character_faction, hostile_faction)
+
                 for enemy_character in hostile_faction_to_characters[hostile_faction]:
                     new_combat_event.add_character_id(
                         hostile_faction, enemy_character.get_info().id
                     )
-                    enemy_character.enter_combat(
-                        new_combat_event_id, character.get_faction()
-                    )
+                    enemy_character.enter_combat(new_combat_event_id)
 
                 new_combat_event.add_character_id(
-                    character.get_faction(), character.get_info().id
+                    character_faction, character.get_info().id
                 )
-                character.enter_combat(new_combat_event_id, hostile_faction)
+                character.enter_combat(new_combat_event_id)
 
                 store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
 
                 return False
-
-        # for other_character in other_characters:
-        #     if character.is_hostile_with(other_character):
-        #         # CombatEvent().execute(character, other_character)
-        #         character.enter_combat([other_character.get_info().id])
-        #         other_character.enter_combat([character.get_info().id])
-        #         # Create a combat event to manage all the characters from Human/Demon
-        #         # Dead characters remove from the event -> update all targets -> won't kill the already dead characters
-        #         return True
 
         return True
 
@@ -179,11 +185,12 @@ class Fight(Action):
     @classmethod
     def do_action(cls, character, **kwargs):
         store = get_store()
-        target_faction = kwargs.get("target_faction")
         combat_event_id = kwargs.get("combat_event_id")
         combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
-        target_character_ids = combat_event.get_character_ids_with_faction(
-            target_faction
+        charcter_faction = character.get_faction()
+        # TODO: Proritize factions or specific targets
+        target_character_ids = combat_event.get_target_character_ids_of_faction(
+            charcter_faction
         )
         # TODO: smarter target selection
         target_character_id = random.choice(target_character_ids)
@@ -192,7 +199,13 @@ class Fight(Action):
             StatDefinition.CURRENT_HEALTH,
             -character.character_stats.get_stat(StatDefinition.POWER).value,
         )
-        logger.debug(f"{character.get_info()} hit {target_character.get_info()}")
+        damage_dealt = character.character_stats.get_stat(StatDefinition.POWER).value
+        target_character_remaining_health = target_character.character_stats.get_stat(
+            StatDefinition.CURRENT_HEALTH
+        ).value
+        logger.debug(
+            f"{character.get_info()} hit {target_character.get_info()} for {damage_dealt} damage, left {target_character_remaining_health} HP"
+        )
         if not target_character.is_alive():
             combat_event.kill_character(character, target_character)
             # is_end_combat = combat_event.kill_character(character, target_character)

@@ -46,7 +46,7 @@ class NumericalStat(Stat):
         if other.numerical_type is NumericalStat.NumericalType.REAL:
             self.value += other.value
         elif other.numerical_type is NumericalStat.NumericalType.PERCENTAGE:
-            self.value *= other.value
+            self.value += self.value * other.value
 
 
 class CategoricalStat(Stat):

@@ -10,6 +10,8 @@ from components.character.character import Character
 from components.character.character_stat import StatDefinition
 from components.utils.tile_utils import get_tile_object
 
+from data.logs.logger import logger
+
 
 class World:
     def __init__(self, grid_data, generators) -> None:

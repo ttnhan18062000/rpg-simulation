@@ -31,11 +31,26 @@ class CombatEvent(Event):
     def __init__(self, tile_id) -> None:
         super().__init__()
         self.character_faction_ids = {}
+        # TODO: if there are more than one target faction of a character, they should have priority
+        self.hostile_faction_map = {}
         self.tile_id = tile_id
         tile = get_store().get(EntityType.TILE, self.tile_id)
         tile.set_tile_combat_status(is_combat=True, combat_event_id=self.id)
 
         logger.debug(f"New combat happen: {self.get_id()}:{self.character_faction_ids}")
+
+    def add_hostile_faction(self, faction, hostile_faction):
+        if faction in self.hostile_faction_map:
+            if hostile_faction not in self.hostile_faction_map[faction]:
+                self.hostile_faction_map[faction].append(hostile_faction)
+        else:
+            self.hostile_faction_map[faction] = [hostile_faction]
+        # When a faction is targeted, they also response to the faction
+        if (
+            hostile_faction not in self.hostile_faction_map
+            or faction not in self.hostile_faction_map[hostile_faction]
+        ):
+            self.add_hostile_faction(hostile_faction, faction)
 
     def add_character_id(self, faction, character_id):
         if faction not in self.character_faction_ids:
@@ -43,25 +58,50 @@ class CombatEvent(Event):
         else:
             self.character_faction_ids[faction].append(character_id)
 
-    def remove_character_id(self, faction, character_id):
-        if faction in self.character_faction_ids:
-            self.character_faction_ids[faction].remove(character_id)
-            if len(self.character_faction_ids[faction]) == 0:
-                self.character_faction_ids.pop(faction)
+    def remove_character_id(self, character_faction, character_id):
+        if character_faction in self.character_faction_ids:
+            self.character_faction_ids[character_faction].remove(character_id)
+            if len(self.character_faction_ids[character_faction]) == 0:
+                self.remove_faction_from_hostile_faction_map(character_faction)
+                self.character_faction_ids.pop(character_faction)
 
                 # Exit combat for all characters has no hostile faction in combat
-                all_factions = list(
+
+                # all_factions = list(
+                #     self.character_faction_ids.keys()
+                # )  # clone list to avoid 'dictionary changed size during iteration'
+                # for faction in all_factions:
+                #     character_of_faction = get_store().get(
+                #         EntityType.CHARACTER, self.character_faction_ids[faction][0]
+                #     )
+                #     if not any(
+                #         hostile_faction in all_factions
+                #         for hostile_faction in character_of_faction.get_hostile_factions()
+                #     ):
+                #         self.exit_combat_faction(faction)
+
+                other_factions = list(
                     self.character_faction_ids.keys()
                 )  # clone list to avoid 'dictionary changed size during iteration'
-                for faction in all_factions:
-                    character_of_faction = get_store().get(
-                        EntityType.CHARACTER, self.character_faction_ids[faction][0]
-                    )
-                    if not any(
-                        hostile_faction in all_factions
-                        for hostile_faction in character_of_faction.get_hostile_factions()
-                    ):
+                for faction in other_factions:
+                    if len(self.hostile_faction_map[faction]) == 0:
                         self.exit_combat_faction(faction)
+
+    # TODO: Proritize factions or specific targets
+    def get_target_character_ids_of_faction(self, faction):
+        target_factions = self.hostile_faction_map[faction]
+        target_character_ids = []
+        for target_faction in target_factions:
+            target_character_ids.extend(
+                self.get_character_ids_with_faction(target_faction)
+            )
+        return target_character_ids
+
+    def remove_faction_from_hostile_faction_map(self, hostile_faction):
+        self.hostile_faction_map.pop(hostile_faction)
+        for other_faction in self.hostile_faction_map.keys():
+            if hostile_faction in self.hostile_faction_map[other_faction]:
+                self.hostile_faction_map[other_faction].remove(hostile_faction)
 
     def get_character_ids_with_faction(self, faction):
         if faction in self.character_faction_ids:
@@ -77,6 +117,7 @@ class CombatEvent(Event):
             for cid in self.character_faction_ids[faction]
         ]
 
+        self.remove_faction_from_hostile_faction_map(faction)
         self.character_faction_ids.pop(faction)
 
         if len(self.character_faction_ids.keys()) == 0:
@@ -93,14 +134,11 @@ class CombatEvent(Event):
 
         store = get_store()
 
-        # TODO: better level up handling
-        is_level_up = character.level.add_exp(
+        character.gain_experience(
             killed_character.level.class_level.get_next_level_required_exp(
                 killed_character.level.current_level
             )
         )
-        if is_level_up:
-            character.level_up()
 
         # TODO: Clean killed character and end combat for ally characters should be handled by another component
         # Remove dead character corpse
@@ -155,42 +193,6 @@ class CombatEvent(Event):
             },
         }
 
-    # @staticmethod
-    # def execute(first_character, second_character):
-    #     logger.debug(
-    #         f"Combat between {first_character.get_info()} and {second_character.get_info()}"
-    #     )
-    #     while first_character.is_alive() and second_character.is_alive():
-    #         first_character.character_stats.update_stat(
-    #             StatDefinition.HEALTH,
-    #             -second_character.character_stats.get_stat(StatDefinition.POWER).value,
-    #         )
-    #         second_character.character_stats.update_stat(
-    #             StatDefinition.HEALTH,
-    #             -first_character.character_stats.get_stat(StatDefinition.POWER).value,
-    #         )
-    #     dead_character = (
-    #         first_character if not first_character.is_alive() else second_character
-    #     )
-    #     alive_character = (
-    #         first_character if first_character.is_alive() else second_character
-    #     )
-    #     is_level_up = alive_character.level.add_exp(
-    #         dead_character.level.class_level.get_next_level_required_exp(
-    #             dead_character.level.current_level
-    #         )
-    #     )
-    #     if is_level_up:
-    #         alive_character.level_up()
-    #     logger.debug(f"{alive_character.get_info()} won")
-
-    #     store = get_store()
-    #     # store.remove(EntityType.CHARACTER, dead_character.get_info().id)
-    #     dead_character.set_status("dead")
-    #     tile_id = dead_character.tile_id
-    #     tile = store.get(EntityType.TILE, tile_id)
-    #     tile.remove_character_id(dead_character.get_info().id)
-
 
 class CollectEvent(Event):
     def __init__(self) -> None:
@@ -207,9 +209,7 @@ class TrainingEvent(Event):
         character.character_stats.update_stat(
             StatDefinition.CURRENT_HEALTH, int(max_health / 10)
         )
-        is_level_up = character.level.add_exp(100)
-        if is_level_up:
-            character.level_up()
+        character.gain_experience(100)
 
 
 class RestingEvent(Event):

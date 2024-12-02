@@ -37,10 +37,23 @@ class CharacterStat:
         new_stat = CharacterStat.create_stat(stat_def, value)
         self.stats_list[stat_def] = new_stat
 
-    def get_stat(self, stat_def: StatDefinition):
+    def get_stat(self, stat_def: StatDefinition, force=True):
         if stat_def in self.stats_list:
             return self.stats_list[stat_def]
-        raise Exception(f"No {stat_def} found")
+        else:
+            if force:
+                raise Exception(f"No {stat_def} found")
+            else:
+                return None
+
+    def get_stat_value(self, stat_def: StatDefinition, force=True):
+        if stat_def in self.stats_list:
+            return self.stats_list[stat_def].value
+        else:
+            if force:
+                raise Exception(f"No {stat_def} found")
+            else:
+                return 0
 
     def update_stat(self, stat_def: StatDefinition, value):
         if stat_def in self.stats_list:

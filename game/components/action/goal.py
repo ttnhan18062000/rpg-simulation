@@ -22,6 +22,10 @@ class Goal:
             CharacterActionModifyReason.APPLY_GOAL
         )
 
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
     def __str__(self):
         return "Goal"
 
@@ -52,7 +56,7 @@ class TrainingGoal(Goal):
         )
 
     def __str__(self):
-        return f"TrainingGoal for Level {self.target_level}"
+        return f"{self.get_name()} for Level {self.target_level}"
 
 
 class FightingGoal(Goal):
@@ -81,4 +85,4 @@ class FightingGoal(Goal):
         )
 
     def __str__(self):
-        return f"TrainingGoal for Level {self.target_level}"
+        return f"{self.get_name()} for Level {self.target_level}"

@@ -26,6 +26,9 @@ class CharacterClass:
     def get_restricted_tile_types(self):
         return self.restricted_tile_types
 
+    def is_mob(self):
+        return True
+
 
 class Human(CharacterClass):
     def __init__(self) -> None:
@@ -43,6 +46,9 @@ class Human(CharacterClass):
         ]  # TODO: mobs here just for testing, change to "farm" factions later
         self.ally_factions = [Human.__name__]
         self.restricted_tile_types = []
+
+    def is_mob(self):
+        return False
 
 
 class Demon(CharacterClass):
@@ -62,6 +68,9 @@ class Demon(CharacterClass):
         self.ally_factions = [Demon.__name__]
         self.restricted_tile_types = []
 
+    def is_mob(self):
+        return False
+
 
 class RuinMob(CharacterClass):
     def __init__(self) -> None:
@@ -78,6 +87,9 @@ class RuinMob(CharacterClass):
             tile_type for tile_type in tile_map.values() if tile_type != RuinTile
         ]
 
+    def is_mob(self):
+        return True
+
 
 class ForestMob(CharacterClass):
     def __init__(self) -> None:
@@ -93,3 +105,6 @@ class ForestMob(CharacterClass):
         self.restricted_tile_types = [
             tile_type for tile_type in tile_map.values() if tile_type != ForestTile
         ]
+
+    def is_mob(self):
+        return True
