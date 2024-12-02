@@ -1,0 +1,1069 @@
+u24@u24:~/rpgs/rpg-simulation/game$ python3.11 game.py
+pygame 2.6.1 (SDL 2.28.4, Python 3.11.10)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+MESA: error: ZINK: failed to choose pdev
+libEGL warning: egl: failed to create dri2 screen
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one Human at (3,16)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 0@Human has 3385 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Character equipped SteelArmor
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Character equipped SteelSword
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 0@Human added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Added new goal TrainingGoal for Level 3
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.TRAIN=84
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Applied goal TrainingGoal for Level 3
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (6,2)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 1@RuinMob has 8593 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 1@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 1@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (6,3)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 2@RuinMob has 11996 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 2@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 2@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (7,1)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 3@RuinMob has 6307 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 3@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 3@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (7,4)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 4@RuinMob has 8277 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 4@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 4@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (8,1)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 5@RuinMob has 9248 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 5@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 5@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (8,5)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 6@RuinMob has 17166 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 6@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 6@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (9,4)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 7@RuinMob has 10145 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 7@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 7@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (9,10)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 8@ForestMob has 630 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 8@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 8@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (9,14)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 9@ForestMob has 561 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 9@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 9@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (9,17)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 10@ForestMob has 778 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 10@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 10@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (9,20)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 11@ForestMob has 545 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 11@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 11@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (9,21)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 12@ForestMob has 824 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 12@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 12@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (9,23)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 13@ForestMob has 814 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 13@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 13@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (10,2)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 14@RuinMob has 9341 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 14@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 14@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (10,5)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 15@RuinMob has 17975 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 15@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 15@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (10,9)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 16@ForestMob has 913 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 16@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 16@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (10,10)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 17@ForestMob has 1011 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 17@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 17@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (10,12)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 18@ForestMob has 965 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 18@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 18@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (10,16)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 19@ForestMob has 1724 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 19@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 19@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (10,19)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 20@ForestMob has 448 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 20@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 20@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (10,20)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 21@ForestMob has 1372 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 21@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 21@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,10)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 22@ForestMob has 1023 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 22@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 22@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,11)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 23@ForestMob has 1018 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 23@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 23@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,14)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 24@ForestMob has 811 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 24@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 24@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,15)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 25@ForestMob has 1313 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 25@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 25@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,17)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 26@ForestMob has 766 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 26@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 26@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,18)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 27@ForestMob has 593 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 27@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 27@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one ForestMob at (11,24)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 28@ForestMob has 530 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 28@ForestMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 28@ForestMob added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (12,3)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 29@RuinMob has 17860 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 29@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 29@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (12,5)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 30@RuinMob has 8881 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 30@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 30@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (13,5)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 31@RuinMob has 7008 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 31@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 31@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (15,3)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 32@RuinMob has 7158 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 32@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 32@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (16,2)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 33@RuinMob has 19325 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 33@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 33@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (17,3)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 34@RuinMob has 9505 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 34@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 34@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (17,4)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 35@RuinMob has 8237 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 35@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 35@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (19,1)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 36@RuinMob has 7063 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 36@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 36@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (19,2)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 37@RuinMob has 6249 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 37@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 37@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (19,4)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 38@RuinMob has 14308 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 38@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 38@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one RuinMob at (20,4)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 39@RuinMob has 10044 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 39@RuinMob has changed character action to BasicMobCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 39@RuinMob added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Spawn one Demon at (21,16)
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 40@Demon has 7226 power
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 40@Demon has changed character action to BasicCharacterAction
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Character equipped SteelArmor
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Character equipped SteelSword
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - 40@Demon added behavior 'fighting_behavior':'AggressiveBehavior'
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Added new goal TrainingGoal for Level 3
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.TRAIN=84
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - Applied goal TrainingGoal for Level 3
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - FPS: 70
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:40 - data.logs.logger - DEBUG - ALIVE: {'Human': 1, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 1}
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Spawn one Human at (3,16)
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 41@Human has 1535 power
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Character equipped SteelArmor
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Character equipped SteelSword
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 41@Human added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Added new goal TrainingGoal for Level 3
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.TRAIN=84
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Applied goal TrainingGoal for Level 3
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Spawn one Demon at (21,16)
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 42@Demon has 9400 power
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 42@Demon has changed character action to BasicCharacterAction
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Character equipped SteelArmor
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Character equipped SteelSword
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 42@Demon added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Added new goal TrainingGoal for Level 3
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.TRAIN=84
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - Applied goal TrainingGoal for Level 3
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='3385' equipment='4515' status='0' total='7900'
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - FPS: 76
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:41 - data.logs.logger - DEBUG - ALIVE: {'Human': 2, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 2}
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='7226' equipment='6151' status='0' total='13377'
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Spawn one Human at (3,16)
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 43@Human has 3619 power
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Character equipped SteelArmor
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Character equipped SteelSword
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 43@Human added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Added new goal TrainingGoal for Level 3
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.TRAIN=84
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Applied goal TrainingGoal for Level 3
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Spawn one Demon at (21,16)
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 44@Demon has 4335 power
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 44@Demon has changed character action to BasicCharacterAction
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Character equipped SteelArmor
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Character equipped SteelSword
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 44@Demon added behavior 'fighting_behavior':'PassiveBehavior'
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Added new goal TrainingGoal for Level 3
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.TRAIN=84
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Applied goal TrainingGoal for Level 3
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='3385' equipment='4515' status='0' total='7900'
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - f0@Human has leveled up: 10174
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='1535' equipment='3612' status='0' total='5147'
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 41@Human:5147 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - Add new status TownTileBuff for 3 turns
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - FPS: 71
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:42 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='9400' equipment='7833' status='0' total='17233'
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='4748' equipment='5426' status='0' total='10174'
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='1535' equipment='3612' status='460' total='6691'
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='3619' equipment='5568' status='0' total='9187'
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='7226' equipment='6151' status='0' total='13377'
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - 40@Demon:13377 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - FPS: 78
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:43 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='5289' equipment='6045' status='0' total='11334'
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='1535' equipment='3612' status='460' total='6691'
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - f41@Human has leveled up: 8970
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - StatusClass.TOWN_BUFF has expired
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='9400' equipment='7833' status='0' total='17233'
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='4335' equipment='5100' status='0' total='9435'
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='3619' equipment='5568' status='0' total='9187'
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - f43@Human has leveled up: 11942
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - FPS: 95
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:44 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='5789' equipment='6616' status='0' total='12405'
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='2448' equipment='4452' status='0' total='6900'
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 41@Human:6900 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - Add new status TownTileBuff for 3 turns
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='7226' equipment='6151' status='0' total='13377'
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='5214' equipment='6728' status='0' total='11942'
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - FPS: 89
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='5789' equipment='6616' status='0' total='12405'
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - f0@Human has leveled up: 15456
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - Goal TrainingGoal for Level 3 is completed
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 4
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='9400' equipment='7833' status='0' total='17233'
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 42@Demon:17233 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:45 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='2448' equipment='4452' status='735' total='8970'
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='5825' equipment='7517' status='0' total='13342'
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='4335' equipment='5100' status='0' total='9435'
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 44@Demon:9435 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='7728' equipment='7728' status='0' total='15456'
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='2751' equipment='5003' status='826' total='10081'
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 41@Human:10081 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - StatusClass.TOWN_BUFF has expired
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - FPS: 81
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:46 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='7226' equipment='6151' status='0' total='13377'
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='6113' equipment='7888' status='0' total='14001'
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='8618' equipment='8618' status='0' total='17236'
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='9400' equipment='7833' status='0' total='17233'
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='2751' equipment='5003' status='0' total='7754'
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - FPS: 79
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='6113' equipment='7888' status='0' total='14001'
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - 43@Human:14001 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:47 - data.logs.logger - DEBUG - Add new status TownTileBuff for 3 turns
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 0@Human:18236 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - Add new status TownTileBuff for 3 turns
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='4335' equipment='5100' status='0' total='9435'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='7226' equipment='6151' status='0' total='13377'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 40@Demon:13377 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='6113' equipment='7888' status='1834' total='18201'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - f43@Human has leveled up: 22842
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - Goal TrainingGoal for Level 3 is completed
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 4
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='2735' total='23707'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 0@Human:23707 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - Extend the TownTileBuff with TownTileBuff to 3 turns
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='3031' equipment='5512' status='0' total='8543'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - FPS: 85
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'RuinMob': 20, 'ForestMob': 19, 'Demon': 3}
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='9400' equipment='7833' status='0' total='17233'
+2024-12-02 14:41:48 - data.logs.logger - DEBUG - f42@Demon has leveled up: 22014
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='2497' total='22842'
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 43@Human:22842 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - Extend the TownTileBuff with TownTileBuff to 3 turns
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='9118' equipment='9118' status='2735' total='23707'
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='3031' equipment='5512' status='0' total='8543'
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - f41@Human has leveled up: 10974
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - Goal TrainingGoal for Level 3 is completed
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 4
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - FPS: 73
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 19}
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='2735' total='23707'
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 0@Human:23707 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - StatusClass.TOWN_BUFF has expired
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='2497' total='22842'
+2024-12-02 14:41:49 - data.logs.logger - DEBUG - 43@Human:22842 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='13029' equipment='8985' status='0' total='22014'
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='7226' equipment='6151' status='0' total='13377'
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - f40@Demon has leveled up: 17320
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='4335' equipment='5100' status='0' total='9435'
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 44@Demon:9435 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='2497' total='22842'
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 43@Human:22842 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - StatusClass.TOWN_BUFF has expired
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4422' equipment='6552' status='0' total='10974'
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 41@Human:10974 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='9118' equipment='9118' status='0' total='18236'
+
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - FPS: 77
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:50 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 19}
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='0' total='17571'
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 43@Human:17571 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4422' equipment='6552' status='0' total='10974'
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 41@Human:10974 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 0@Human:18236 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='14522' equipment='10015' status='0' total='24537'
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='10177' equipment='7143' status='0' total='17320'
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - FPS: 85
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 19}
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='0' total='17571'
+2024-12-02 14:41:51 - data.logs.logger - DEBUG - 43@Human:17571 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4422' equipment='6552' status='0' total='10974'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 41@Human:10974 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 0@Human:18236 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 19@ForestMob:1724 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='4335' equipment='5100' status='0' total='9435'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='0' total='17571'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 43@Human:17571 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 0@Human:18236 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - FPS: 81
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 19}
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='4422' equipment='6552' status='0' total='10974'
+2024-12-02 14:41:52 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='11368' equipment='7977' status='0' total='19345'
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='8323' equipment='9248' status='0' total='17571'
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 43@Human:17571 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - New combat happen: 39:{}
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 10@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 10@ForestMob hit 43@Human
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4932' equipment='7308' status='0' total='12240'
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - 41@Human:12240 is joining combat 39:(9,18):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - FPS: 87
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:53 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 19}
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 42@Demon:25836 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='7784' equipment='8650' status='0' total='16434'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 43@Human hit 10@ForestMob
+
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 0@Human:18236 is joining combat 39:(9,18):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='4335' equipment='5100' status='0' total='9435'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - f44@Demon has leveled up: 12810
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4932' equipment='7308' status='0' total='12240'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 41@Human:12240 is joining combat 39:(9,18):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - FPS: 78
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - DEAD: {}
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 19}
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='7784' equipment='8650' status='0' total='16434'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 43@Human hit 10@ForestMob
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 0@Human:18236 is joining combat 39:(9,18):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:54 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 10@ForestMob hit 0@Human
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='4932' equipment='7308' status='0' total='12240'
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 41@Human hit 10@ForestMob
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 20@ForestMob:448 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='7784' equipment='8650' status='0' total='16434'
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 43@Human hit 10@ForestMob
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 43@Human killed 10@ForestMob
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='8506' equipment='8507' status='0' total='17013'
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - FPS: 82
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 1}
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 18}
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='6710' equipment='6100' status='0' total='12810'
+2024-12-02 14:41:55 - data.logs.logger - DEBUG - 44@Demon:12810 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4932' equipment='7308' status='0' total='12240'
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 41@Human:12240 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - New combat happen: 46:{}
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 27@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 25@ForestMob:1313 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='7784' equipment='8650' status='0' total='16434'
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 43@Human:16434 is joining combat 46:(10,18):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 21@ForestMob:1372 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - FPS: 82
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 1}
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 18}
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='4932' equipment='7308' status='0' total='12240'
+2024-12-02 14:41:56 - data.logs.logger - DEBUG - 41@Human hit 27@ForestMob
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='7784' equipment='8650' status='0' total='16434'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 43@Human hit 27@ForestMob
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 0@Human:18236 is joining combat 46:(10,18):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 40@Demon:20812 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 27@ForestMob hit 41@Human
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='6710' equipment='6100' status='0' total='12810'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 44@Demon:12810 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='4592' equipment='6804' status='0' total='11396'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 41@Human hit 27@ForestMob
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 25@ForestMob:1313 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - FPS: 85
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 1}
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 18}
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='7784' equipment='8650' status='0' total='16434'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 43@Human hit 27@ForestMob
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 43@Human killed 27@ForestMob
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - f43@Human has leveled up: 20091
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Goal FightingGoal for Level 4 is completed
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 5
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='9118' equipment='9118' status='0' total='18236'
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - f0@Human has leveled up: 22164
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Goal FightingGoal for Level 4 is completed
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 5
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:41:57 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4592' equipment='6804' status='0' total='11396'
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 41@Human:11396 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='10169' equipment='9922' status='0' total='20091'
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 43@Human:20091 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='11734' equipment='10430' status='0' total='22164'
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 40@Demon:20812 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - FPS: 88
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 2}
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 17}
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 26@ForestMob:766 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:58 - data.logs.logger - DEBUG - 24@ForestMob:811 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='10169' equipment='9922' status='0' total='20091'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 43@Human:20091 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - New combat happen: 52:{}
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 12@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13022' equipment='11575' status='0' total='24597'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 0@Human:24597 is joining combat 52:(10,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 42@Demon:25836 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='6710' equipment='6100' status='0' total='12810'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 44@Demon:12810 is chasing PowerEst.WEAKER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='4592' equipment='6804' status='0' total='11396'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 19@ForestMob:1724 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 21@ForestMob:1372 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 12@ForestMob hit 43@Human
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13022' equipment='11575' status='0' total='24597'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 0@Human:24597 is joining combat 52:(10,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='9082' equipment='8861' status='0' total='17943'
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - 43@Human hit 12@ForestMob
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - FPS: 74
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 2}
+2024-12-02 14:41:59 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 17}
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5103' equipment='7560' status='0' total='12663'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human:12663 is joining combat 52:(10,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='13022' equipment='11575' status='0' total='24597'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 0@Human hit 12@ForestMob
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 0@Human killed 12@ForestMob
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='9082' equipment='8861' status='0' total='17943'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 43@Human:17943 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - New combat happen: 55:{}
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 20@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - FPS: 86
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 3}
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 16}
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='6710' equipment='6100' status='0' total='12810'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 21@ForestMob:1372 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5103' equipment='7560' status='0' total='12663'
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human:12663 is joining combat 55:(9,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:00 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13022' equipment='11575' status='0' total='24597'
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human:24597 is joining combat 55:(9,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='9082' equipment='8861' status='0' total='17943'
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 43@Human hit 20@ForestMob
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 20@ForestMob hit 41@Human
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='12229' equipment='8583' status='0' total='20812'
+
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='4728' equipment='7006' status='0' total='11734'
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 41@Human hit 20@ForestMob
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='13022' equipment='11575' status='0' total='24597'
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human hit 20@ForestMob
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human killed 20@ForestMob
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='9082' equipment='8861' status='0' total='17943'
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 43@Human:17943 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='15291' equipment='10545' status='0' total='25836'
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - f42@Demon has leveled up: 32123
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Goal TrainingGoal for Level 3 is completed
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 4
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - 13@ForestMob:814 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - FPS: 77
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 4}
+2024-12-02 14:42:01 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 15}
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='13022' equipment='11575' status='0' total='24597'
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='9082' equipment='8861' status='0' total='17943'
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='7515' equipment='6832' status='0' total='14347'
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4728' equipment='7006' status='0' total='11734'
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 41@Human:11734 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 40@Demon:20812 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - FPS: 88
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 4}
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 15}
+2024-12-02 14:42:02 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='20225' equipment='11898' status='0' total='32123'
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 0@Human:25543 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 43@Human:20723 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - New combat happen: 64:{}
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 11@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 28@ForestMob:530 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4728' equipment='7006' status='0' total='11734'
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 41@Human:11734 is joining combat 64:(11,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 0@Human:25543 is joining combat 64:(11,20):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - 43@Human hit 11@ForestMob
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - FPS: 78
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 4}
+2024-12-02 14:42:03 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 15}
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='22499' equipment='13236' status='0' total='35735'
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 42@Demon:35735 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='4728' equipment='7006' status='0' total='11734'
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 41@Human hit 11@ForestMob
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 11@ForestMob escape failed
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 0@Human hit 11@ForestMob
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 0@Human killed 11@ForestMob
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - 43@Human:20723 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - FPS: 82
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 5}
+2024-12-02 14:42:04 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 14}
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 0@Human:25543 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 43@Human:20723 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='4728' equipment='7006' status='0' total='11734'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 41@Human:11734 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 13@ForestMob:814 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='22499' equipment='13236' status='0' total='35735'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 42@Demon:35735 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='12229' equipment='8583' status='0' total='20812'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - f40@Demon has leveled up: 26146
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - Goal TrainingGoal for Level 3 is completed
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 4
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 0@Human:25543 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 43@Human:20723 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - New combat happen: 68:{}
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 28@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='4728' equipment='7006' status='0' total='11734'
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - FPS: 76
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 5}
+2024-12-02 14:42:05 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 14}
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 0@Human:25543 is joining combat 68:(11,23):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 43@Human hit 28@ForestMob
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='22499' equipment='13236' status='0' total='35735'
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 42@Demon:35735 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='5239' equipment='7761' status='0' total='13000'
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='16372' equipment='9774' status='0' total='26146'
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 40@Demon:26146 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - FPS: 83
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 5}
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 14}
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 0@Human hit 28@ForestMob
+2024-12-02 14:42:06 - data.logs.logger - DEBUG - 28@ForestMob escape failed
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 43@Human hit 28@ForestMob
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 43@Human killed 28@ForestMob
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 44@Demon:15372 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='13522' equipment='12021' status='0' total='25543'
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 0@Human:25543 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - New combat happen: 72:{}
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 21@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='22499' equipment='13236' status='0' total='35735'
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='10489' equipment='10234' status='0' total='20723'
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - FPS: 84
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 6}
+2024-12-02 14:42:07 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 13}
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='16372' equipment='9774' status='0' total='26146'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 21@ForestMob hit 0@Human
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='12306' equipment='10939' status='0' total='23245'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 0@Human hit 21@ForestMob
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 26@ForestMob:766 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 41@Human:13085 is joining combat 72:(11,24):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human:23502 is joining combat 72:(11,24):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 42@Demon:36875 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='12306' equipment='10939' status='0' total='23245'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 0@Human hit 21@ForestMob
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - FPS: 77
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 6}
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 13}
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human hit 21@ForestMob
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human killed 21@ForestMob
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:08 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='18240' equipment='10889' status='0' total='29129'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 40@Demon:29129 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='12306' equipment='10939' status='0' total='23245'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 0@Human:23245 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 26@ForestMob:766 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 43@Human:23502 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 42@Demon:36875 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - FPS: 88
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 7}
+2024-12-02 14:42:09 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 12}
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='12306' equipment='10939' status='0' total='23245'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 0@Human:23245 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - New combat happen: 79:{}
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 13@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 43@Human:23502 is joining combat 79:(9,24):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='18240' equipment='10889' status='0' total='29129'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 40@Demon:29129 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 41@Human:13085 is joining combat 79:(9,24):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='12306' equipment='10939' status='0' total='23245'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 0@Human hit 13@ForestMob
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - 43@Human hit 13@ForestMob
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - FPS: 88
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 7}
+2024-12-02 14:42:10 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 12}
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 42@Demon do Train. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='12306' equipment='10939' status='0' total='23245'
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 0@Human hit 13@ForestMob
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 0@Human killed 13@ForestMob
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - f0@Human has leveled up: 27709
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Goal FightingGoal for Level 5 is completed
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 6
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 6
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 41@Human do Train. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 43@Human:23502 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='18240' equipment='10889' status='0' total='29129'
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - 40@Demon:29129 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - FPS: 73
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 8}
+2024-12-02 14:42:11 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 11}
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='15394' equipment='12315' status='0' total='27709'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 0@Human:27709 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 42@Demon:36875 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 43@Human do Train. Stat: base='11896' equipment='11606' status='0' total='23502'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='15394' equipment='12315' status='0' total='27709'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 0@Human:27709 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:12 - data.logs.logger - DEBUG - 18@ForestMob:965 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - FPS: 73
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 8}
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 11}
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='18240' equipment='10889' status='0' total='29129'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 40@Demon:29129 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='15394' equipment='12315' status='0' total='27709'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 42@Demon:36875 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 0@Human do Train. Stat: base='17273' equipment='13819' status='0' total='31092'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:13 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - FPS: 75
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 8}
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 11}
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 44@Demon do Train. Stat: base='8052' equipment='7320' status='0' total='15372'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - f44@Demon has leveled up: 20022
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - Goal TrainingGoal for Level 3 is completed
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 4
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='18240' equipment='10889' status='0' total='29129'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 0@Human:34475 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 42@Demon:36875 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 0@Human:34475 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:14 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - FPS: 85
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 8}
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 11}
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 0@Human:34475 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='11502' equipment='8520' status='0' total='20022'
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 44@Demon:20022 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='19119' equipment='11414' status='0' total='30533'
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 42@Demon do Move. Stat: base='23217' equipment='13658' status='0' total='36875'
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 42@Demon:36875 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - New combat happen: 90:{}
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 26@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:15 - data.logs.logger - DEBUG - 42@Demon has changed character action to CombatCharacterAction
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 0@Human:34475 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - FPS: 83
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 8}
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 11}
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 26@ForestMob hit 42@Demon
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 17@ForestMob:1011 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 0@Human:34475 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='19119' equipment='11414' status='0' total='30533'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 42@Demon do Fight. Stat: base='22499' equipment='13236' status='0' total='35735'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 42@Demon hit 26@ForestMob
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 43@Human:26282 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='11502' equipment='8520' status='0' total='20022'
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 44@Demon:20022 is joining combat 90:(9,16):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:16 - data.logs.logger - DEBUG - 22@ForestMob:1023 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - FPS: 70
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 8}
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 11}
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 0@Human:34475 is joining combat 90:(9,16):PowerEst.WEAKER
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 41@Human:13085 is joining combat 90:(9,16):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 43@Human hit 42@Demon
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 26@ForestMob escape failed
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 0@Human hit 42@Demon
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 42@Demon do Fight. Stat: base='17054' equipment='10032' status='0' total='27086'
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 42@Demon hit 26@ForestMob
+2024-12-02 14:42:17 - data.logs.logger - DEBUG - 42@Demon killed 26@ForestMob
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 41@Human:13085 is joining combat 90:(9,16):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 40@Demon do Train. Stat: base='19119' equipment='11414' status='0' total='30533'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - FPS: 82
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 9}
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 43@Human hit 42@Demon
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 0@Human hit 42@Demon
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='11502' equipment='8520' status='0' total='20022'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 44@Demon:20022 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 43@Human hit 42@Demon
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 41@Human hit 42@Demon
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:18 - data.logs.logger - DEBUG - 0@Human hit 42@Demon
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - FPS: 81
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - DEAD: {'ForestMob': 9}
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 3, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 42@Demon do Escape. Stat: base='4547' equipment='2676' status='0' total='7223'
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 42@Demon escape failed
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 24@ForestMob:811 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='19119' equipment='11414' status='0' total='30533'
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 40@Demon:30533 is chasing PowerEst.WEAKER
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 0@Human hit 42@Demon
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='13303' equipment='12979' status='0' total='26282'
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 43@Human hit 42@Demon
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 43@Human killed 42@Demon
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - f43@Human has leveled up: 31482
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 5
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 43@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 6
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 0@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 4
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 41@Human has changed character action to BasicCharacterAction
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Goal FightingGoal for Level 5 is completed
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Added new goal FightingGoal for Level 6
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied multiplier to action: ActionType.MOVE=83
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - Applied goal FightingGoal for Level 6
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 9@ForestMob:561 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 25@ForestMob:1313 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='11502' equipment='8520' status='0' total='20022'
+2024-12-02 14:42:19 - data.logs.logger - DEBUG - 44@Demon:20022 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 0@Human:34475 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - FPS: 77
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - DEAD: {'Demon': 1, 'ForestMob': 9}
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 2, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 43@Human:31482 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 8@ForestMob:630 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 41@Human do Move. Stat: base='5273' equipment='7812' status='0' total='13085'
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 41@Human:13085 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - New combat happen: 93:{}
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 19@ForestMob has changed character action to CombatCharacterAction
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 41@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 40@Demon do Move. Stat: base='19119' equipment='11414' status='0' total='30533'
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 40@Demon:30533 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 40@Demon has changed character action to CombatCharacterAction
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 0@Human do Move. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 0@Human:34475 is joining combat 93:(10,15):PowerEst.WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 0@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 43@Human do Move. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 43@Human:31482 is joining combat 93:(10,15):PowerEst.MUCH_WEAKER
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 43@Human has changed character action to CombatCharacterAction
+2024-12-02 14:42:20 - data.logs.logger - DEBUG - 24@ForestMob:811 is escaping from PowerEst.MUCH_STRONGER
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - FPS: 81
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - DEAD: {'Demon': 1, 'ForestMob': 9}
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 2, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 0@Human hit 40@Demon
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='11502' equipment='8520' status='0' total='20022'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 44@Demon:20022 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 43@Human hit 40@Demon
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 19@ForestMob hit 41@Human
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='4592' equipment='6804' status='0' total='11396'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 41@Human hit 19@ForestMob
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 40@Demon do Fight. Stat: base='13844' equipment='8266' status='0' total='22110'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 40@Demon hit 41@Human
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 0@Human hit 40@Demon
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:21 - data.logs.logger - DEBUG - 43@Human hit 40@Demon
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='2313' equipment='3427' status='0' total='5740'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 41@Human hit 19@ForestMob
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - FPS: 77
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - DEAD: {'Demon': 1, 'ForestMob': 9}
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 2, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 0@Human hit 40@Demon
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 43@Human hit 40@Demon
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 44@Demon do Move. Stat: base='11502' equipment='8520' status='0' total='20022'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 44@Demon:20022 is chasing PowerEst.MUCH_WEAKER
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 44@Demon has changed character action to CombatCharacterAction
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 19@ForestMob hit 41@Human
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='1632' equipment='2420' status='0' total='4052'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 41@Human hit 19@ForestMob
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 0@Human hit 40@Demon
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 40@Demon do Escape. Stat: base='549' equipment='328' status='0' total='877'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 40@Demon escape failed
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 43@Human hit 40@Demon
+2024-12-02 14:42:22 - data.logs.logger - DEBUG - 43@Human killed 40@Demon
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - FPS: 77
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - DEAD: {'Demon': 2, 'ForestMob': 9}
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - ALIVE: {'Human': 3, 'Demon': 1, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - 0@Human hit 44@Demon
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - 43@Human hit 44@Demon
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - 41@Human do Fight. Stat: base='1632' equipment='2420' status='0' total='4052'
+2024-12-02 14:42:23 - data.logs.logger - DEBUG - 41@Human hit 19@ForestMob
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 44@Demon do Fight. Stat: base='7821' equipment='5793' status='0' total='13614'
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 44@Demon hit 41@Human
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 44@Demon killed 41@Human
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 0@Human hit 44@Demon
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - FPS: 76
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - DEAD: {'Demon': 2, 'Human': 1, 'ForestMob': 9}
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - ALIVE: {'Human': 2, 'Demon': 1, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 43@Human hit 44@Demon
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 19@ForestMob escape failed
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 0@Human hit 44@Demon
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+2024-12-02 14:42:24 - data.logs.logger - DEBUG - 43@Human hit 44@Demon
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - FPS: 87
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - DEAD: {'Demon': 2, 'Human': 1, 'ForestMob': 9}
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - ALIVE: {'Human': 2, 'Demon': 1, 'RuinMob': 20, 'ForestMob': 10}
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - 0@Human do Fight. Stat: base='19153' equipment='15322' status='0' total='34475'
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - 0@Human hit 44@Demon
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - 0@Human killed 44@Demon
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - 19@ForestMob suffered from HeavyInjury after exit combat
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - Add new status HeavyInjury for 5 turns
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - 19@ForestMob has changed character action to BasicCharacterAction
+2024-12-02 14:42:25 - data.logs.logger - DEBUG - 43@Human do Fight. Stat: base='16839' equipment='14643' status='0' total='31482'
+Traceback (most recent call last):
+  File "/home/u24/rpgs/rpg-simulation/game/game.py", line 122, in <module>
+    game.run()
+  File "/home/u24/rpgs/rpg-simulation/game/game.py", line 109, in run
+    self.update()
+  File "/home/u24/rpgs/rpg-simulation/game/game.py", line 91, in update
+    self.world.update()
+  File "/home/u24/rpgs/rpg-simulation/game/components/world/world.py", line 130, in update
+    character.do_action()
+  File "/home/u24/rpgs/rpg-simulation/game/components/character/character.py", line 228, in do_action
+    is_just_changed_location = self.get_character_action().do_action(self)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u24/rpgs/rpg-simulation/game/components/character/character_action.py", line 54, in do_action
+    return next_action.execute(character, **self.kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u24/rpgs/rpg-simulation/game/components/action/action.py", line 39, in execute
+    return cls.do_action(character, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/u24/rpgs/rpg-simulation/game/components/action/action.py", line 199, in do_action
+    target_character_id = random.choice(target_character_ids)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/random.py", line 373, in choice
+    raise IndexError('Cannot choose from an empty sequence')
+IndexError: Cannot choose from an empty sequence

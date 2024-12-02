@@ -2,8 +2,10 @@ import pygame
 
 from components.action.event import EventType
 from components.character.status import GroundTileBuff, TownTileBuff
+from components.item.equipment import DamagedAncientArmor, DamagedAncientSword
 
 
+# TODO: Change to class-level properties instead, to make it more efficient
 class Tile:
     id_counter = 1
 
@@ -15,6 +17,7 @@ class Tile:
         self.is_tile_display_changed = False
         self.is_combat = False
         self.event_dict_ids = {}
+        self.collectable_items = {}
 
     def get_id(self):
         return self.id
@@ -64,6 +67,9 @@ class Tile:
 
     def check_and_apply_status(self, charater):
         pass
+
+    def get_collectable_items(self):
+        return self.collectable_items
 
 
 class HumanGeneratorTile(Tile):
@@ -181,6 +187,10 @@ class BattlefieldTile(Tile):
     def __init__(self) -> None:
         super().__init__()
         self.image = pygame.image.load("data/sprites/battlefield1.png")
+        self.collectable_items = {
+            DamagedAncientArmor(): 0.5,
+            DamagedAncientSword(): 0.5,
+        }
 
     def is_obstacle(self):
         return False

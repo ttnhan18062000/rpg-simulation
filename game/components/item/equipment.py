@@ -17,6 +17,7 @@ class Equipment(Item):
     equipment_type = None
     affect_stats = {}
     require_stats = {}  # For example: require some STR
+    is_stackable = False
 
     def __init__(self):
         self.rarity = Equipment.base_rarity
@@ -47,6 +48,23 @@ class SteelSword(Equipment):
         self.rarity = SteelSword.base_rarity
 
 
+class DamagedAncientSword(Equipment):
+    description = "Damaged Rare Weapon"
+    base_rarity = Rarity.UNCOMMON
+    equipment_type = EquipmentType.WEAPON
+    affect_stats = {
+        StatDefinition.POWER: CharacterStat.create_stat(
+            StatDefinition.POWER,
+            30,
+            **{NumericalStat.numerical_type_key: NumericalStat.NumericalType.REAL},
+        ),
+    }
+    require_stats = {}
+
+    def __init__(self):
+        self.rarity = SteelSword.base_rarity
+
+
 class SteelArmor(Equipment):
     description = "Starter Armor"
     base_rarity = Rarity.COMMON
@@ -55,6 +73,23 @@ class SteelArmor(Equipment):
         StatDefinition.MAX_HEALTH: CharacterStat.create_stat(
             StatDefinition.MAX_HEALTH,
             100,
+            **{NumericalStat.numerical_type_key: NumericalStat.NumericalType.REAL},
+        ),
+    }
+    require_stats = {}
+
+    def __init__(self):
+        self.rarity = SteelArmor.base_rarity
+
+
+class DamagedAncientArmor(Equipment):
+    description = "Damaged Rare Armor"
+    base_rarity = Rarity.UNCOMMON
+    equipment_type = EquipmentType.ARMOR
+    affect_stats = {
+        StatDefinition.MAX_HEALTH: CharacterStat.create_stat(
+            StatDefinition.MAX_HEALTH,
+            150,
             **{NumericalStat.numerical_type_key: NumericalStat.NumericalType.REAL},
         ),
     }

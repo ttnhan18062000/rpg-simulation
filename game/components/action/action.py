@@ -1,4 +1,5 @@
 import random
+import numpy
 
 from components.world.store import get_store, EntityType
 from components.common.point import Point
@@ -152,6 +153,27 @@ class Move(Action):
                 return False
 
         return True
+
+
+class Search(Action):
+    action_name = "Search"
+
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        success_chance = 0.25  # TODO: this should based on character's attribute
+        if random.random() < success_chance:
+            current_tile = get_tile_object(character.pos)
+            collectable_items = current_tile.get_collectable_items()
+            item_list = collectable_items.keys()
+            received_item_id = numpy.random.choice(
+                numpy.arange(0, len(item_list)),
+                p=[p for p in collectable_items.values()],
+            )
+            character.add_item(collectable_items[received_item_id])
+            logger.debug(
+                f"{character.get_info()} collected {collectable_items[received_item_id].get_name()}"
+            )
+        return False
 
 
 class Interact(Action):

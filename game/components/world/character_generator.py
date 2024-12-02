@@ -79,8 +79,8 @@ class HumanGenerator(CharacterGenerator):
         new_human.set_character_action(BasicCharacterAction())
         new_human.set_vision_range(15)
 
-        new_human.equip(SteelArmor())
-        new_human.equip(SteelSword())
+        new_human.add_item(SteelArmor())
+        new_human.add_item(SteelSword())
 
         new_human.add_strategy(CharacterStrategyType.Move, ThinkingMove())
         new_human.add_behavior(
@@ -115,8 +115,8 @@ class DemonGenerator(CharacterGenerator):
         new_demon.set_character_action(BasicCharacterAction())
         new_demon.set_vision_range(15)
 
-        new_demon.equip(SteelArmor())
-        new_demon.equip(SteelSword())
+        new_demon.add_item(SteelArmor())
+        new_demon.add_item(SteelSword())
 
         new_demon.add_strategy(CharacterStrategyType.Move, ThinkingMove())
         new_demon.add_behavior(

@@ -24,7 +24,7 @@ from components.character.memory.character_memory import CharacterMemory
 from components.character.character_behavior import FightingBehavior
 from components.character.character_goal import CharacterGoal
 
-from components.character.character_inventory import CharacterInventory
+from components.character.character_inventory import CharacterInventory, OnAddItemAction
 from components.character.character_equipment import CharacterEquipment
 
 from components.world.store import get_store, EntityType
@@ -121,8 +121,31 @@ class Character(GameObject):
     def get_character_equipment(self):
         return self.character_equipment
 
+    def add_item(self, item):
+        on_add_item_action = self.character_inventory.add_item(item)
+        if on_add_item_action is OnAddItemAction.CAN_EQUIP_ITEM:
+            before_power, after_power = (
+                CharacterPower.get_character_before_and_after_equip_equipment(
+                    self, item
+                )
+            )
+            if after_power > before_power:
+                logger.debug(
+                    f"The new collected equipment {item.get_name()} is stronger than current, apply it"
+                )
+                self.equip(item)
+        elif on_add_item_action is OnAddItemAction.CAN_CONSUME_ITEM:
+            pass
+
     def equip(self, equipment):
+        equipment_name = equipment.get_name()
+        if not self.get_character_inventory().get_item(equipment_name):
+            raise Exception(
+                f"Equipment {equipment_name} is not found in the character {self.get_info()} inventory"
+            )
+        self.get_character_inventory().remove_item(equipment_name)
         self.get_character_equipment().equip(equipment)
+        logger.debug(f"Character equipped {equipment.get_name()}")
 
     def get_character_inventory(self):
         return self.character_inventory

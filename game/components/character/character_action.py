@@ -2,7 +2,15 @@ import numpy
 from enum import Enum
 import copy
 
-from components.action.action import Move, Interact, Train, Standby, Fight, Escape
+from components.action.action import (
+    Move,
+    Interact,
+    Train,
+    Standby,
+    Fight,
+    Escape,
+    Search,
+)
 from components.character.character_behavior import FightingBehavior
 from components.character.character_stat import StatDefinition
 
@@ -16,6 +24,7 @@ class ActionType(Enum):
     STANDBY = 4
     FIGHT = 5
     ESCAPE = 6
+    SEARCH = 7
 
 
 class CharacterActionModifyReason(Enum):
@@ -186,3 +195,17 @@ class CombatCharacterAction(CharacterAction):
             }
         else:
             return self.actions
+
+
+class FindItemCharacterAction(CharacterAction):
+    def __init__(self, **kwargs) -> None:
+        super().__init__()
+        self.base_actions = {
+            ActionType.MOVE: {"class": Move, "prob": 10},
+            ActionType.SEARCH: {"class": Search, "prob": 90},
+        }
+        self.actions = {
+            ActionType.MOVE: {"class": Move, "prob": 10},
+            ActionType.SEARCH: {"class": Search, "prob": 90},
+        }
+        self.kwargs = kwargs
