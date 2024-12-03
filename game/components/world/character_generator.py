@@ -86,7 +86,7 @@ class HumanGenerator(CharacterGenerator):
         new_human.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
-        new_human.add_goal(1, TrainingGoal(**{"target_level": 3}))
+        new_human.add_goal(1, TrainingGoal(**{"target_level": 2}))
         get_store().add(EntityType.CHARACTER, new_human.get_info().id, new_human)
 
 
@@ -122,7 +122,7 @@ class DemonGenerator(CharacterGenerator):
         new_demon.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
-        new_demon.add_goal(1, TrainingGoal(**{"target_level": 3}))
+        new_demon.add_goal(1, TrainingGoal(**{"target_level": 2}))
         get_store().add(EntityType.CHARACTER, new_demon.get_info().id, new_demon)
 
 

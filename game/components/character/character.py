@@ -1,5 +1,9 @@
 from components.common.point import Point
 from components.common.game_object import GameObject
+from components.action.event import Event, CombatEvent, TrainingEvent, EventType
+from components.action.strategy.base_strategy import BaseStrategy
+from components.action.action import ActionResult
+from components.world.tile import Tile
 from components.character.character_info import CharacterInfo
 from components.character.character_action_management import CharacterActionManagement
 from components.character.character_action import (
@@ -7,12 +11,12 @@ from components.character.character_action import (
     BasicCharacterAction,
     CombatCharacterAction,
     CharacterActionModifyReason,
+    FindItemCharacterAction,
 )
 from components.character.character_strategy import (
     CharacterStrategy,
     CharacterStrategyType,
 )
-from components.action.strategy.base_strategy import BaseStrategy
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.character_status import CharacterStatus
 from components.character.status import LightInjury, HeavyInjury
@@ -124,10 +128,11 @@ class Character(GameObject):
     def add_item(self, item):
         on_add_item_action = self.character_inventory.add_item(item)
         if on_add_item_action is OnAddItemAction.CAN_EQUIP_ITEM:
-            before_power, after_power = (
-                CharacterPower.get_character_before_and_after_equip_equipment(
-                    self, item
-                )
+            (
+                before_power,
+                after_power,
+            ) = CharacterPower.get_character_before_and_after_equip_equipment(
+                self, item
             )
             if after_power > before_power:
                 logger.debug(
@@ -158,6 +163,9 @@ class Character(GameObject):
     def add_goal(self, priority: int, goal):
         self.character_goal.add(priority, goal)
         self.character_action_management.on_new_goal_added(self)
+
+    def has_goal(self):
+        return self.character_goal.has_goal()
 
     def get_current_goal(self):
         return self.character_goal.get_current_goal()
@@ -261,6 +269,78 @@ class Character(GameObject):
         # Check goal is done yet
         if self.character_goal.has_goal():
             self.check_done_current_goal()
+
+    def on_moving_into_new_tile(self, new_tile: Tile):
+        store = get_store()
+        # Enter a tile that holding a combat event
+        if new_tile.is_combat_happen():
+            combat_event_id = new_tile.get_event(EventType.COMBAT)
+            combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
+            all_factions = combat_event.get_factions()
+            for hostile_faction in self.get_hostile_factions():
+                if hostile_faction in all_factions:
+                    combat_event.add_hostile_faction(
+                        self.get_faction(), hostile_faction
+                    )
+                    combat_event.add_character_id(
+                        self.get_faction(), self.get_info().id
+                    )
+                    self.enter_combat(combat_event_id)
+                    return False, ActionResult.JOIN_COMBAT
+
+        # Enter a tile with other characters standing on it, may cause a combat event happen
+        all_characters = [
+            store.get(EntityType.CHARACTER, cid)
+            for cid in new_tile.get_character_ids()
+            if cid != self.get_info().id
+        ]
+        hostile_faction_to_characters = {}
+        for hostile_faction in self.get_hostile_factions():
+            hostile_faction_to_characters[hostile_faction] = []
+            for other_character in all_characters:
+                if other_character.get_faction() == hostile_faction:
+                    hostile_faction_to_characters[hostile_faction].append(
+                        other_character
+                    )
+        for hostile_faction in self.get_hostile_factions():
+            if len(hostile_faction_to_characters[hostile_faction]) > 0:
+                new_combat_event: CombatEvent = CombatEvent(new_tile.get_id())
+                new_combat_event_id = new_combat_event.id
+                character_faction = self.get_faction()
+
+                new_combat_event.add_hostile_faction(character_faction, hostile_faction)
+
+                for enemy_character in hostile_faction_to_characters[hostile_faction]:
+                    new_combat_event.add_character_id(
+                        hostile_faction, enemy_character.get_info().id
+                    )
+                    enemy_character.enter_combat(new_combat_event_id)
+
+                new_combat_event.add_character_id(character_faction, self.get_info().id)
+                self.enter_combat(new_combat_event_id)
+
+                store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
+
+                return False, ActionResult.START_COMBAT
+
+        # Enter a collectable_items tile, and current goal is collect items, match the target items
+        # => Change to FindItemCharacterAction
+        if (
+            new_tile.is_collectable()
+            and self.has_goal()
+            and self.get_current_goal().is_finding_item()
+            and self.get_current_goal().is_collectable_items_match(
+                new_tile.get_collectable_items()
+            )
+        ):
+            self.set_character_action(FindItemCharacterAction(**{"max_attempt": 5}))
+        elif (
+            self.get_character_action().get_name() != FindItemCharacterAction.get_name()
+        ):
+            # TODO: Think about the better approach to end the FindItemCharacterAction action
+            self.set_character_action(BasicCharacterAction())
+
+        return True, None
 
     def should_redraw(self):
         return self.is_just_changed_location

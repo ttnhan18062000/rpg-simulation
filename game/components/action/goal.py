@@ -27,6 +27,10 @@ class Goal:
         )
 
     @classmethod
+    def is_finding_item(cls):
+        return False
+
+    @classmethod
     def get_name(cls):
         return cls.__name__
 
@@ -76,9 +80,14 @@ class FightingGoal(Goal):
         character.get_character_action().reset_probabilities(
             CharacterActionModifyReason.APPLY_GOAL
         )
-        character.add_goal(
-            1, FightingGoal(**{"target_level": character.get_current_level() + 1})
-        )
+        # TODO: Just for testing, change later
+        # Currently is if the character strong enough, they need to find better equipments
+        if character.get_current_level() >= 3:
+            character.add_goal(1, FindingItemGoal(**{"target_items": {}}))
+        else:
+            character.add_goal(
+                1, FightingGoal(**{"target_level": character.get_current_level() + 1})
+            )
 
     def can_apply_to(self, character):
         return character.get_character_action().has_action(ActionType.MOVE)
@@ -96,19 +105,22 @@ class FindingItemGoal(Goal):
     # Keep training until reach a given level
     def __init__(self, **kwargs) -> None:
         super().__init__()
-        # self.target_level = kwargs.get("target_level")
+        self.target_items = kwargs.get("target_items")
+
+    @classmethod
+    def is_finding_item(cls):
+        return True
 
     # TODO: Later change to find the specific items
     def is_complete(self, character):
         return character.get_last_action_result() is ActionResult.SUCCESS_FIND_ITEM
 
-    # def on_complete(self, character):
-    #     character.get_character_action().reset_probabilities(
-    #         CharacterActionModifyReason.APPLY_GOAL
-    #     )
-    #     character.add_goal(
-    #         1, FightingGoal(**{"target_level": character.get_current_level() + 1})
-    #     )
+    # TODO: Later change to find the specific items
+    def is_collectable_items_match(self, items_dict):
+        return True
+
+    def on_complete(self, character):
+        pass
 
     # def can_apply_to(self, character):
     #     return character.get_character_action().has_action(ActionType.MOVE)

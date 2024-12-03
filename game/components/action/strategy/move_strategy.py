@@ -10,6 +10,7 @@ from components.world.store import get_store, EntityType
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
 from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
 from components.utils.tile_utils import get_tile_object
+from components.action.goal import FindingItemGoal
 
 from data.logs.logger import logger
 from data.game_settings import ACTION
@@ -48,6 +49,37 @@ class RandomMove:
 class ThinkingMove(MoveStrategy):
     @classmethod
     def get_next_move(cls, character):
+        # TODO: Prioritize between goals or decisions
+        # Currently finding items first
+        if character.has_goal():
+            current_goal = character.get_current_goal()
+            if current_goal.is_finding_item():
+                logger.debug(
+                    f"{character.get_info()} has the FindingItem goal, looking for the tile contains the item"
+                )
+                # TODO: Better strategy for reaching the collectable tiles
+                # Currently, When there is no collectable tiles in the memory, Human -> go left, Demon -> go right
+                tiles_in_memory = character.get_memory().get_all_sorted_distant(
+                    EntityType.TILE, character.get_location()
+                )
+                for memory_tile in tiles_in_memory:
+                    tile = memory_tile.get_tile()
+                    if (
+                        tile.is_collectable()
+                        and current_goal.is_collectable_items_match(
+                            tile.get_collectable_items()
+                        )
+                    ):
+                        logger.debug(
+                            f"{character.get_info()} has the memory about the {tile.get_name()} contain the item, moving into it"
+                        )
+                        return get_move_from_target(
+                            character,
+                            character.pos,
+                            memory_tile.get_location(),
+                            is_chasing=True,
+                        )
+
         # Join nearby combat of own faction if favorable
         events_in_memory = character.get_memory().get_all_sorted_distant(
             EntityType.EVENT, character.get_location()

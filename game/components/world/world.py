@@ -56,7 +56,7 @@ class World:
                 ):
                     tile = store.get(EntityType.TILE, grid.tiles[cell_x][cell_y])
                     if is_display_changed or tile.should_redraw():
-                        cell_image = tile.image
+                        cell_image = tile.get_image()
                         if tile.is_combat_happen():
                             cell_image = pygame.image.load("data/sprites/combat.png")
                         else:

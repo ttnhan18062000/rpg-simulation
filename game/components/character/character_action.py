@@ -69,9 +69,13 @@ class CharacterAction:
         is_changed_location, last_action_result = next_action.execute(
             character, **self.kwargs
         )
+        self.on_action_done()
         if last_action_result:
             self.last_action_result = last_action_result
         return is_changed_location
+
+    def on_action_done(self):
+        pass
 
     def modify_probabilities(
         self,
@@ -212,11 +216,26 @@ class FindItemCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
         super().__init__()
         self.base_actions = {
-            ActionType.MOVE: {"class": Move, "prob": 10},
-            ActionType.SEARCH: {"class": Search, "prob": 90},
+            ActionType.MOVE: {"class": Move, "prob": 0},
+            ActionType.SEARCH: {"class": Search, "prob": 100},
         }
         self.actions = {
-            ActionType.MOVE: {"class": Move, "prob": 10},
-            ActionType.SEARCH: {"class": Search, "prob": 90},
+            ActionType.MOVE: {"class": Move, "prob": 0},
+            ActionType.SEARCH: {"class": Search, "prob": 100},
         }
         self.kwargs = kwargs
+        self.max_attempt = kwargs.get("max_attempt", 5)
+        self.attempt_counter = 0
+
+    def get_modified_actions(self, character):
+        if self.attempt_counter < self.max_attempt:
+            return self.base_actions
+        else:
+            return {
+                ActionType.MOVE: {"class": Move, "prob": 100},
+                ActionType.SEARCH: {"class": Search, "prob": 0},
+            }
+
+    def on_action_done(self):
+        self.attempt_counter += 1
+        logger.debug(f"Search attempt: {self.attempt_counter}")
