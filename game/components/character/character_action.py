@@ -10,6 +10,7 @@ from components.action.action import (
     Fight,
     Escape,
     Search,
+    ActionResult,
 )
 from components.character.character_behavior import FightingBehavior
 from components.character.character_stat import StatDefinition
@@ -36,10 +37,15 @@ class CharacterAction:
         self.actions = {}
         self.base_actions = {}
         self.kwargs = kwargs
+        self.last_action_result: ActionResult = None
 
     @classmethod
     def get_name(cls):
         return cls.__name__
+
+    # TODO: Should we change this to character_action_management?
+    def get_last_action_result(self):
+        return self.last_action_result
 
     def get_modified_actions(self, character):
         return self.actions
@@ -60,7 +66,12 @@ class CharacterAction:
 
     def do_action(self, character):
         next_action = self.get_next_action(character)
-        return next_action.execute(character, **self.kwargs)
+        is_changed_location, last_action_result = next_action.execute(
+            character, **self.kwargs
+        )
+        if last_action_result:
+            self.last_action_result = last_action_result
+        return is_changed_location
 
     def modify_probabilities(
         self,

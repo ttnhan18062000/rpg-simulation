@@ -246,6 +246,9 @@ class Character(GameObject):
         self.set_character_action(BasicCharacterAction())
         self.set_redraw_status(True)
 
+    def get_last_action_result(self):
+        return self.get_character_action().get_last_action_result()
+
     def do_action(self):
         is_just_changed_location = self.get_character_action().do_action(self)
 

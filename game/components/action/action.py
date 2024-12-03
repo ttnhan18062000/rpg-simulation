@@ -1,5 +1,6 @@
 import random
 import numpy
+from enum import Enum
 
 from components.world.store import get_store, EntityType
 from components.common.point import Point
@@ -14,6 +15,15 @@ from components.utils.tile_utils import get_tile_object
 from components.character.character_strategy import CharacterStrategyType
 from data.logs.logger import logger
 from data.game_settings import ACTION
+
+
+class ActionResult(Enum):
+    START_COMBAT = 1
+    JOIN_COMBAT = 2
+    SUCCESS_ESCAPE_COMBAT = 3
+    FAIL_ESCAPE_COMBAT = 4
+    SUCCESS_FIND_ITEM = 5
+    FAIL_FIND_ITEM = 6
 
 
 class Action:
@@ -83,6 +93,7 @@ class Move(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
+        action_result = kwargs.get("action_result", None)
 
         store = get_store()
 
@@ -113,7 +124,7 @@ class Move(Action):
                         character.get_faction(), character.get_info().id
                     )
                     character.enter_combat(combat_event_id)
-                    return False
+                    return False, ActionResult.JOIN_COMBAT
 
         # Enter a tile with other characters standing on it, may cause a combat event happen
         all_characters = [
@@ -150,9 +161,9 @@ class Move(Action):
 
                 store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
 
-                return False
+                return False, ActionResult.START_COMBAT
 
-        return True
+        return True, action_result
 
 
 class Search(Action):
@@ -173,7 +184,9 @@ class Search(Action):
             logger.debug(
                 f"{character.get_info()} collected {collectable_items[received_item_id].get_name()}"
             )
-        return False
+            return True, ActionResult.SUCCESS_FIND_ITEM
+
+        return False, ActionResult.FAIL_FIND_ITEM
 
 
 class Interact(Action):
@@ -263,10 +276,11 @@ class Escape(Action):
 
             character.exit_combat()
 
-            # TODO: Random move (should trigger the Move class function => convert Move into classmethod?)
-            Move.do_action(character)
+            Move.do_action(
+                character, **{"action_result": ActionResult.SUCCESS_ESCAPE_COMBAT}
+            )
 
-            return True
+            return True, ActionResult.SUCCESS_ESCAPE_COMBAT
 
         logger.debug(f"{character.get_info()} escape failed")
-        return False
+        return False, ActionResult.FAIL_ESCAPE_COMBAT
