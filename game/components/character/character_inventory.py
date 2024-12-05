@@ -14,6 +14,7 @@ class OnAddItemAction(Enum):
 class CharacterInventory:
     def __init__(self) -> None:
         self.items = {}
+        self.recently_added_item_names = []
 
     def get_item(self, item_name):
         if item_name in self.items:
@@ -76,3 +77,11 @@ class CharacterInventory:
             return OnAddItemAction.CAN_EQUIP_ITEM
         elif item.is_consumable():
             return OnAddItemAction.CAN_CONSUME_ITEM
+
+        self.recently_added_item_names.append(item_name)
+
+    def get_recently_added_item_names(self):
+        return self.recently_added_item_names
+
+    def clear_recently_added_item_names(self):
+        self.recently_added_item_names = []

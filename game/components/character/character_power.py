@@ -2,6 +2,8 @@ import copy
 
 from components.character.character_stat import StatDefinition, CharacterStat
 
+from data.logs.logger import logger
+
 
 class CharacterPower:
     def __init__(self) -> None:
@@ -43,6 +45,10 @@ class CharacterPower:
         )
         after_equipment_applied_stat_power = CharacterPower.get_power(
             after_equipment_applied_stat
+        )
+
+        logger.debug(
+            f"Power before and after equip {target_equipment.get_name()}: {before_equipment_applied_stat_power} and {after_equipment_applied_stat_power}"
         )
 
         return before_equipment_applied_stat_power, after_equipment_applied_stat_power

@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import IntEnum
 
 
 class ItemType:
@@ -8,7 +8,7 @@ class ItemType:
     CONSUMABLE = 4
 
 
-class Rarity(Enum):
+class Rarity(IntEnum):
     COMMON = 1
     UNCOMMON = 2
     RARE = 3
@@ -56,6 +56,10 @@ class Item:
         return cls.__name__
 
     @classmethod
+    def get_type(cls):
+        return cls.item_type
+
+    @classmethod
     def is_equipment(cls):
         return cls.item_type == ItemType.EQUIPMENT
 
@@ -66,6 +70,9 @@ class Item:
     @classmethod
     def is_consumable(cls):
         return cls.item_type == ItemType.CONSUMABLE
+
+    def get_final_rarity(self):
+        return self.base_rarity
 
     @classmethod
     def can_be_stacked(cls):

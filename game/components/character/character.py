@@ -125,6 +125,9 @@ class Character(GameObject):
     def get_character_equipment(self):
         return self.character_equipment
 
+    def get_recently_added_inventory_item_names(self):
+        return self.character_inventory.get_recently_added_item_names()
+
     def add_item(self, item):
         on_add_item_action = self.character_inventory.add_item(item)
         if on_add_item_action is OnAddItemAction.CAN_EQUIP_ITEM:
@@ -325,22 +328,34 @@ class Character(GameObject):
 
         # Enter a collectable_items tile, and current goal is collect items, match the target items
         # => Change to FindItemCharacterAction
-        if (
-            new_tile.is_collectable()
-            and self.has_goal()
-            and self.get_current_goal().is_finding_item()
-            and self.get_current_goal().is_collectable_items_match(
-                new_tile.get_collectable_items()
-            )
-        ):
-            self.set_character_action(FindItemCharacterAction(**{"max_attempt": 5}))
-        elif (
-            self.get_character_action().get_name() != FindItemCharacterAction.get_name()
-        ):
-            # TODO: Think about the better approach to end the FindItemCharacterAction action
-            self.set_character_action(BasicCharacterAction())
+        # Checking current goal
+        if self.has_goal():
+            current_goal = self.get_current_goal()
+            # FindingItemGoal
+            if current_goal.is_finding_item():
+                collectable_item_list = list(new_tile.get_collectable_items().keys())
+                if (
+                    new_tile.is_collectable()
+                    and current_goal.is_collectable_items_match(collectable_item_list)
+                ):
+                    # Add more target items if satisfy the goal and can be collected in the tile
+                    for collectable_item in collectable_item_list:
+                        if current_goal.is_item_satisfy_goal(collectable_item):
+                            current_goal.add_item_to_goal(collectable_item)
+                    self.set_character_action(
+                        FindItemCharacterAction(**{"max_attempt": 5})
+                    )
+                elif (
+                    self.get_character_action().get_name()
+                    == FindItemCharacterAction.get_name()
+                ):
+                    # TODO: Think about the better approach to end the FindItemCharacterAction action
+                    self.set_character_action(BasicCharacterAction())
 
         return True, None
+
+    def reset_to_basic_character_action(self):
+        self.set_character_action(BasicCharacterAction())
 
     def should_redraw(self):
         return self.is_just_changed_location

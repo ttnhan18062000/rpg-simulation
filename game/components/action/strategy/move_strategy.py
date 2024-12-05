@@ -67,7 +67,7 @@ class ThinkingMove(MoveStrategy):
                     if (
                         tile.is_collectable()
                         and current_goal.is_collectable_items_match(
-                            tile.get_collectable_items()
+                            list(tile.get_collectable_items().keys())
                         )
                     ):
                         logger.debug(

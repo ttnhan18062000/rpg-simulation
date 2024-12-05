@@ -79,6 +79,9 @@ class Tile:
     def get_collectable_items(self):
         return self.collectable_items
 
+    def get_collectable_item_list(self):
+        return list(self.collectable_items.keys())
+
     def is_collectable(self):
         return len(self.collectable_items) > 0
 

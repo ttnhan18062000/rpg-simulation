@@ -238,4 +238,5 @@ class FindItemCharacterAction(CharacterAction):
 
     def on_action_done(self):
         self.attempt_counter += 1
-        logger.debug(f"Search attempt: {self.attempt_counter}")
+        if self.attempt_counter <= self.max_attempt:
+            logger.debug(f"Search attempt: {self.attempt_counter}")
