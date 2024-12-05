@@ -16,7 +16,6 @@ class CharacterEquipment:
         return self.armor
 
     def equip(self, equipment: Equipment):
-        logger.debug(f"Character equipped {equipment.get_name()}")
         if equipment.get_equipment_type() is EquipmentType.WEAPON:
             self.equip_weapon(equipment)
         elif equipment.get_equipment_type() is EquipmentType.ARMOR:

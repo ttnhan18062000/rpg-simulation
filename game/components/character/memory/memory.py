@@ -66,7 +66,6 @@ class MemoryCharacter(Memory):
 
 
 class MemoryEvent(Memory):
-
     def __init__(self, id, pos: Point, event_type: EventType) -> None:
         super().__init__(id, pos)
         self.event_type: EventType = event_type
@@ -105,3 +104,12 @@ class MemoryEvent(Memory):
 
     def get_power_est(self):
         return self.power_value_est
+
+
+class MemoryTile(Memory):
+    def __init__(self, id, pos, tile):
+        super().__init__(id, pos)
+        self.tile = tile
+
+    def get_tile(self):
+        return self.tile

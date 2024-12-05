@@ -1,4 +1,8 @@
+import copy
+
 from components.character.character_stat import StatDefinition, CharacterStat
+
+from data.logs.logger import logger
 
 
 class CharacterPower:
@@ -14,6 +18,40 @@ class CharacterPower:
         cur_hp = character_stats.get_stat_value(StatDefinition.CURRENT_HEALTH)
 
         return int(cur_hp * power * (speed / 100))
+
+    @staticmethod
+    def get_character_before_and_after_equip_equipment(character, target_equipment):
+        character_base_stat = character.get_character_stat()
+        # Current equipment total power
+        before_equipment_applied_stat = (
+            character_base_stat.get_applied_equipments_character_stat(
+                character.get_character_equipment()
+            )
+        )
+        before_equipment_applied_stat_power = CharacterPower.get_power(
+            before_equipment_applied_stat
+        )
+
+        # After applied equipment total power
+        after_applied_character_equipment = copy.deepcopy(
+            character.get_character_equipment()
+        )
+        after_applied_character_equipment.equip(target_equipment)
+
+        after_equipment_applied_stat = (
+            character_base_stat.get_applied_equipments_character_stat(
+                after_applied_character_equipment
+            )
+        )
+        after_equipment_applied_stat_power = CharacterPower.get_power(
+            after_equipment_applied_stat
+        )
+
+        logger.debug(
+            f"Power before and after equip {target_equipment.get_name()}: {before_equipment_applied_stat_power} and {after_equipment_applied_stat_power}"
+        )
+
+        return before_equipment_applied_stat_power, after_equipment_applied_stat_power
 
     # TODO: think about refactor this too
     # TODO: better formula for total power and additional powers

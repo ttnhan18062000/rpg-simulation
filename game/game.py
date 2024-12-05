@@ -53,10 +53,10 @@ class Game:
             for y in range(len(grid_data[0])):
                 # TODO: Avoid hard-coded tile value
                 if grid_data[x][y] == 8 and not demon_spawn:
-                    generators.append(DemonGenerator(1, 3, Point(x, y)))
+                    generators.append(DemonGenerator(1, 1, Point(x, y)))
                     demon_spawn = True
                 elif grid_data[x][y] == 3 and not human_spawn:
-                    generators.append(HumanGenerator(1, 3, Point(x, y)))
+                    generators.append(HumanGenerator(1, 1, Point(x, y)))
                     human_spawn = True
                 elif grid_data[x][y] == 11 and random_once(0.25):
                     generators.append(RuinMobGenerator(1, 1, Point(x, y)))

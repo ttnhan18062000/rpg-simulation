@@ -79,14 +79,14 @@ class HumanGenerator(CharacterGenerator):
         new_human.set_character_action(BasicCharacterAction())
         new_human.set_vision_range(15)
 
-        new_human.equip(SteelArmor())
-        new_human.equip(SteelSword())
+        new_human.add_item(SteelArmor())
+        new_human.add_item(SteelSword())
 
         new_human.add_strategy(CharacterStrategyType.Move, ThinkingMove())
         new_human.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
-        new_human.add_goal(1, TrainingGoal(**{"target_level": 3}))
+        new_human.add_goal(1, TrainingGoal(**{"target_level": 2}))
         get_store().add(EntityType.CHARACTER, new_human.get_info().id, new_human)
 
 
@@ -115,14 +115,14 @@ class DemonGenerator(CharacterGenerator):
         new_demon.set_character_action(BasicCharacterAction())
         new_demon.set_vision_range(15)
 
-        new_demon.equip(SteelArmor())
-        new_demon.equip(SteelSword())
+        new_demon.add_item(SteelArmor())
+        new_demon.add_item(SteelSword())
 
         new_demon.add_strategy(CharacterStrategyType.Move, ThinkingMove())
         new_demon.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
-        new_demon.add_goal(1, TrainingGoal(**{"target_level": 3}))
+        new_demon.add_goal(1, TrainingGoal(**{"target_level": 2}))
         get_store().add(EntityType.CHARACTER, new_demon.get_info().id, new_demon)
 
 

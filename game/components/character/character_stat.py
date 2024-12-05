@@ -102,7 +102,7 @@ class CharacterStat:
             for stat_def, stat in weapon.get_affect_stats().items():
                 applied_character_stat.get_stat(stat_def).modify(stat)
         if armor:
-            for stat_def, stat in weapon.get_affect_stats().items():
+            for stat_def, stat in armor.get_affect_stats().items():
                 applied_character_stat.get_stat(stat_def).modify(stat)
 
         return applied_character_stat

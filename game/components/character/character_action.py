@@ -2,7 +2,16 @@ import numpy
 from enum import Enum
 import copy
 
-from components.action.action import Move, Interact, Train, Standby, Fight, Escape
+from components.action.action import (
+    Move,
+    Interact,
+    Train,
+    Standby,
+    Fight,
+    Escape,
+    Search,
+    ActionResult,
+)
 from components.character.character_behavior import FightingBehavior
 from components.character.character_stat import StatDefinition
 
@@ -16,6 +25,7 @@ class ActionType(Enum):
     STANDBY = 4
     FIGHT = 5
     ESCAPE = 6
+    SEARCH = 7
 
 
 class CharacterActionModifyReason(Enum):
@@ -27,10 +37,15 @@ class CharacterAction:
         self.actions = {}
         self.base_actions = {}
         self.kwargs = kwargs
+        self.last_action_result: ActionResult = None
 
     @classmethod
     def get_name(cls):
         return cls.__name__
+
+    # TODO: Should we change this to character_action_management?
+    def get_last_action_result(self):
+        return self.last_action_result
 
     def get_modified_actions(self, character):
         return self.actions
@@ -51,7 +66,16 @@ class CharacterAction:
 
     def do_action(self, character):
         next_action = self.get_next_action(character)
-        return next_action.execute(character, **self.kwargs)
+        is_changed_location, last_action_result = next_action.execute(
+            character, **self.kwargs
+        )
+        self.on_action_done()
+        if last_action_result:
+            self.last_action_result = last_action_result
+        return is_changed_location
+
+    def on_action_done(self):
+        pass
 
     def modify_probabilities(
         self,
@@ -186,3 +210,33 @@ class CombatCharacterAction(CharacterAction):
             }
         else:
             return self.actions
+
+
+class FindItemCharacterAction(CharacterAction):
+    def __init__(self, **kwargs) -> None:
+        super().__init__()
+        self.base_actions = {
+            ActionType.MOVE: {"class": Move, "prob": 0},
+            ActionType.SEARCH: {"class": Search, "prob": 100},
+        }
+        self.actions = {
+            ActionType.MOVE: {"class": Move, "prob": 0},
+            ActionType.SEARCH: {"class": Search, "prob": 100},
+        }
+        self.kwargs = kwargs
+        self.max_attempt = kwargs.get("max_attempt", 5)
+        self.attempt_counter = 0
+
+    def get_modified_actions(self, character):
+        if self.attempt_counter < self.max_attempt:
+            return self.base_actions
+        else:
+            return {
+                ActionType.MOVE: {"class": Move, "prob": 100},
+                ActionType.SEARCH: {"class": Search, "prob": 0},
+            }
+
+    def on_action_done(self):
+        self.attempt_counter += 1
+        if self.attempt_counter <= self.max_attempt:
+            logger.debug(f"Search attempt: {self.attempt_counter}")

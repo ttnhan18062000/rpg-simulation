@@ -88,7 +88,7 @@ class CharacterGoal:
 
     def check_done_current_goal(self, character):
         if self.get_current_goal().is_complete(character):
-            logger.debug(f"Goal {self.get_current_goal()} is completed")
+            logger.debug(f"Goal {self.get_current_goal().get_name()} is completed")
             self.on_complete_goal(character)
             return True
         return False

@@ -1,4 +1,7 @@
 import random
+import numpy
+from enum import Enum
+import copy
 
 from components.world.store import get_store, EntityType
 from components.common.point import Point
@@ -8,18 +11,35 @@ from components.common.path_finding import (
     get_move_from_target,
     check_valid_step,
 )
-from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
+from components.character.memory.memory import (
+    MemoryCharacter,
+    MemoryEvent,
+    PowerEst,
+    MemoryTile,
+)
+from components.character.memory.character_memory import CharacterMemoryType
 from components.utils.tile_utils import get_tile_object
 from components.character.character_strategy import CharacterStrategyType
 from data.logs.logger import logger
 from data.game_settings import ACTION
 
 
+class ActionResult(Enum):
+    START_COMBAT = 1
+    JOIN_COMBAT = 2
+    SUCCESS_ESCAPE_COMBAT = 3
+    FAIL_ESCAPE_COMBAT = 4
+    SUCCESS_FIND_ITEM = 5
+    FAIL_FIND_ITEM = 6
+    TRAINED = 7
+    HIT_ENEMY = 8
+
+
 class Action:
     action_name = "Action"
 
     @classmethod
-    def do_action(cls, character):
+    def do_action(cls, character, **kwargs):
         pass
 
     @classmethod
@@ -50,6 +70,15 @@ class Action:
             tile_id = store.get(EntityType.GRID, 0).get_tile(point)
             tile = store.get(EntityType.TILE, tile_id)
 
+            # Remember the tile permanently
+            # TODO: Beware of too much data copied, when character remember/store the whole map
+            # TODO: we should remember the tile status at the moment (use copy) instead of something like store the tile_id.
+            # To make case like character A remember the item then the item is taken by another character B, A doesn't know until he check the tile again
+            memory_tile = MemoryTile(tile_id, point, copy.deepcopy(tile))
+            character.get_memory().add(
+                EntityType.TILE, tile_id, memory_tile, CharacterMemoryType.PERMANENT
+            )
+
             # Examine combat event on visible tiles
             if tile.is_combat_happen():
                 combat_id = tile.get_event(EventType.COMBAT)
@@ -57,7 +86,12 @@ class Action:
                 if character.get_faction() in combat.get_factions():
                     memory = MemoryEvent(combat_id, point, event_type=EventType.COMBAT)
                     memory.remember_power(character, combat, perception_accuracy=90)
-                    character.get_memory().add(EntityType.EVENT, combat_id, memory)
+                    character.get_memory().add(
+                        EntityType.EVENT,
+                        combat_id,
+                        memory,
+                        CharacterMemoryType.TEMPORARY,
+                    )
 
             # Examine character powers on visible tiles
             character_ids_on_tile = store.get(
@@ -74,7 +108,9 @@ class Action:
                         other_character,
                         perception_accuracy=ACTION.BASE_POWER_PERCEPTION_ACCURACY,
                     )
-                    character.get_memory().add(EntityType.CHARACTER, cid, memory)
+                    character.get_memory().add(
+                        EntityType.CHARACTER, cid, memory, CharacterMemoryType.TEMPORARY
+                    )
 
 
 class Move(Action):
@@ -82,7 +118,6 @@ class Move(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
-
         store = get_store()
 
         next_move = character.get_strategy(CharacterStrategyType.Move).get_next_move(
@@ -98,60 +133,28 @@ class Move(Action):
         new_tile.character_move_in(character)
         character.tile_id = new_tile.id
 
-        # Enter a tile that holding a combat event
-        if new_tile.is_combat_happen():
-            combat_event_id = new_tile.get_event(EventType.COMBAT)
-            combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
-            all_factions = combat_event.get_factions()
-            for hostile_faction in character.get_hostile_factions():
-                if hostile_faction in all_factions:
-                    combat_event.add_hostile_faction(
-                        character.get_faction(), hostile_faction
-                    )
-                    combat_event.add_character_id(
-                        character.get_faction(), character.get_info().id
-                    )
-                    character.enter_combat(combat_event_id)
-                    return False
+        return character.on_moving_into_new_tile(new_tile)
 
-        # Enter a tile with other characters standing on it, may cause a combat event happen
-        all_characters = [
-            store.get(EntityType.CHARACTER, cid)
-            for cid in new_tile.get_character_ids()
-            if cid != character.get_info().id
-        ]
-        hostile_faction_to_characters = {}
-        for hostile_faction in character.get_hostile_factions():
-            hostile_faction_to_characters[hostile_faction] = []
-            for other_character in all_characters:
-                if other_character.get_faction() == hostile_faction:
-                    hostile_faction_to_characters[hostile_faction].append(
-                        other_character
-                    )
-        for hostile_faction in character.get_hostile_factions():
-            if len(hostile_faction_to_characters[hostile_faction]) > 0:
-                new_combat_event: CombatEvent = CombatEvent(new_tile.get_id())
-                new_combat_event_id = new_combat_event.id
-                character_faction = character.get_faction()
 
-                new_combat_event.add_hostile_faction(character_faction, hostile_faction)
+class Search(Action):
+    action_name = "Search"
 
-                for enemy_character in hostile_faction_to_characters[hostile_faction]:
-                    new_combat_event.add_character_id(
-                        hostile_faction, enemy_character.get_info().id
-                    )
-                    enemy_character.enter_combat(new_combat_event_id)
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        success_chance = 0.25  # TODO: this should based on character's attribute
+        if random.random() < success_chance:
+            current_tile = get_tile_object(character.pos)
+            collectable_items = current_tile.get_collectable_items()
+            received_item = numpy.random.choice(
+                list(collectable_items.keys()),
+                p=list(collectable_items.values()),
+            )
+            character.add_item(received_item)
+            logger.debug(f"{character.get_info()} collected {received_item.get_name()}")
+            return True, ActionResult.SUCCESS_FIND_ITEM
 
-                new_combat_event.add_character_id(
-                    character_faction, character.get_info().id
-                )
-                character.enter_combat(new_combat_event_id)
-
-                store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
-
-                return False
-
-        return True
+        logger.debug(f"{character.get_info()} Search failed")
+        return False, ActionResult.FAIL_FIND_ITEM
 
 
 class Interact(Action):
@@ -168,7 +171,7 @@ class Train(Action):
     @classmethod
     def do_action(cls, character, **kwargs):
         TrainingEvent().execute(character)
-        return False
+        return False, ActionResult.TRAINED
 
 
 class Standby(Action):
@@ -176,7 +179,7 @@ class Standby(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        return False
+        return False, None
 
 
 class Fight(Action):
@@ -213,7 +216,7 @@ class Fight(Action):
 
         # There is a twist, if the combat is over, the combat_event will reset the redraw status (True)
         # but if we return True here, it will be replaced and not drawing the character
-        return character.should_redraw()
+        return character.should_redraw(), ActionResult.HIT_ENEMY
 
 
 class Escape(Action):
@@ -241,10 +244,11 @@ class Escape(Action):
 
             character.exit_combat()
 
-            # TODO: Random move (should trigger the Move class function => convert Move into classmethod?)
-            Move.do_action(character)
+            Move.do_action(
+                character, **{"action_result": ActionResult.SUCCESS_ESCAPE_COMBAT}
+            )
 
-            return True
+            return True, ActionResult.SUCCESS_ESCAPE_COMBAT
 
         logger.debug(f"{character.get_info()} escape failed")
-        return False
+        return False, ActionResult.FAIL_ESCAPE_COMBAT
