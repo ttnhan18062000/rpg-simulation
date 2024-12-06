@@ -8,6 +8,12 @@ class Stat:
     def set(self, value):
         self.value = value
 
+    def get_value(self):
+        return self.value
+
+    def __str__(self):
+        return self.value
+
 
 class NumericalStat(Stat):
     numerical_type_key = "numerical_type"
@@ -41,6 +47,9 @@ class NumericalStat(Stat):
                 raise Exception(f"NumericalType need to be the same to use addition")
             return NumericalStat(self.value + other.value)
         return NotImplemented
+
+    def __str__(self):
+        return f"{self.value}{'%' if self.numerical_type is NumericalStat.NumericalType.PERCENTAGE else ''}"
 
     def modify(self, other: "NumericalStat"):
         if other.numerical_type is NumericalStat.NumericalType.REAL:

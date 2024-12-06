@@ -3,6 +3,7 @@ import numpy
 from enum import Enum
 import copy
 
+from components.common.damage_formula import get_final_damage_output
 from components.world.store import get_store, EntityType
 from components.common.point import Point
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
@@ -20,6 +21,7 @@ from components.character.memory.memory import (
 from components.character.memory.character_memory import CharacterMemoryType
 from components.utils.tile_utils import get_tile_object
 from components.character.character_strategy import CharacterStrategyType
+from components.attribute.attribute import Vitality, Endurance, Strength, Agility
 from data.logs.logger import logger
 from data.game_settings import ACTION
 
@@ -112,6 +114,9 @@ class Action:
                         EntityType.CHARACTER, cid, memory, CharacterMemoryType.TEMPORARY
                     )
 
+        # Increase proficiency
+        # TODO: Increase something like Sensitive, currently not implemented
+
 
 class Move(Action):
     action_name = "Move"
@@ -133,6 +138,9 @@ class Move(Action):
         new_tile.character_move_in(character)
         character.tile_id = new_tile.id
 
+        # Increase proficiency
+        character.gain_proficiency(Agility.get_name(), 10)
+
         return character.on_moving_into_new_tile(new_tile)
 
 
@@ -141,6 +149,9 @@ class Search(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
+        # Increase proficiency
+        # TODO: increase something like dexterity, currently not implemented yet
+
         success_chance = 0.25  # TODO: this should based on character's attribute
         if random.random() < success_chance:
             current_tile = get_tile_object(character.pos)
@@ -162,6 +173,8 @@ class Interact(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
+        # Increase proficiency
+        # TODO: increase something like charisma, currently not implemented yet
         return False
 
 
@@ -171,6 +184,10 @@ class Train(Action):
     @classmethod
     def do_action(cls, character, **kwargs):
         TrainingEvent().execute(character)
+        character.gain_proficiency(Vitality.get_name(), 20)
+        character.gain_proficiency(Strength.get_name(), 10)
+        character.gain_proficiency(Endurance.get_name(), 5)
+        character.gain_proficiency(Agility.get_name(), 5)
         return False, ActionResult.TRAINED
 
 
@@ -202,12 +219,24 @@ class Fight(Action):
             StatDefinition.CURRENT_HEALTH,
             -character.character_stats.get_stat(StatDefinition.POWER).value,
         )
-        damage_dealt = character.character_stats.get_stat(StatDefinition.POWER).value
+        character_power = character.character_stats.get_stat_value(StatDefinition.POWER)
+        target_character_defense = target_character.character_stats.get_stat_value(
+            StatDefinition.DEFENSE
+        )
+        damage_dealt = get_final_damage_output(
+            source_power=character_power,
+            target_defense=target_character_defense,
+        )
         target_character_remaining_health = target_character.character_stats.get_stat(
             StatDefinition.CURRENT_HEALTH
         ).value
+
+        # Increase proficiency
+        character.gain_proficiency(Strength.get_name(), 20)
+        target_character.gain_proficiency(Endurance.get_name(), 20)
+
         logger.debug(
-            f"{character.get_info()} hit {target_character.get_info()} for {damage_dealt} damage, left {target_character_remaining_health} HP"
+            f"{character.get_info()}:POWER{character_power} hit {target_character.get_info()}:DEFENSE{target_character_defense} for {damage_dealt} damage, left {target_character_remaining_health} HP"
         )
         if not target_character.is_alive():
             combat_event.kill_character(character, target_character)
@@ -236,6 +265,9 @@ class Escape(Action):
             escape_chance = ACTION.LOW_ESCAPE_CHANCE
         elif total_hostile_power < ACTION.HIGH_ESCAPE_POWER_THRESHOLD * character_power:
             escape_chance = ACTION.HIGH_ESCAPE_CHANCE
+
+        # Increase proficiency
+        character.gain_proficiency(Agility.get_name(), 20)
 
         if random.random() < escape_chance:
             logger.debug(f"{character.get_info()} escape successfully")

@@ -6,6 +6,8 @@ from components.character.character_class import Human, Demon, RuinMob, ForestMo
 from components.character.character import Character
 from components.character.character_info import CharacterInfo
 from components.character.character_stat import CharacterStat, StatDefinition
+from components.attribute.character_attribute import CharacterAttribute
+from components.attribute.attribute import Vitality, Endurance, Strength, Agility
 from components.character.character_level import CharacterLevel
 from components.character.character_behavior import (
     FightingBehavior,
@@ -60,19 +62,26 @@ class HumanGenerator(CharacterGenerator):
         self.name = "Human"
 
     def spawn(self):
-        stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(100, 150))
-        stat.add_stat(
-            StatDefinition.CURRENT_HEALTH,
-            stat.get_stat(StatDefinition.MAX_HEALTH).value,
-        )
-        stat.add_stat(StatDefinition.POWER, random.randint(15, 30))
-        stat.add_stat(StatDefinition.SPEED, random.randint(80, 120))
+        # stat = CharacterStat()
+        # stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(100, 150))
+        # stat.add_stat(
+        #     StatDefinition.CURRENT_HEALTH,
+        #     stat.get_stat(StatDefinition.MAX_HEALTH).value,
+        # )
+        # stat.add_stat(StatDefinition.POWER, random.randint(15, 30))
+        # stat.add_stat(StatDefinition.SPEED, random.randint(80, 120))
+        attributes = CharacterAttribute()
+        attributes.add_base_attribute(Vitality(random.randint(7, 9)))
+        attributes.add_base_attribute(Endurance(random.randint(5, 7)))
+        attributes.add_base_attribute(Strength(random.randint(7, 9)))
+        attributes.add_base_attribute(Agility(random.randint(10, 14)))
+
         new_human = Character(
             self.location,
             pygame.image.load("data/sprites/character3.png"),
             CharacterInfo("Human"),
-            stat,
+            # stat,
+            attributes,
             Human(),
             1,
         )
@@ -96,19 +105,25 @@ class DemonGenerator(CharacterGenerator):
         self.name = "Demon"
 
     def spawn(self):
-        stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(200, 300))
-        stat.add_stat(
-            StatDefinition.CURRENT_HEALTH,
-            stat.get_stat(StatDefinition.MAX_HEALTH).value,
-        )
-        stat.add_stat(StatDefinition.POWER, random.randint(30, 50))
-        stat.add_stat(StatDefinition.SPEED, random.randint(50, 70))
+        # stat = CharacterStat()
+        # stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(200, 300))
+        # stat.add_stat(
+        #     StatDefinition.CURRENT_HEALTH,
+        #     stat.get_stat(StatDefinition.MAX_HEALTH).value,
+        # )
+        # stat.add_stat(StatDefinition.POWER, random.randint(30, 50))
+        # stat.add_stat(StatDefinition.SPEED, random.randint(50, 70))
+        attributes = CharacterAttribute()
+        attributes.add_base_attribute(Vitality(random.randint(8, 12)))
+        attributes.add_base_attribute(Endurance(random.randint(8, 12)))
+        attributes.add_base_attribute(Strength(random.randint(7, 13)))
+        attributes.add_base_attribute(Agility(random.randint(4, 6)))
         new_demon = Character(
             self.location,
             pygame.image.load("data/sprites/demon2.png"),
             CharacterInfo("Demon"),
-            stat,
+            # stat,
+            attributes,
             Demon(),
             1,
         )
@@ -132,19 +147,25 @@ class RuinMobGenerator(CharacterGenerator):
         self.name = "RuinMob"
 
     def spawn(self):
-        stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(300, 600))
-        stat.add_stat(
-            StatDefinition.CURRENT_HEALTH,
-            stat.get_stat(StatDefinition.MAX_HEALTH).value,
-        )
-        stat.add_stat(StatDefinition.POWER, random.randint(50, 80))
-        stat.add_stat(StatDefinition.SPEED, random.randint(25, 50))
+        # stat = CharacterStat()
+        # stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(300, 600))
+        # stat.add_stat(
+        #     StatDefinition.CURRENT_HEALTH,
+        #     stat.get_stat(StatDefinition.MAX_HEALTH).value,
+        # )
+        # stat.add_stat(StatDefinition.POWER, random.randint(50, 80))
+        # stat.add_stat(StatDefinition.SPEED, random.randint(25, 50))
+        attributes = CharacterAttribute()
+        attributes.add_base_attribute(Vitality(random.randint(10, 14)))
+        attributes.add_base_attribute(Endurance(random.randint(10, 14)))
+        attributes.add_base_attribute(Strength(random.randint(10, 14)))
+        attributes.add_base_attribute(Agility(random.randint(3, 5)))
         new_mob = Character(
             self.location,
             pygame.image.load("data/sprites/ruinmob1.png"),
             CharacterInfo("RuinMob"),
-            stat,
+            # stat,
+            attributes,
             RuinMob(),
             1,
         )
@@ -160,19 +181,25 @@ class ForsetMobGenerator(CharacterGenerator):
         self.name = "ForestMob"
 
     def spawn(self):
-        stat = CharacterStat()
-        stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(75, 125))
-        stat.add_stat(
-            StatDefinition.CURRENT_HEALTH,
-            stat.get_stat(StatDefinition.MAX_HEALTH).value,
-        )
-        stat.add_stat(StatDefinition.POWER, random.randint(10, 20))
-        stat.add_stat(StatDefinition.SPEED, random.randint(50, 80))
+        # stat = CharacterStat()
+        # stat.add_stat(StatDefinition.MAX_HEALTH, random.randint(75, 125))
+        # stat.add_stat(
+        #     StatDefinition.CURRENT_HEALTH,
+        #     stat.get_stat(StatDefinition.MAX_HEALTH).value,
+        # )
+        # stat.add_stat(StatDefinition.POWER, random.randint(10, 20))
+        # stat.add_stat(StatDefinition.SPEED, random.randint(50, 80))
+        attributes = CharacterAttribute()
+        attributes.add_base_attribute(Vitality(random.randint(4, 6)))
+        attributes.add_base_attribute(Endurance(random.randint(4, 6)))
+        attributes.add_base_attribute(Strength(random.randint(4, 6)))
+        attributes.add_base_attribute(Agility(random.randint(6, 10)))
         new_mob = Character(
             self.location,
             pygame.image.load("data/sprites/forestmob1.png"),
             CharacterInfo("ForestMob"),
-            stat,
+            # stat,
+            attributes,
             ForestMob(),
             1,
         )

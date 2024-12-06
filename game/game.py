@@ -1,6 +1,7 @@
 import pygame
 import sys
 import json
+import argparse
 
 sys.path.append("..")
 sys.path.append(".")
@@ -26,11 +27,14 @@ from components.utils.random_utils import random_once
 
 
 class Game:
-    def __init__(self) -> None:
+
+    def __init__(self, char_speed_multiplier=None) -> None:
         self.max_x_cell = 7
         self.max_y_cell = 7
         self.world = None
         self.initialize_world()
+        if char_speed_multiplier:
+            self.world.set_char_speed_multiplier(char_speed_multiplier)
         self.display_setting = DisplaySetting(self.max_x_cell, self.max_y_cell)
         self.control_event_handler = ControlEventHandler()
         self.is_display_changed = True
@@ -118,5 +122,26 @@ class Game:
         pygame.quit()
 
 
-game = Game()
-game.run()
+def main():
+    # Initialize the argument parser
+    parser = argparse.ArgumentParser(
+        description="Description of your script's functionality."
+    )
+
+    # Add arguments
+    parser.add_argument(
+        "--char-speed", type=int, help="Character speed multiplier", required=False
+    )
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Access arguments
+    char_speed_multiplier = args.char_speed
+
+    game = Game(char_speed_multiplier=char_speed_multiplier)
+    game.run()
+
+
+if __name__ == "__main__":
+    main()

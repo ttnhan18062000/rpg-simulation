@@ -7,11 +7,13 @@ from components.character.class_level import (
     ForestMobLevel,
 )
 from components.world.tile import tile_map, RuinTile, ForestTile
+from components.attribute.attribute import Vitality, Endurance, Strength, Agility
 
 
 class CharacterClass:
+    attributes_cap_gain = {}
+
     def __init__(self) -> None:
-        self.stats_gain = {}
         self.class_level = ClassLevel()
         self.hostile_factions = []
         self.ally_factions = []
@@ -29,15 +31,21 @@ class CharacterClass:
     def is_mob(self):
         return True
 
+    @classmethod
+    def get_attributes_cap_gain(cls):
+        return cls.attributes_cap_gain
+
 
 class Human(CharacterClass):
+    attributes_cap_gain = {
+        Vitality.get_name(): 4,
+        Endurance.get_name(): 4,
+        Strength.get_name(): 5,
+        Agility.get_name(): 8,
+    }
+
     def __init__(self) -> None:
         super().__init__()
-        self.stats_gain = {
-            StatDefinition.MAX_HEALTH: 25,
-            StatDefinition.POWER: 5,
-            StatDefinition.SPEED: 20,
-        }
         self.class_level = HumanLevel()
         self.hostile_factions = [
             Demon.__name__,
@@ -52,13 +60,15 @@ class Human(CharacterClass):
 
 
 class Demon(CharacterClass):
+    attributes_cap_gain = {
+        Vitality.get_name(): 6,
+        Endurance.get_name(): 6,
+        Strength.get_name(): 7,
+        Agility.get_name(): 3,
+    }
+
     def __init__(self) -> None:
         super().__init__()
-        self.stats_gain = {
-            StatDefinition.MAX_HEALTH: 50,
-            StatDefinition.POWER: 10,
-            StatDefinition.SPEED: 10,
-        }
         self.class_level = DemonLevel()
         self.hostile_factions = [
             Human.__name__,
@@ -73,13 +83,15 @@ class Demon(CharacterClass):
 
 
 class RuinMob(CharacterClass):
+    attributes_cap_gain = {
+        Vitality.get_name(): 10,
+        Endurance.get_name(): 10,
+        Strength.get_name(): 10,
+        Agility.get_name(): 3,
+    }
+
     def __init__(self) -> None:
         super().__init__()
-        self.stats_gain = {
-            StatDefinition.MAX_HEALTH: 50,
-            StatDefinition.POWER: 15,
-            StatDefinition.SPEED: 3,
-        }
         self.class_level = RuinMobLevel()
         self.hostile_factions = [Human.__name__, Demon.__name__]
         self.ally_factions = [RuinMob.__name__]
@@ -92,13 +104,15 @@ class RuinMob(CharacterClass):
 
 
 class ForestMob(CharacterClass):
+    attributes_cap_gain = {
+        Vitality.get_name(): 3,
+        Endurance.get_name(): 3,
+        Strength.get_name(): 2,
+        Agility.get_name(): 5,
+    }
+
     def __init__(self) -> None:
         super().__init__()
-        self.stats_gain = {
-            StatDefinition.MAX_HEALTH: 15,
-            StatDefinition.POWER: 3,
-            StatDefinition.SPEED: 20,
-        }
         self.class_level = ForestMobLevel()
         self.hostile_factions = [Demon.__name__]
         self.ally_factions = [ForestMob.__name__]

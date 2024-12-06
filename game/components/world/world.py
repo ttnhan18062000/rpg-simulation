@@ -19,6 +19,10 @@ class World:
 
         self.character_action_values = {}
         self.generators = generators
+        self.char_speed_multiplier = 1
+
+    def set_char_speed_multiplier(self, char_speed_multiplier):
+        self.char_speed_multiplier = char_speed_multiplier
 
     def is_moveable_tile(self, pos: Point):
         return self.grid.is_moveable_tile(pos)
@@ -120,18 +124,14 @@ class World:
             else:
                 if cid not in self.character_action_values:
                     self.character_action_values[cid] = (
-                        100
-                        / character.get_final_stat()
-                        .get_stat(StatDefinition.SPEED)
-                        .value
-                        + time.time()
-                    )
+                        100 / self.char_speed_multiplier
+                    ) / character.get_final_stat().get_stat(
+                        StatDefinition.SPEED
+                    ).value + time.time()
                 if self.character_action_values[cid] < time.time():
                     character.do_action()
                     self.character_action_values[cid] = (
-                        100
-                        / character.get_final_stat()
-                        .get_stat(StatDefinition.SPEED)
-                        .value
-                        + time.time()
-                    )
+                        100 / self.char_speed_multiplier
+                    ) / character.get_final_stat().get_stat(
+                        StatDefinition.SPEED
+                    ).value + time.time()
