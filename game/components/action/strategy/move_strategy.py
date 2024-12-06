@@ -71,7 +71,7 @@ class ThinkingMove(MoveStrategy):
                         )
                     ):
                         logger.debug(
-                            f"{character.get_info()} has the memory about the {tile.get_name()} contain the item, moving into it"
+                            f"{character.get_info()} has the memory about the {tile.get_name()} contain the satisfied items, moving into it"
                         )
                         return get_move_from_target(
                             character,

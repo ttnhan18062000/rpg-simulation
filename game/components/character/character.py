@@ -18,6 +18,8 @@ from components.character.character_strategy import (
     CharacterStrategyType,
 )
 from components.character.character_stat import CharacterStat, StatDefinition
+from components.attribute.attribute import AttributeProficiencyResult
+from components.attribute.character_attribute import CharacterAttribute
 from components.character.character_status import CharacterStatus
 from components.character.status import LightInjury, HeavyInjury
 from components.character.character_class import CharacterClass
@@ -42,7 +44,8 @@ class Character(GameObject):
         pos: Point,
         img: str,
         character_info: CharacterInfo,
-        character_stats: CharacterStat,
+        # character_stats: CharacterStat,
+        character_attributes: CharacterAttribute,
         character_class: CharacterClass,
         level: int,
     ):
@@ -51,7 +54,9 @@ class Character(GameObject):
         self.img = img
         self.character_info = character_info
         self.character_strategy = CharacterStrategy()
-        self.character_stats = character_stats
+        # self.character_stats = character_stats
+        self.character_attributes = character_attributes
+        self.character_stats = CharacterStat(character_attributes)
         self.character_status = CharacterStatus()
         self.character_class = character_class
         self.character_vision = CharacterVision(5)
@@ -85,6 +90,9 @@ class Character(GameObject):
 
     def get_character_stat(self):
         return self.character_stats
+
+    def get_character_attributes(self):
+        return self.character_attributes
 
     def get_final_stat(self):
         return self.get_character_stat().get_final_stat(self)
@@ -221,9 +229,33 @@ class Character(GameObject):
         raise NotImplemented
 
     def level_up(self):
-        for stat_def, value in self.character_class.stats_gain.items():
-            self.character_stats.update_stat(stat_def, value)
-        logger.debug(f"f{self.get_info()} has leveled up: {self.get_power()}")
+        logger.debug(
+            f"{self.get_info()} level up, before attributes: {self.get_character_attributes()}"
+        )
+        self.get_character_attributes().modify_caps(
+            self.character_class.get_attributes_cap_gain()
+        )
+        logger.debug(
+            f"{self.get_info()} leveled up, after attributes: {self.get_character_attributes()}"
+        )
+
+    def gain_proficiency(self, attr_name: str, value: int):
+        attr = self.get_character_attributes().get_base_attr(attr_name)
+        attr_prof_result: AttributeProficiencyResult = attr.increase_proficiency(value)
+        if attr_prof_result is AttributeProficiencyResult.IS_LEVELED_UP:
+            new_stat_gained = attr.clone()
+            new_stat_gained.set_value(1)
+            self.get_character_stat().update_stat_with_new_attribute_gained(
+                new_stat_gained
+            )
+            logger.debug(f"The attribute {attr_name} is leveled up {attr.get_info()}")
+        if attr_prof_result is AttributeProficiencyResult.IS_CAPPED:
+            logger.debug(
+                f"The attribute {attr_name} is reaching its cap {attr.get_cap()}"
+            )
+            # TODO: is_increased let character know it already maxed out or not
+            # later we can change goal when maxed out proficiency
+            pass
 
     def gain_experience(self, exp_value: int):
         is_level_up = self.level.add_exp(exp_value)
@@ -353,6 +385,12 @@ class Character(GameObject):
                     self.set_character_action(BasicCharacterAction())
 
         return True, None
+
+    def on_character_attribute_changed(self):
+        # self.get_character_stat().apply_character_attributes(
+        #     self.get_character_attributes()
+        # )
+        pass
 
     def reset_to_basic_character_action(self):
         self.set_character_action(BasicCharacterAction())

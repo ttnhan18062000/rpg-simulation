@@ -16,6 +16,7 @@ class CharacterPower:
         power = character_stats.get_stat_value(StatDefinition.POWER)
         speed = character_stats.get_stat_value(StatDefinition.SPEED)
         cur_hp = character_stats.get_stat_value(StatDefinition.CURRENT_HEALTH)
+        defense = character_stats.get_stat_value(StatDefinition.DEFENSE)
 
         return int(cur_hp * power * (speed / 100))
 

@@ -1,7 +1,7 @@
-from enum import IntEnum
+from enum import IntEnum, Enum
 
 
-class ItemType:
+class ItemType(Enum):
     ITEM = 1
     EQUIPMENT = 2
     MATERIAL = 3

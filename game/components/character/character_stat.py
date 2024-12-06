@@ -13,6 +13,9 @@ class StatDefinition(Enum):
     CURRENT_HEALTH = 2
     POWER = 3
     SPEED = 4
+    REGENATION = 5
+    DEFENSE = 6
+    RESISTANCE = 7
 
 
 stat_class = {
@@ -20,12 +23,61 @@ stat_class = {
     StatDefinition.CURRENT_HEALTH: NumericalStat,
     StatDefinition.POWER: NumericalStat,
     StatDefinition.SPEED: NumericalStat,
+    StatDefinition.REGENATION: NumericalStat,
+    StatDefinition.DEFENSE: NumericalStat,
+    StatDefinition.RESISTANCE: NumericalStat,
 }
 
 
 class CharacterStat:
-    def __init__(self) -> None:
+    def __init__(self, character_attr) -> None:
         self.stats_list = {}
+        self.apply_character_attributes(character_attr)
+
+    # @staticmethod
+    # def get_applied_stat_effects(base_character_stat, stat_effects):
+    #     applied_character_stat = copy.deepcopy(base_character_stat)
+    #     for stat_def, stat in stat_effects.items():
+    #         if stat_def in applied_character_stat.stats_list:
+    #             applied_character_stat.get_stat(stat_def).modify(stat)
+    #         else:
+    #             applied_character_stat.stats_list[stat_def] = stat
+    #     return applied_character_stat
+
+    # Increase stats by gained a number of specific attribute
+    # Usually used for level up a attribute
+    def update_stat_with_new_attribute_gained(self, attr):
+        total_stat_effect = attr.get_total_stat_effect()
+        # TODO: optimize later, here is slightly hard-code
+        for stat_def, stat in total_stat_effect.items():
+            if stat_def in self.stats_list:
+                self.get_stat(stat_def).modify(stat)
+            else:
+                self.stats_list[stat_def] = stat
+            logger.debug(f"Character gained {stat_def.name}={stat}")
+
+    def apply_character_attributes(self, character_attr):
+        final_attrs = character_attr.get_final_attributes()
+        for attr in final_attrs.values():
+            if attr.has_stat_effect():
+                total_stat_effect = attr.get_total_stat_effect()
+                # TODO: optimize later, here is slightly hard-code
+                for stat_def, stat in total_stat_effect.items():
+                    if stat_def in self.stats_list:
+                        self.get_stat(stat_def).modify(stat)
+                    else:
+                        self.stats_list[stat_def] = stat
+
+        # TODO: Currently inefficiently when first initialization, we need to set current health = max health
+        self.stats_list[StatDefinition.CURRENT_HEALTH] = CharacterStat.create_stat(
+            StatDefinition.CURRENT_HEALTH,
+            self.get_stat_value(StatDefinition.MAX_HEALTH),
+            **{NumericalStat.numerical_type_key: NumericalStat.NumericalType.REAL},
+        )
+
+        logger.debug(
+            f"Applied new character attributes: {character_attr}, new stats: {self}"
+        )
 
     @staticmethod
     def create_stat(stat_def, value, **kwargs):
@@ -125,4 +177,9 @@ class CharacterStat:
         )
 
     def __str__(self) -> str:
-        return " ".join([str(stat.value) for stat in list(self.stats_list.values())])
+        return " ".join(
+            [
+                f"{stat_def.name}={stat.get_value()}"
+                for stat_def, stat in list(self.stats_list.items())
+            ]
+        )

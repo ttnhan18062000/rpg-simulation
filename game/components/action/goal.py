@@ -137,7 +137,7 @@ class FindingItemGoal(Goal):
         if item.get_final_rarity() < self.target_rarity:
             return False
         logger.debug(
-            f"Item {item.get_name()} is satisfied with the goal to collect items with type={self.target_item_types}, rarity>={self.target_rarity}"
+            f"Item {item.get_name()} is satisfied with the goal to collect items with type={[item_type.name for item_type in self.target_item_types]}, rarity>={self.target_rarity.name}"
         )
         return True
 
