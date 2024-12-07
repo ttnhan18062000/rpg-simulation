@@ -13,6 +13,11 @@ class EntityType(Enum):
 class Store:
     def __init__(self) -> None:
         self.data = {}
+        self.recently_added = {
+            EntityType.CHARACTER: None,
+            EntityType.ITEM: None,
+            EntityType.EVENT: None,
+        }
 
     @staticmethod
     def get_key(entity_type: EntityType, id):
@@ -29,6 +34,8 @@ class Store:
             produce_messages(obj_dict)
 
         self.data[key] = obj
+        if entity_type in (EntityType.CHARACTER, EntityType.ITEM, EntityType.EVENT):
+            self.recently_added[entity_type] = obj
 
     def remove(self, entity_type: EntityType, id):
         key = Store.get_key(entity_type, id)
@@ -46,6 +53,11 @@ class Store:
         key = Store.get_key(entity_type, id)
         if key in self.data:
             return self.data[key]
+        return None
+
+    def get_recently_added(self, entity_type: EntityType):
+        if entity_type in self.recently_added:
+            return self.recently_added[entity_type]
         return None
 
     def get_all(self, entity_type: EntityType):

@@ -26,3 +26,8 @@ class CharacterEquipment:
 
     def equip_armor(self, armor: Equipment):
         self.armor = armor
+
+    def __str__(self):
+        weapon_name = self.weapon.get_name() if self.weapon else ""
+        armor_name = self.armor.get_name() if self.armor else ""
+        return f"Weapon: {weapon_name} | Armor: {armor_name}"

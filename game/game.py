@@ -28,6 +28,7 @@ from components.utils.random_utils import random_once
 
 class Game:
 
+    # TODO: Cleaner creating Game/World, currently a mess
     def __init__(self, char_speed_multiplier=None) -> None:
         self.max_x_cell = 7
         self.max_y_cell = 7
@@ -48,6 +49,7 @@ class Game:
         pygame.init()
         self.surface = pygame.display.set_mode(self.display_setting.window_size)
         self.font = pygame.font.Font(None, 20)
+        self.info_font = pygame.font.Font(None, 30)
 
     def initialize_generators(self, grid_data):
         demon_spawn = False
@@ -88,6 +90,16 @@ class Game:
             ),
             self.is_display_changed,
         )
+        if self.control_event_handler.selected_tile_pos:
+            self.world.update_tracking_characters_with_tile_pos(
+                self.control_event_handler.selected_tile_pos
+            )
+        self.world.draw_info_left_bar(
+            self.surface,
+            self.info_font,
+            self.display_setting,
+        )
+
         self.is_display_changed = False
 
     def update(self):
@@ -130,7 +142,7 @@ def main():
 
     # Add arguments
     parser.add_argument(
-        "--char-speed", type=int, help="Character speed multiplier", required=False
+        "--char-speed", type=float, help="Character speed multiplier", required=False
     )
 
     # Parse arguments

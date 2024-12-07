@@ -26,3 +26,14 @@ class CharacterLevel:
 
     def get_current_level(self):
         return self.current_level
+
+    def get_exp_visualization(self):
+        # filled_blocks = int((self.current_exp / self.next_level_required_exp) * 15)
+        # # TODO: empty space " " is not equal width with "█", make it weird
+        # empty_blocks = int(15 - filled_blocks)
+
+        # # Create the bar
+        # bar = "█" * filled_blocks + " " * empty_blocks
+        # return f"[{bar}]"
+
+        return f"({self.current_exp}/{self.next_level_required_exp})"

@@ -51,6 +51,8 @@ class CharacterGenerator:
             self.timestamp = time.time()
             self.spawn()
             self.spawn_counter += 1
+            return True
+        return False
 
     def is_stop(self):
         return self.amount == self.spawn_counter

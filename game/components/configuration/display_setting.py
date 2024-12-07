@@ -18,10 +18,19 @@ class DisplaySetting:
             if "min_cell_size" in setting_data
             else DefaultSetting.MIN_CELL_SIZE
         )
+        self.main_screen_size = (
+            setting_data["main_screen_size"]
+            if "main_screen_size" in setting_data
+            else DefaultSetting.MAIN_SCREEN_SIZE
+        )
+        self.left_screen_size = (
+            setting_data["left_screen_size"]
+            if "left_screen_size" in setting_data
+            else DefaultSetting.LEFT_SCREEN_SIZE
+        )
         self.window_size = (
-            setting_data["window_size"]
-            if "window_size" in setting_data
-            else DefaultSetting.WINDOW_SIZE
+            self.main_screen_size[0] + self.left_screen_size[0],
+            self.main_screen_size[1],
         )
         self.max_y_cell = max_x_cell
         self.max_x_cell = max_y_cell
