@@ -39,6 +39,10 @@ class Status:
         self.duration = duration
 
     @classmethod
+    def get_name(cls):
+        return cls.__name__
+
+    @classmethod
     def get_status_class(cls):
         return cls.status_class
 

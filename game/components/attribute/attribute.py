@@ -22,6 +22,11 @@ class Attribute:
     def get_name(cls):
         return cls.__name__
 
+    @classmethod
+    def get_display_name(cls):
+        attr_name = cls.get_name()
+        return attr_name[:3].upper() if len(attr_name) >= 3 else attr_name.upper()
+
     def __init__(self, value: int, cap=None) -> None:
         self.value = value
         if cap:
@@ -49,10 +54,20 @@ class Attribute:
         return NotImplemented
 
     def get_info(self):
-        return f"{self.value}({self.cap})"
+        return f"{self.get_proficiency_visualization()} {self.value} ({self.cap})"
+
+    def get_proficiency_visualization(self):
+        filled_blocks = int(
+            (self.current_proficiency * 100 / self.get_next_level_proficiency()) // 10
+        )
+        empty_blocks = 10 - filled_blocks
+
+        # Create the bar
+        bar = "█" * filled_blocks + " " * empty_blocks
+        return f"[{bar}]"
 
     def __str__(self):
-        return f"{self.__class__.get_name()}:{self.get_info()}"
+        return f"{self.__class__.get_display_name()} {self.get_info()}"
 
     def get_next_level_proficiency(self):
         return 10 * (self.value + 1)

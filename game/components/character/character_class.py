@@ -35,6 +35,10 @@ class CharacterClass:
     def get_attributes_cap_gain(cls):
         return cls.attributes_cap_gain
 
+    @classmethod
+    def get_name(cls):
+        return cls.__name__
+
 
 class Human(CharacterClass):
     attributes_cap_gain = {

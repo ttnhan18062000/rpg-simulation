@@ -52,6 +52,7 @@ class Character(GameObject):
         super().__init__(pos, img)
         self.pos = pos
         self.img = img
+        self.action_percentage = 0
         self.character_info = character_info
         self.character_strategy = CharacterStrategy()
         # self.character_stats = character_stats
@@ -88,6 +89,9 @@ class Character(GameObject):
     def get_info(self):
         return self.character_info
 
+    def get_id(self):
+        return self.character_info.id
+
     def get_character_stat(self):
         return self.character_stats
 
@@ -108,6 +112,9 @@ class Character(GameObject):
 
     def get_power(self):
         return CharacterPower.get_power(self.get_final_stat())
+
+    def get_max_power(self):
+        return CharacterPower.get_max_power(self.get_final_stat())
 
     def get_detailed_power(self):
         return CharacterPower.get_detailed_character_power(self)
@@ -135,6 +142,9 @@ class Character(GameObject):
 
     def get_recently_added_inventory_item_names(self):
         return self.character_inventory.get_recently_added_item_names()
+
+    def update_action_percentage(self, action_percentage: float):
+        self.action_percentage = action_percentage
 
     def add_item(self, item):
         on_add_item_action = self.character_inventory.add_item(item)
@@ -198,8 +208,9 @@ class Character(GameObject):
     def get_character_class_name(self):
         return self.character_class.__class__.__name__
 
-    def set_status(self, status):
-        if status == "dead":
+    # TODO: Better management state
+    def set_state(self, state):
+        if state == "dead":
             self.is_dead = True
 
     def set_vision_range(self, vision_range: int):
@@ -420,6 +431,31 @@ class Character(GameObject):
 
     def get_character_action_type(self):
         return self.get_character_action().__class__.__name__
+
+    def get_action_percentage_visualization(self):
+        filled_blocks = int((1 - self.action_percentage) * 20)
+        # TODO: empty space " " is not equal width with "█", make it weird
+        empty_blocks = int((20 - filled_blocks) * 3 / 2)
+
+        # Create the bar
+        bar = "█" * filled_blocks + " " * empty_blocks
+        return f"[{bar}]"
+
+    def get_exp_visualization(self):
+        return self.get_level().get_exp_visualization()
+
+    def get_character_detailed_info_string(self):
+        # TODO: Some like equipments and buffs should be displayed as icon instead of raw text
+        return (
+            f"Action: {self.get_action_percentage_visualization()} | "
+            f"{self.get_info()} LVL {self.get_current_level()} {self.get_exp_visualization()} | "
+            f"Power: {self.get_power()} ({self.get_max_power()}) | "
+            f"{self.get_character_stat().get_health_visualization()} | "
+            f"{self.get_character_attributes()} | "
+            f"Goal: {self.get_current_goal().get_name() if self.character_goal.has_goal() else ''} | "
+            f"{self.get_character_equipment()} | "
+            f"Status: {self.get_character_status()}"
+        )
 
     def to_dict(self):
         return {

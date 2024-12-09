@@ -2,7 +2,10 @@ import pygame
 import time
 import math
 
+from components.common.point import Point
 from components.configuration.display_setting import DisplaySetting
+
+from data.logs.logger import logger
 
 
 class ControlEventHandler:
@@ -14,6 +17,7 @@ class ControlEventHandler:
         self.drag_start_pos = (0, 0)
         self.offset_x = 0
         self.offset_y = 0
+        self.selected_tile_pos = None
 
     # TODO: Move to the other module
     def calculate_distance(self, start_pos, end_pos):
@@ -31,7 +35,12 @@ class ControlEventHandler:
                 self.drag_start_pos = event.pos
                 return True
             elif event.button == 1:  # Left mouse button (for cell click, no drag)
-                # Click
+                mouse_x, mouse_y = event.pos
+                self.selected_tile_pos = Point(
+                    (self.offset_x + mouse_x) // display_setting.cell_size,
+                    (self.offset_y + mouse_y) // display_setting.cell_size,
+                )
+                logger.debug(f"Clicked at TILE {self.selected_tile_pos}")
                 return False
             elif event.button == 4:  # Scroll up for zoom in
                 new_cell_size = min(
@@ -103,14 +112,16 @@ class ControlEventHandler:
                 self.offset_x = max(
                     0,
                     min(
-                        display_setting.map_size_x - display_setting.window_size[0],
+                        display_setting.map_size_x
+                        - display_setting.main_screen_size[0],
                         self.offset_x - dx,
                     ),
                 )
                 self.offset_y = max(
                     0,
                     min(
-                        display_setting.map_size_y - display_setting.window_size[1],
+                        display_setting.map_size_y
+                        - display_setting.main_screen_size[1],
                         self.offset_y - dy,
                     ),
                 )

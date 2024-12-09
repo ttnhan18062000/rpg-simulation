@@ -13,6 +13,9 @@ class CharacterAttribute:
             self.base_attrs = {}
         self.additional_attrs = {}
 
+    def get_base_attrs(self):
+        return self.base_attrs
+
     def get_base_attr(self, attr_name: str) -> Attribute:
         if attr_name not in self.base_attrs:
             raise Exception(
@@ -94,9 +97,6 @@ class CharacterAttribute:
         pass
 
     def __str__(self):
-        return " ".join(
-            [
-                f"{attr_name}={attr.get_value()}({attr.get_cap()})"
-                for attr_name, attr in self.get_final_attributes().items()
-            ]
+        return " | ".join(
+            [f"{attr}" for attr_name, attr in self.get_base_attrs().items()]
         )

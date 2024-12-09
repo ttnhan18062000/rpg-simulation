@@ -176,8 +176,16 @@ class CharacterStat:
             / self.get_stat(StatDefinition.MAX_HEALTH).value
         )
 
+    def get_health_visualization(self):
+        filled_blocks = int(self.get_health_ratio() * 25)
+        empty_blocks = 25 - filled_blocks
+
+        # Create the bar
+        bar = "█" * filled_blocks + " " * empty_blocks
+        return f"HP: [{bar}]"
+
     def __str__(self) -> str:
-        return " ".join(
+        return " | ".join(
             [
                 f"{stat_def.name}={stat.get_value()}"
                 for stat_def, stat in list(self.stats_list.items())

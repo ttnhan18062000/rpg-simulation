@@ -144,7 +144,7 @@ class CombatEvent(Event):
         # Remove dead character corpse
         target_faction = killed_character.get_faction()
         killed_character_id = killed_character.get_info().id
-        killed_character.set_status("dead")
+        killed_character.set_state("dead")
         tile_id = killed_character.tile_id
         tile = store.get(EntityType.TILE, tile_id)
         tile.remove_character_id(killed_character_id)

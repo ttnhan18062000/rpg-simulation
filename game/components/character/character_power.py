@@ -21,6 +21,15 @@ class CharacterPower:
         return int(cur_hp * power * (speed / 100))
 
     @staticmethod
+    def get_max_power(character_stats: CharacterStat):
+        power = character_stats.get_stat_value(StatDefinition.POWER)
+        speed = character_stats.get_stat_value(StatDefinition.SPEED)
+        cur_hp = character_stats.get_stat_value(StatDefinition.MAX_HEALTH)
+        defense = character_stats.get_stat_value(StatDefinition.DEFENSE)
+
+        return int(cur_hp * power * (speed / 100))
+
+    @staticmethod
     def get_character_before_and_after_equip_equipment(character, target_equipment):
         character_base_stat = character.get_character_stat()
         # Current equipment total power

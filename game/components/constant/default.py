@@ -2,4 +2,5 @@ class DefaultSetting:
     CELL_SIZE = 50
     MAX_CELL_SIZE = 100
     MIN_CELL_SIZE = 15
-    WINDOW_SIZE = (640, 480)
+    MAIN_SCREEN_SIZE = (640, 640)
+    LEFT_SCREEN_SIZE = (360, 640)

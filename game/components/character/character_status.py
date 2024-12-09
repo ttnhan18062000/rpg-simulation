@@ -50,3 +50,6 @@ class CharacterStatus:
             for status_name, status in self.statuses.items()
             if not status.is_expired()
         }
+
+    def __str__(self):
+        return " ".join([status.get_name() for status in self.statuses.values()])
