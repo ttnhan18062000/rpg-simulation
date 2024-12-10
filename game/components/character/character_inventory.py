@@ -73,12 +73,12 @@ class CharacterInventory:
             else:
                 self.items[item_name] = [item]
 
+        self.recently_added_item_names.append(item_name)
+
         if item.is_equipment():
             return OnAddItemAction.CAN_EQUIP_ITEM
         elif item.is_consumable():
             return OnAddItemAction.CAN_CONSUME_ITEM
-
-        self.recently_added_item_names.append(item_name)
 
     def get_recently_added_item_names(self):
         return self.recently_added_item_names

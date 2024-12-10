@@ -18,7 +18,7 @@ class CharacterPower:
         cur_hp = character_stats.get_stat_value(StatDefinition.CURRENT_HEALTH)
         defense = character_stats.get_stat_value(StatDefinition.DEFENSE)
 
-        return int(cur_hp * power * (speed / 100))
+        return int(cur_hp * power * defense * (speed / 100))
 
     @staticmethod
     def get_max_power(character_stats: CharacterStat):
@@ -27,7 +27,7 @@ class CharacterPower:
         cur_hp = character_stats.get_stat_value(StatDefinition.MAX_HEALTH)
         defense = character_stats.get_stat_value(StatDefinition.DEFENSE)
 
-        return int(cur_hp * power * (speed / 100))
+        return int(cur_hp * power * defense * (speed / 100))
 
     @staticmethod
     def get_character_before_and_after_equip_equipment(character, target_equipment):
@@ -38,14 +38,12 @@ class CharacterPower:
                 character.get_character_equipment()
             )
         )
-        before_equipment_applied_stat_power = CharacterPower.get_power(
+        before_equipment_applied_stat_power = CharacterPower.get_max_power(
             before_equipment_applied_stat
         )
 
         # After applied equipment total power
-        after_applied_character_equipment = copy.deepcopy(
-            character.get_character_equipment()
-        )
+        after_applied_character_equipment = character.get_character_equipment().clone()
         after_applied_character_equipment.equip(target_equipment)
 
         after_equipment_applied_stat = (
@@ -53,7 +51,7 @@ class CharacterPower:
                 after_applied_character_equipment
             )
         )
-        after_equipment_applied_stat_power = CharacterPower.get_power(
+        after_equipment_applied_stat_power = CharacterPower.get_max_power(
             after_equipment_applied_stat
         )
 
