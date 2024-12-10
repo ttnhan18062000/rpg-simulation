@@ -152,7 +152,7 @@ class Search(Action):
         # Increase proficiency
         # TODO: increase something like dexterity, currently not implemented yet
 
-        success_chance = 0.25  # TODO: this should based on character's attribute
+        success_chance = 0.5  # TODO: this should based on character's attribute
         if random.random() < success_chance:
             current_tile = get_tile_object(character.pos)
             collectable_items = current_tile.get_collectable_items()

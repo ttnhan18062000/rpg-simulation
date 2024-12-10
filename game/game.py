@@ -8,6 +8,8 @@ sys.path.append(".")
 
 from components.configuration.display_setting import DisplaySetting
 from components.world.world import World
+from components.display.character_info_display import CharacterInfoDisplay
+from components.display.world_display import WorldDisplay
 from components.character.character import Character
 from components.character.character_info import CharacterInfo
 from components.character.character_stat import CharacterStat
@@ -45,6 +47,9 @@ class Game:
         self.running = True
         self.monitor = Monitoring()
 
+        self.world_display = WorldDisplay(self.display_setting)
+        self.character_info_display = CharacterInfoDisplay(self.display_setting)
+
     def initialize_game(self):
         pygame.init()
         self.surface = pygame.display.set_mode(self.display_setting.window_size)
@@ -79,8 +84,24 @@ class Game:
         # generators = [] # TODO: Temporary not spawn any characters to test regions
         self.world = World(grid_data, generators)
 
+    def get_all_surfaces(self):
+        surfaces = {}
+        surfaces.update({"world_surface": self.world_display.get_main_surface()})
+        surfaces.update(self.character_info_display.get_character_info_surfaces())
+        return surfaces
+
+    def get_all_surfaces_pos_absolute(self):
+        surfaces_pos = {}
+        surfaces_pos.update(
+            {"world_surface": self.world_display.get_main_surface_pos()}
+        )
+        surfaces_pos.update(
+            self.character_info_display.get_character_info_surfaces_pos_absolute()
+        )
+        return surfaces_pos
+
     def draw(self):
-        self.world.draw_world(
+        self.world_display.draw(
             self.surface,
             self.font,
             self.display_setting,
@@ -94,10 +115,12 @@ class Game:
             self.world.update_tracking_characters_with_tile_pos(
                 self.control_event_handler.selected_tile_pos
             )
-        self.world.draw_info_left_bar(
+        self.world.update_tracking_characters_status()
+        self.character_info_display.draw(
             self.surface,
             self.info_font,
             self.display_setting,
+            self.world.get_tracking_info_characters(),
         )
 
         self.is_display_changed = False
@@ -113,7 +136,10 @@ class Game:
                     self.running = False
                 else:
                     is_display_changed = self.control_event_handler.handle(
-                        event, self.display_setting
+                        event,
+                        self.display_setting,
+                        self.get_all_surfaces(),
+                        self.get_all_surfaces_pos_absolute(),
                     )
                     if (
                         is_display_changed and self.is_display_changed == False

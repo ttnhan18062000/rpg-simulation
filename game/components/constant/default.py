@@ -4,3 +4,4 @@ class DefaultSetting:
     MIN_CELL_SIZE = 15
     MAIN_SCREEN_SIZE = (640, 640)
     LEFT_SCREEN_SIZE = (360, 640)
+    MAX_DRAW_PER_SECOND = 30

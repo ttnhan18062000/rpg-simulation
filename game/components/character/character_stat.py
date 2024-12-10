@@ -3,6 +3,7 @@ from enum import Enum
 import copy
 
 from components.character.stat import NumericalStat, CategoricalStat, Stat
+from components.utils.visualization_converter import convert_to_progress_string
 
 
 from data.logs.logger import logger
@@ -30,13 +31,23 @@ stat_class = {
 
 
 class CharacterStat:
-    def __init__(self, character_attr) -> None:
-        self.stats_list = {}
-        self.apply_character_attributes(character_attr)
+    def __init__(self, stats_list=None, character_attr=None) -> None:
+        if stats_list:
+            self.stats_list = stats_list
+        else:
+            self.stats_list = {}
+        if character_attr:
+            self.apply_character_attributes(character_attr)
+
+    def clone(self):
+        new_stats_list = {}
+        for stat_def, stat in self.stats_list.items():
+            new_stats_list[stat_def] = stat.clone()
+        return CharacterStat(stats_list=new_stats_list)
 
     # @staticmethod
     # def get_applied_stat_effects(base_character_stat, stat_effects):
-    #     applied_character_stat = copy.deepcopy(base_character_stat)
+    #     applied_character_stat = base_character_stat.clone()
     #     for stat_def, stat in stat_effects.items():
     #         if stat_def in applied_character_stat.stats_list:
     #             applied_character_stat.get_stat(stat_def).modify(stat)
@@ -129,7 +140,7 @@ class CharacterStat:
         Apply all effects to a given CharacterStats object.
         :param stats: The CharacterStats instance to modify
         """
-        applied_character_stat = copy.deepcopy(character_stat)
+        applied_character_stat = character_stat.clone()
 
         stat_effect_statuses = {
             status_name: status
@@ -146,7 +157,7 @@ class CharacterStat:
 
     # TODO: Refactor this, currently duplicated, inefficient
     def get_applied_equipments_character_stat(self, character_equipment):
-        applied_character_stat = copy.deepcopy(self)
+        applied_character_stat = self.clone()
 
         weapon = character_equipment.get_weapon()
         armor = character_equipment.get_armor()
@@ -177,12 +188,8 @@ class CharacterStat:
         )
 
     def get_health_visualization(self):
-        filled_blocks = int(self.get_health_ratio() * 25)
-        empty_blocks = 25 - filled_blocks
-
-        # Create the bar
-        bar = "█" * filled_blocks + " " * empty_blocks
-        return f"HP: [{bar}]"
+        visualization = convert_to_progress_string(self.get_health_ratio(), 20)
+        return visualization
 
     def __str__(self) -> str:
         return " | ".join(

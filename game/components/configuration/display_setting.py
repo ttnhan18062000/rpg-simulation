@@ -28,6 +28,11 @@ class DisplaySetting:
             if "left_screen_size" in setting_data
             else DefaultSetting.LEFT_SCREEN_SIZE
         )
+        self.max_draw_per_second = (
+            setting_data["max_draw_per_second"]
+            if "max_draw_per_second" in setting_data
+            else DefaultSetting.MAX_DRAW_PER_SECOND
+        )
         self.window_size = (
             self.main_screen_size[0] + self.left_screen_size[0],
             self.main_screen_size[1],

@@ -1,4 +1,6 @@
 from enum import Enum
+import threading
+
 from components.database.producer import produce_messages
 
 
@@ -79,6 +81,9 @@ class Store:
 
 store = Store()
 
+_lock = threading.Lock()
+
 
 def get_store():
-    return store
+    with _lock:
+        return store

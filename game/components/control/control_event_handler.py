@@ -25,8 +25,27 @@ class ControlEventHandler:
         x2, y2 = end_pos
         return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
+    def get_clicked_child_surface(self, mouse_pos, surface_dict, surface_pos_dict):
+        if not surface_dict or not surface_pos_dict:
+            return None
+        for surface_id, surface in surface_dict.items():
+            # Get the rectangle for the child surface
+            child_rect = surface.get_rect(topleft=surface_pos_dict[surface_id])
+
+            # Check if the mouse click is within the child surface's rectangle
+            if child_rect.collidepoint(mouse_pos):
+                print(f"11111111111111111 {surface_id}")
+                return surface_id
+        return None
+
     # TODO: Refactor to Point instance instead of x, y
-    def handle(self, event: pygame.event.Event, display_setting: DisplaySetting):
+    def handle(
+        self,
+        event: pygame.event.Event,
+        display_setting: DisplaySetting,
+        surface_dict,
+        surface_pos_dict,
+    ):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 3:  # Right mouse button
                 # Start dragging
@@ -35,6 +54,9 @@ class ControlEventHandler:
                 self.drag_start_pos = event.pos
                 return True
             elif event.button == 1:  # Left mouse button (for cell click, no drag)
+                self.get_clicked_child_surface(
+                    event.pos, surface_dict, surface_pos_dict
+                )
                 mouse_x, mouse_y = event.pos
                 self.selected_tile_pos = Point(
                     (self.offset_x + mouse_x) // display_setting.cell_size,

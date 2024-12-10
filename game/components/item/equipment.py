@@ -30,6 +30,9 @@ class Equipment(Item):
     def get_affect_stats(cls):
         return cls.affect_stats
 
+    def clone(self):
+        return self.__class__()
+
 
 class SteelSword(Equipment):
     description = "Starter Weapon"
@@ -62,7 +65,7 @@ class DamagedAncientSword(Equipment):
     require_stats = {}
 
     def __init__(self):
-        self.rarity = SteelSword.base_rarity
+        self.rarity = DamagedAncientSword.base_rarity
 
 
 class SteelArmor(Equipment):
@@ -96,4 +99,4 @@ class DamagedAncientArmor(Equipment):
     require_stats = {}
 
     def __init__(self):
-        self.rarity = SteelArmor.base_rarity
+        self.rarity = DamagedAncientArmor.base_rarity

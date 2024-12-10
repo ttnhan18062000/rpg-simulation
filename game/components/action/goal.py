@@ -176,6 +176,7 @@ class FindingItemGoal(Goal):
                     if recently_collected_item_name in self.target_items.keys():
                         self.target_items.pop(recently_collected_item_name)
                         self.collected_item_name.append(recently_collected_item_name)
+                character.clear_recently_added_inventory_item_names()
             if len(self.target_items.keys()) == 0:
                 return True
         return False

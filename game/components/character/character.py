@@ -1,3 +1,7 @@
+# from components.global_object.world_notification import (
+#     get_world_notification_manager,
+#     WorldNotificationType,
+# )
 from components.common.point import Point
 from components.common.game_object import GameObject
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
@@ -35,6 +39,8 @@ from components.character.character_equipment import CharacterEquipment
 
 from components.world.store import get_store, EntityType
 
+from components.utils.visualization_converter import convert_to_progress_string
+
 from data.logs.logger import logger
 
 
@@ -57,7 +63,7 @@ class Character(GameObject):
         self.character_strategy = CharacterStrategy()
         # self.character_stats = character_stats
         self.character_attributes = character_attributes
-        self.character_stats = CharacterStat(character_attributes)
+        self.character_stats = CharacterStat(character_attr=character_attributes)
         self.character_status = CharacterStatus()
         self.character_class = character_class
         self.character_vision = CharacterVision(5)
@@ -143,6 +149,9 @@ class Character(GameObject):
     def get_recently_added_inventory_item_names(self):
         return self.character_inventory.get_recently_added_item_names()
 
+    def clear_recently_added_inventory_item_names(self):
+        return self.character_inventory.clear_recently_added_item_names()
+
     def update_action_percentage(self, action_percentage: float):
         self.action_percentage = action_percentage
 
@@ -172,6 +181,9 @@ class Character(GameObject):
         self.get_character_inventory().remove_item(equipment_name)
         self.get_character_equipment().equip(equipment)
         logger.debug(f"Character equipped {equipment.get_name()}")
+        # get_world_notification_manager().publish(
+        #     WorldNotificationType.CHARACTER.CHANGE_INFO, self.get_id()
+        # )
 
     def get_character_inventory(self):
         return self.character_inventory
@@ -433,13 +445,10 @@ class Character(GameObject):
         return self.get_character_action().__class__.__name__
 
     def get_action_percentage_visualization(self):
-        filled_blocks = int((1 - self.action_percentage) * 20)
-        # TODO: empty space " " is not equal width with "█", make it weird
-        empty_blocks = int((20 - filled_blocks) * 3 / 2)
-
-        # Create the bar
-        bar = "█" * filled_blocks + " " * empty_blocks
-        return f"[{bar}]"
+        progress_string = convert_to_progress_string(
+            percentage=(1 - self.action_percentage), block_length=20
+        )
+        return progress_string
 
     def get_exp_visualization(self):
         return self.get_level().get_exp_visualization()
@@ -450,7 +459,7 @@ class Character(GameObject):
             f"Action: {self.get_action_percentage_visualization()} | "
             f"{self.get_info()} LVL {self.get_current_level()} {self.get_exp_visualization()} | "
             f"Power: {self.get_power()} ({self.get_max_power()}) | "
-            f"{self.get_character_stat().get_health_visualization()} | "
+            f"HP: {self.get_character_stat().get_health_visualization()} {self.get_character_stat().get_stat_value(StatDefinition.MAX_HEALTH)} | "
             f"{self.get_character_attributes()} | "
             f"Goal: {self.get_current_goal().get_name() if self.character_goal.has_goal() else ''} | "
             f"{self.get_character_equipment()} | "

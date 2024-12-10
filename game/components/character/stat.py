@@ -57,6 +57,11 @@ class NumericalStat(Stat):
         elif other.numerical_type is NumericalStat.NumericalType.PERCENTAGE:
             self.value += self.value * other.value
 
+    def clone(self):
+        return NumericalStat(
+            self.value, **{NumericalStat.numerical_type_key: self.numerical_type}
+        )
+
 
 class CategoricalStat(Stat):
     pass

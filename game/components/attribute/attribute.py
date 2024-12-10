@@ -2,6 +2,7 @@ from enum import Enum
 
 from components.character.character_stat import CharacterStat, StatDefinition
 from components.character.stat import NumericalStat
+from components.utils.visualization_converter import convert_to_progress_string
 
 from data.logs.logger import logger
 
@@ -57,14 +58,11 @@ class Attribute:
         return f"{self.get_proficiency_visualization()} {self.value} ({self.cap})"
 
     def get_proficiency_visualization(self):
-        filled_blocks = int(
-            (self.current_proficiency * 100 / self.get_next_level_proficiency()) // 10
+        progress_string = convert_to_progress_string(
+            percentage=(self.current_proficiency / self.get_next_level_proficiency()),
+            block_length=10,
         )
-        empty_blocks = 10 - filled_blocks
-
-        # Create the bar
-        bar = "█" * filled_blocks + " " * empty_blocks
-        return f"[{bar}]"
+        return progress_string
 
     def __str__(self):
         return f"{self.__class__.get_display_name()} {self.get_info()}"
