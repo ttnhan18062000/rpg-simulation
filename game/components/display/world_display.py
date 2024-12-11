@@ -1,6 +1,7 @@
 import pygame
 import time
 
+from components.common.point import Point
 from components.display.drawer import Drawer
 from components.configuration.display_setting import DisplaySetting
 from components.world.store import get_store, EntityType
@@ -36,6 +37,7 @@ class WorldDisplay:
         display_setting: DisplaySetting,
         offset,
         is_display_changed: bool,
+        focusing_character,
     ):
         store = get_store()
         if is_display_changed:
@@ -54,6 +56,21 @@ class WorldDisplay:
 
         start_x = offset_x // cell_size * cell_size
         start_y = offset_y // cell_size * cell_size
+
+        # If focusing a character, apply their vision
+        visible_tile_ids = []
+        memory_tile_ids = []
+        if focusing_character:
+            visible_tile_ids = [
+                tile.get_id() for tile in focusing_character.get_visible_tiles()
+            ]
+            memory_tile_ids = [
+                memory_tile.get_tile().get_id()
+                for memory_tile in focusing_character.get_memory().get_all(
+                    EntityType.TILE, focusing_character.get_location()
+                )
+            ]
+
         for x in range(start_x, start_x + main_screen_width + cell_size, cell_size):
             for y in range(
                 start_y, start_y + main_screen_height + cell_size, cell_size
@@ -66,16 +83,60 @@ class WorldDisplay:
                 ):
                     tile = store.get(EntityType.TILE, grid.tiles[cell_x][cell_y])
                     if is_display_changed or tile.should_redraw():
-                        cell_image = tile.get_image()
-                        if tile.is_combat_happen():
-                            cell_image = pygame.image.load("data/sprites/combat.png")
+                        # TODO: Need refactoring
+                        if not focusing_character:
+                            cell_image = tile.get_image()
+                            if tile.is_combat_happen():
+                                cell_image = pygame.image.load(
+                                    "data/sprites/combat.png"
+                                )
+                            else:
+                                tile.reset_redraw_status()
+                            cell_image = pygame.transform.scale(
+                                cell_image, (cell_size, cell_size)
+                            )
+                            # Draw cell image at position
+                            self.main_surface.blit(
+                                cell_image, (x - offset_x, y - offset_y)
+                            )
                         else:
-                            tile.reset_redraw_status()
-                        cell_image = pygame.transform.scale(
-                            cell_image, (cell_size, cell_size)
-                        )
-                        # Draw cell image at position
-                        self.main_surface.blit(cell_image, (x - offset_x, y - offset_y))
+                            # TODO: need refactoring, current a MESS
+                            if (
+                                tile.get_id() in visible_tile_ids
+                                or Point(cell_x, cell_y) == focusing_character.get_pos()
+                                or tile.get_id() in memory_tile_ids
+                            ):
+                                cell_image = tile.get_image()
+                                if tile.is_combat_happen():
+                                    cell_image = pygame.image.load(
+                                        "data/sprites/combat.png"
+                                    )
+                                else:
+                                    tile.reset_redraw_status()
+                                cell_image = pygame.transform.scale(
+                                    cell_image, (cell_size, cell_size)
+                                )
+                                # Draw cell image at position
+                                self.main_surface.blit(
+                                    cell_image, (x - offset_x, y - offset_y)
+                                )
+
+                                if (
+                                    tile.get_id() not in visible_tile_ids
+                                    and Point(cell_x, cell_y)
+                                    != focusing_character.get_pos()
+                                ):
+                                    # Create the dark filter
+                                    dark_filter = pygame.Surface(
+                                        (
+                                            cell_image.get_width(),
+                                            cell_image.get_height(),
+                                        )
+                                    )
+                                    dark_filter.fill((0, 0, 0))  # Black color
+                                    dark_filter.set_alpha(
+                                        128
+                                    )  # Set transparency (0-255)
 
         # Draw character icons on top of cells
         all_characters = store.get_all(EntityType.CHARACTER)

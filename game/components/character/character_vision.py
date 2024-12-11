@@ -9,6 +9,7 @@ class CharacterVision:
     def set_range(self, range: int):
         self.range = range
 
+    # TODO: This LIED, it get visible location instead of tile object
     def get_visible_tiles(self, current_pos: Point):
         store = get_store()
         grid = store.get(EntityType.GRID, 0)

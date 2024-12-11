@@ -110,6 +110,9 @@ class Character(GameObject):
     def get_vision(self):
         return self.character_vision
 
+    def get_visible_tiles(self):
+        return self.character_vision.get_visible_tiles(self.get_pos())
+
     def get_faction(self):
         return self.character_class.__class__.__name__
 

@@ -68,7 +68,7 @@ class Action:
 
         character.get_memory().reset()
         store = get_store()
-        visible_points = character.get_vision().get_visible_tiles(character.pos)
+        visible_points = character.get_visible_tiles()
         for point in visible_points:
             tile_id = store.get(EntityType.GRID, 0).get_tile(point)
             tile = store.get(EntityType.TILE, tile_id)

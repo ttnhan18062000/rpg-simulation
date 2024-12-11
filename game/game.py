@@ -115,6 +115,7 @@ class Game:
                 self.control_event_handler.get_offset_y(),
             ),
             self.is_display_changed,
+            self.world.get_focusing_character(),
         )
 
         self.character_info_display.draw(

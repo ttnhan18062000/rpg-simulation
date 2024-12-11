@@ -6,6 +6,7 @@ from components.item.equipment import DamagedAncientArmor, DamagedAncientSword
 
 
 # TODO: Change to class-level properties instead, to make it more efficient
+# TODO: WHERE TF IS THE TILE's LOCATION POINT PROPERTY
 class Tile:
     id_counter = 1
     image = None
