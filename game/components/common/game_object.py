@@ -10,3 +10,6 @@ class GameObject:
 
     def draw(self, screen: Surface):
         pass
+
+    def get_pos(self):
+        return self.pos

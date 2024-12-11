@@ -1,5 +1,5 @@
 class CharacterInfo:
-    id_counter = 0
+    id_counter = 1
 
     def __init__(self, name) -> None:
         self.id = CharacterInfo.id_counter

@@ -30,7 +30,8 @@ class World:
         self.char_speed_multiplier = 1
         self.tracking_info_characters = {}
         self.tracking_info_character_factions = [Human.get_name(), Demon.get_name()]
-        self.focus_on_character = None
+        self.focusing_character_id = None
+        self.just_select_focusing_character = None
         # self.subscribe_to_world_notification()
 
     # TODO: Can be optimized further
@@ -70,12 +71,45 @@ class World:
     #     self.character_info_display.set_should_redraw(True)
 
     def update_tracking_characters_status(self):
+        is_changed = False
         new_tracking_info_characters = {
             cid: character
             for cid, character in self.tracking_info_characters.items()
             if character.is_alive()
         }
+        if set(self.tracking_info_characters.keys()) != set(
+            new_tracking_info_characters.keys()
+        ):
+            is_changed = True
         self.tracking_info_characters = new_tracking_info_characters
+        return is_changed
+
+    def update_focusing_character_status(self):
+        if self.focusing_character_id:
+            focusing_character = get_store().get(
+                EntityType.CHARACTER, self.focusing_character_id
+            )
+            if not focusing_character.is_alive():
+                self.focusing_character_id = None
+
+    def update_focusing_character_id(self, character_id):
+        if self.focusing_character_id != character_id:
+            self.just_select_focusing_character = True
+        self.focusing_character_id = character_id
+
+    def get_focusing_character_id(self):
+        return self.focusing_character_id
+
+    def get_focusing_character(self):
+        if self.focusing_character_id:
+            return get_store().get(EntityType.CHARACTER, self.focusing_character_id)
+        return None
+
+    def is_just_select_focusing_character(self):
+        return self.just_select_focusing_character
+
+    def set_already_focused_on_character(self):
+        self.just_select_focusing_character = False
 
     def update(self):
         store = get_store()

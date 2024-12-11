@@ -45,10 +45,13 @@ class WorldDisplay:
         # Draw grid cells
         cell_size = display_setting.cell_size
         grid = store.get(EntityType.GRID, 0)
-        # Draw only screen tiles
-        offset_x, offset_y = offset
+
         cell_size = display_setting.cell_size
         main_screen_width, main_screen_height = display_setting.main_screen_size
+
+        # Draw only screen tiles
+        offset_x, offset_y = offset
+
         start_x = offset_x // cell_size * cell_size
         start_y = offset_y // cell_size * cell_size
         for x in range(start_x, start_x + main_screen_width + cell_size, cell_size):
