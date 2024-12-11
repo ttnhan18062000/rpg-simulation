@@ -110,6 +110,12 @@ class Character(GameObject):
     def get_vision(self):
         return self.character_vision
 
+    def get_visible_tiles(self):
+        return self.character_vision.get_visible_tiles(self.get_pos())
+
+    def get_visible_tile_objects(self):
+        return self.character_vision.get_visible_tile_objects(self.get_pos())
+
     def get_faction(self):
         return self.character_class.__class__.__name__
 
@@ -312,8 +318,20 @@ class Character(GameObject):
         self.set_character_action(BasicCharacterAction())
         self.set_redraw_status(True)
 
-    def get_last_action_result(self):
-        return self.get_character_action().get_last_action_result()
+    def get_last_action_results(self):
+        return self.get_character_action().get_last_action_results()
+
+    def add_last_action_result(self, action_result: ActionResult):
+        self.get_character_action().add_last_action_result(action_result)
+
+    def is_just_act(self, action_result: ActionResult):
+        last_action_results = self.get_character_action().get_last_action_results()
+        if last_action_results:
+            return action_result in last_action_results
+        return None
+
+    def is_just_moved(self):
+        return self.is_just_act(ActionResult.MOVED_INTO_NEW_TILE)
 
     def do_action(self):
         is_just_changed_location = self.get_character_action().do_action(self)
@@ -344,7 +362,7 @@ class Character(GameObject):
                         self.get_faction(), self.get_info().id
                     )
                     self.enter_combat(combat_event_id)
-                    return False, ActionResult.JOIN_COMBAT
+                    return False, [ActionResult.JOIN_COMBAT]
 
         # Enter a tile with other characters standing on it, may cause a combat event happen
         all_characters = [
@@ -379,7 +397,7 @@ class Character(GameObject):
 
                 store.add(EntityType.EVENT, new_combat_event_id, new_combat_event)
 
-                return False, ActionResult.START_COMBAT
+                return False, [ActionResult.START_COMBAT]
 
         # Enter a collectable_items tile, and current goal is collect items, match the target items
         # => Change to FindItemCharacterAction
@@ -407,7 +425,7 @@ class Character(GameObject):
                     # TODO: Think about the better approach to end the FindItemCharacterAction action
                     self.set_character_action(BasicCharacterAction())
 
-        return True, None
+        return True, []
 
     def on_character_attribute_changed(self):
         # self.get_character_stat().apply_character_attributes(

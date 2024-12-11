@@ -1,6 +1,7 @@
 import pygame
 import sys
 import json
+import time
 import argparse
 
 sys.path.append("..")
@@ -49,6 +50,10 @@ class Game:
 
         self.world_display = WorldDisplay(self.display_setting)
         self.character_info_display = CharacterInfoDisplay(self.display_setting)
+
+        # TODO: Later optimization and refactoring
+        self.max_refresh_per_second = 120
+        self.last_refresh = time.perf_counter()
 
     def initialize_game(self):
         pygame.init()
@@ -106,16 +111,13 @@ class Game:
             self.font,
             self.display_setting,
             (
-                self.control_event_handler.offset_x,
-                self.control_event_handler.offset_y,
+                self.control_event_handler.get_offset_x(),
+                self.control_event_handler.get_offset_y(),
             ),
             self.is_display_changed,
+            self.world.get_focusing_character(),
         )
-        if self.control_event_handler.selected_tile_pos:
-            self.world.update_tracking_characters_with_tile_pos(
-                self.control_event_handler.selected_tile_pos
-            )
-        self.world.update_tracking_characters_status()
+
         self.character_info_display.draw(
             self.surface,
             self.info_font,
@@ -124,6 +126,49 @@ class Game:
         )
 
         self.is_display_changed = False
+
+    def update_information_based_on_event(self):
+        selected_tile_pos = self.control_event_handler.get_selected_tile_pos()
+        if selected_tile_pos:
+            self.world.update_tracking_characters_with_tile_pos(selected_tile_pos)
+
+        selected_character_info_id = (
+            self.control_event_handler.get_selected_character_info_id()
+        )
+        self.character_info_display.set_focusing_character_info_id(
+            selected_character_info_id
+        )
+
+        # Allow to set selected_character_info_id to None, to exist the focusing mode
+        self.world.update_focusing_character_id(selected_character_info_id)
+
+    # TODO: Need refactoring, currently a mess
+    def update_display_information(self):
+        is_changed = self.world.update_tracking_characters_status()
+        if is_changed:
+            self.character_info_display.refresh_character_info_surfaces()
+
+        self.world.update_focusing_character_status()
+
+        if self.world.is_just_select_focusing_character():
+            self.is_display_changed = True
+        # If is in focusing specific character mode
+        # set the offset to keep character in the center
+        selected_character = self.world.get_focusing_character()
+        if selected_character and (
+            self.world.is_just_select_focusing_character()
+            or selected_character.is_just_moved()
+        ):
+            self.world.set_already_focused_on_character()
+            cell_size = self.display_setting.cell_size
+            main_screen_width, main_screen_height = (
+                self.display_setting.main_screen_size
+            )
+            character_pos = selected_character.get_pos()
+            offset_x = int(character_pos.x * cell_size - main_screen_width / 2)
+            offset_y = int(character_pos.y * cell_size - main_screen_height / 2)
+            self.control_event_handler.update_offset(offset_x, offset_y)
+            self.is_display_changed = True
 
     def update(self):
         self.monitor.check()
@@ -147,6 +192,13 @@ class Game:
                         self.is_display_changed = True
                     else:
                         self.is_display_changed = False
+
+            if self.last_refresh <= time.perf_counter():
+                self.last_refresh = (
+                    time.perf_counter() + 1 / self.max_refresh_per_second
+                )
+                self.update_information_based_on_event()
+                self.update_display_information()
 
             self.update()
 

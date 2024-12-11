@@ -57,31 +57,39 @@ class CharacterMemory:
         ]
 
     # TODO: Better management for temporary and permanent memories
-    def get_all_sorted_distant(self, entity_type: EntityType, target_point: Point):
+    def get_all(
+        self, entity_type: EntityType, target_point: Point, is_sorted_distance=True
+    ):
         if entity_type is EntityType.TILE:
             unsorted_memories = [
                 obj
                 for key, obj in self.permanent_memories.items()
                 if key.startswith(f"{entity_type.value}")
             ]
-            return sorted(
-                unsorted_memories,
-                key=lambda memory: Point.get_distance_man(
-                    memory.get_location(), target_point
-                ),
-            )
+            if is_sorted_distance:
+                return sorted(
+                    unsorted_memories,
+                    key=lambda memory: Point.get_distance_man(
+                        memory.get_location(), target_point
+                    ),
+                )
+            else:
+                return unsorted_memories
         else:
             unsorted_memories = [
                 obj
                 for key, obj in self.temporary_memories.items()
                 if key.startswith(f"{entity_type.value}")
             ]
-            return sorted(
-                unsorted_memories,
-                key=lambda memory: Point.get_distance_man(
-                    memory.get_location(), target_point
-                ),
-            )
+            if is_sorted_distance:
+                return sorted(
+                    unsorted_memories,
+                    key=lambda memory: Point.get_distance_man(
+                        memory.get_location(), target_point
+                    ),
+                )
+            else:
+                return unsorted_memories
 
     def reset(self):
         self.temporary_memories = {}

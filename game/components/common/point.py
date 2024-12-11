@@ -27,6 +27,16 @@ class Point:
     def __str__(self) -> str:
         return f"({self.x},{self.y})"
 
+    def __eq__(self, other):
+        if isinstance(other, Point):
+            return self.x == other.x and self.y == other.y
+        return False
+
+    def __ne__(self, other):
+        if isinstance(other, Point):
+            return not self.__eq__(other)
+        return True
+
     def reverse(self):
         self.x = -self.x
         self.y = -self.y

@@ -35,6 +35,7 @@ class ActionResult(Enum):
     FAIL_FIND_ITEM = 6
     TRAINED = 7
     HIT_ENEMY = 8
+    MOVED_INTO_NEW_TILE = 9
 
 
 class Action:
@@ -67,7 +68,7 @@ class Action:
 
         character.get_memory().reset()
         store = get_store()
-        visible_points = character.get_vision().get_visible_tiles(character.pos)
+        visible_points = character.get_visible_tiles()
         for point in visible_points:
             tile_id = store.get(EntityType.GRID, 0).get_tile(point)
             tile = store.get(EntityType.TILE, tile_id)
@@ -141,7 +142,12 @@ class Move(Action):
         # Increase proficiency
         character.gain_proficiency(Agility.get_name(), 10)
 
-        return character.on_moving_into_new_tile(new_tile)
+        is_changed_location, action_results = character.on_moving_into_new_tile(
+            new_tile
+        )
+        action_results.append(ActionResult.MOVED_INTO_NEW_TILE)
+
+        return is_changed_location, action_results
 
 
 class Search(Action):
@@ -162,10 +168,10 @@ class Search(Action):
             )
             character.add_item(received_item)
             logger.debug(f"{character.get_info()} collected {received_item.get_name()}")
-            return True, ActionResult.SUCCESS_FIND_ITEM
+            return True, [ActionResult.SUCCESS_FIND_ITEM]
 
         logger.debug(f"{character.get_info()} Search failed")
-        return False, ActionResult.FAIL_FIND_ITEM
+        return False, [ActionResult.FAIL_FIND_ITEM]
 
 
 class Interact(Action):
@@ -188,7 +194,7 @@ class Train(Action):
         character.gain_proficiency(Strength.get_name(), 10)
         character.gain_proficiency(Endurance.get_name(), 5)
         character.gain_proficiency(Agility.get_name(), 5)
-        return False, ActionResult.TRAINED
+        return False, [ActionResult.TRAINED]
 
 
 class Standby(Action):
@@ -196,7 +202,7 @@ class Standby(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        return False, None
+        return False, []
 
 
 class Fight(Action):
@@ -215,10 +221,6 @@ class Fight(Action):
         # TODO: smarter target selection
         target_character_id = random.choice(target_character_ids)
         target_character = store.get(EntityType.CHARACTER, target_character_id)
-        target_character.character_stats.update_stat(
-            StatDefinition.CURRENT_HEALTH,
-            -character.character_stats.get_stat(StatDefinition.POWER).value,
-        )
         character_power = character.character_stats.get_stat_value(StatDefinition.POWER)
         target_character_defense = target_character.character_stats.get_stat_value(
             StatDefinition.DEFENSE
@@ -226,6 +228,10 @@ class Fight(Action):
         damage_dealt = get_final_damage_output(
             source_power=character_power,
             target_defense=target_character_defense,
+        )
+        target_character.character_stats.update_stat(
+            StatDefinition.CURRENT_HEALTH,
+            -damage_dealt,
         )
         target_character_remaining_health = target_character.character_stats.get_stat(
             StatDefinition.CURRENT_HEALTH
@@ -245,7 +251,7 @@ class Fight(Action):
 
         # There is a twist, if the combat is over, the combat_event will reset the redraw status (True)
         # but if we return True here, it will be replaced and not drawing the character
-        return character.should_redraw(), ActionResult.HIT_ENEMY
+        return character.should_redraw(), [ActionResult.HIT_ENEMY]
 
 
 class Escape(Action):
@@ -276,11 +282,12 @@ class Escape(Action):
 
             character.exit_combat()
 
-            Move.do_action(
-                character, **{"action_result": ActionResult.SUCCESS_ESCAPE_COMBAT}
-            )
+            Move.do_action(character)
 
-            return True, ActionResult.SUCCESS_ESCAPE_COMBAT
+            return True, [
+                ActionResult.SUCCESS_ESCAPE_COMBAT,
+                ActionResult.MOVED_INTO_NEW_TILE,
+            ]
 
         logger.debug(f"{character.get_info()} escape failed")
-        return False, ActionResult.FAIL_ESCAPE_COMBAT
+        return False, [ActionResult.FAIL_ESCAPE_COMBAT]

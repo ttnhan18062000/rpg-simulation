@@ -1,5 +1,6 @@
 from components.common.point import Point
 from components.world.store import get_store, EntityType
+from components.utils.tile_utils import get_tile_objects
 
 
 class CharacterVision:
@@ -9,17 +10,37 @@ class CharacterVision:
     def set_range(self, range: int):
         self.range = range
 
+    # TODO: This LIED, it get visible location instead of tile object
     def get_visible_tiles(self, current_pos: Point):
         store = get_store()
         grid = store.get(EntityType.GRID, 0)
         tile_ids = grid.tiles
         obstacle_matrix = [
-            [store.get(EntityType.TILE, tile_id).is_obstacle() for tile_id in row]
+            [
+                1 if store.get(EntityType.TILE, tile_id).is_block_vision() else 0
+                for tile_id in row
+            ]
             for row in tile_ids
         ]
         return self.find_visible_points(
             obstacle_matrix, current_pos.x, current_pos.y, grid.width, grid.height
         )
+
+    def get_visible_tile_objects(self, current_pos: Point):
+        store = get_store()
+        grid = store.get(EntityType.GRID, 0)
+        tile_ids = grid.tiles
+        obstacle_matrix = [
+            [
+                1 if store.get(EntityType.TILE, tile_id).is_block_vision() else 0
+                for tile_id in row
+            ]
+            for row in tile_ids
+        ]
+        visible_points = self.find_visible_points(
+            obstacle_matrix, current_pos.x, current_pos.y, grid.width, grid.height
+        )
+        return get_tile_objects(visible_points)
 
     def find_visible_points(self, obstacle_matrix, x, y, width, height):
         d = self.range

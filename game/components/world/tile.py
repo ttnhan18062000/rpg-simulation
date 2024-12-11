@@ -6,6 +6,7 @@ from components.item.equipment import DamagedAncientArmor, DamagedAncientSword
 
 
 # TODO: Change to class-level properties instead, to make it more efficient
+# TODO: WHERE TF IS THE TILE's LOCATION POINT PROPERTY
 class Tile:
     id_counter = 1
     image = None
@@ -31,6 +32,9 @@ class Tile:
         return self.id
 
     def is_obstacle(self):
+        return False
+
+    def is_block_vision(self):
         return False
 
     def is_combat_happen(self):
@@ -139,7 +143,7 @@ class VillageTile(Tile):
         super().__init__()
 
     def is_obstacle(self):
-        return True
+        return False
 
 
 class TownTile(Tile):

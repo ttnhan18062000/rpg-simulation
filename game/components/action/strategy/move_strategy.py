@@ -59,8 +59,8 @@ class ThinkingMove(MoveStrategy):
                 )
                 # TODO: Better strategy for reaching the collectable tiles
                 # Currently, When there is no collectable tiles in the memory, Human -> go left, Demon -> go right
-                tiles_in_memory = character.get_memory().get_all_sorted_distant(
-                    EntityType.TILE, character.get_location()
+                tiles_in_memory = character.get_memory().get_all(
+                    EntityType.TILE, character.get_location(), is_sorted_distance=True
                 )
                 for memory_tile in tiles_in_memory:
                     tile = memory_tile.get_tile()
@@ -81,8 +81,8 @@ class ThinkingMove(MoveStrategy):
                         )
 
         # Join nearby combat of own faction if favorable
-        events_in_memory = character.get_memory().get_all_sorted_distant(
-            EntityType.EVENT, character.get_location()
+        events_in_memory = character.get_memory().get_all(
+            EntityType.EVENT, character.get_location(), is_sorted_distance=True
         )
         for memory_event in events_in_memory:
             if memory_event.get_event_type() is EventType.COMBAT:
@@ -101,8 +101,8 @@ class ThinkingMove(MoveStrategy):
                     )
 
         # Chase or escape nearby enemies
-        characters_in_memory = character.get_memory().get_all_sorted_distant(
-            EntityType.CHARACTER, character.get_location()
+        characters_in_memory = character.get_memory().get_all(
+            EntityType.CHARACTER, character.get_location(), is_sorted_distance=True
         )
         for memory_character in characters_in_memory:
             if character.is_hostile_with(memory_character.get_faction()):
@@ -143,8 +143,8 @@ class AgressiveMobMove(MoveStrategy):
     @classmethod
     def get_next_move(cls, character):
         # Join nearby combat of own faction if favorable
-        events_in_memory = character.get_memory().get_all_sorted_distant(
-            EntityType.EVENT, character.get_location()
+        events_in_memory = character.get_memory().get_all(
+            EntityType.EVENT, character.get_location(), is_sorted_distance=True
         )
         for memory_event in events_in_memory:
             if memory_event.get_event_type() is EventType.COMBAT:
@@ -163,8 +163,8 @@ class AgressiveMobMove(MoveStrategy):
                 )
 
         # Chase or escape nearby enemies
-        characters_in_memory = character.get_memory().get_all_sorted_distant(
-            EntityType.CHARACTER, character.get_location()
+        characters_in_memory = character.get_memory().get_all(
+            EntityType.CHARACTER, character.get_location(), is_sorted_distance=True
         )
         for memory_character in characters_in_memory:
             if character.is_hostile_with(memory_character.get_faction()):
@@ -190,8 +190,8 @@ class AgressiveMobMove(MoveStrategy):
 class PassiveMobMove(MoveStrategy):
     @classmethod
     def get_next_move(cls, character):
-        characters_in_memory = character.get_memory().get_all_sorted_distant(
-            EntityType.CHARACTER, character.get_location()
+        characters_in_memory = character.get_memory().get_all(
+            EntityType.CHARACTER, character.get_location(), is_sorted_distance=True
         )
         for memory_character in characters_in_memory:
             if not character.is_ally_with(memory_character.get_faction()):

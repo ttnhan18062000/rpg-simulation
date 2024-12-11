@@ -17,7 +17,20 @@ class ControlEventHandler:
         self.drag_start_pos = (0, 0)
         self.offset_x = 0
         self.offset_y = 0
+
         self.selected_tile_pos = None
+        self.selected_surface = None
+        self.selected_character_info_id = None
+
+    def update_offset(self, offset_x, offset_y):
+        self.offset_x = offset_x
+        self.offset_y = offset_y
+
+    def get_offset_x(self):
+        return self.offset_x
+
+    def get_offset_y(self):
+        return self.offset_y
 
     # TODO: Move to the other module
     def calculate_distance(self, start_pos, end_pos):
@@ -34,9 +47,17 @@ class ControlEventHandler:
 
             # Check if the mouse click is within the child surface's rectangle
             if child_rect.collidepoint(mouse_pos):
-                print(f"11111111111111111 {surface_id}")
                 return surface_id
         return None
+
+    def set_selected_character_info_id(self, new_selected_character_info_id):
+        self.selected_character_info_id = new_selected_character_info_id
+
+    def get_selected_tile_pos(self):
+        return self.selected_tile_pos
+
+    def get_selected_character_info_id(self):
+        return self.selected_character_info_id
 
     # TODO: Refactor to Point instance instead of x, y
     def handle(
@@ -54,16 +75,23 @@ class ControlEventHandler:
                 self.drag_start_pos = event.pos
                 return True
             elif event.button == 1:  # Left mouse button (for cell click, no drag)
-                self.get_clicked_child_surface(
+                surface_id = self.get_clicked_child_surface(
                     event.pos, surface_dict, surface_pos_dict
                 )
-                mouse_x, mouse_y = event.pos
-                self.selected_tile_pos = Point(
-                    (self.offset_x + mouse_x) // display_setting.cell_size,
-                    (self.offset_y + mouse_y) // display_setting.cell_size,
-                )
-                logger.debug(f"Clicked at TILE {self.selected_tile_pos}")
-                return False
+                self.selected_surface = surface_id
+                if surface_id == "world_surface":
+                    mouse_x, mouse_y = event.pos
+                    self.selected_tile_pos = Point(
+                        (self.offset_x + mouse_x) // display_setting.cell_size,
+                        (self.offset_y + mouse_y) // display_setting.cell_size,
+                    )
+                elif surface_id:
+                    if surface_id == self.selected_character_info_id:
+                        # Unselect the character by left-click into it again
+                        self.selected_character_info_id = None
+                    else:
+                        self.selected_character_info_id = surface_id
+                logger.debug(f"Clicked on surface {self.selected_character_info_id}")
             elif event.button == 4:  # Scroll up for zoom in
                 new_cell_size = min(
                     display_setting.cell_size + 5, display_setting.max_cell_size

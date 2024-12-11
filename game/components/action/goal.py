@@ -167,7 +167,8 @@ class FindingItemGoal(Goal):
 
     # TODO: Later change to find the specific items
     def is_complete(self, character):
-        if character.get_last_action_result() is ActionResult.SUCCESS_FIND_ITEM:
+
+        if character.is_just_act(ActionResult.SUCCESS_FIND_ITEM):
             recently_collected_item_names = (
                 character.get_recently_added_inventory_item_names()
             )

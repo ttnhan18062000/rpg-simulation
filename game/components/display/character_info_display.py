@@ -17,6 +17,12 @@ class CharacterInfoDisplay:
         self.init_main_surface(display_setting)
         self.text_color = (0, 0, 0)
         self.main_surface_pos = (640, 0)
+        self.focusing_character_id = None
+
+    def refresh_character_info_surfaces(self):
+        logger.debug("Refresh character info surfaces due to change")
+        self.character_info_surfaces = {}
+        self.focusing_character_id = None
 
     def init_main_surface(self, display_setting):
         self.main_surface = pygame.Surface(
@@ -56,6 +62,33 @@ class CharacterInfoDisplay:
         character_info_surfaces.fill((222, 222, 222))
         Drawer.render_text_box(character_info_surfaces, text, font, color)
         character_surface.blit(character_info_surfaces, (margin, margin))
+
+    def set_focusing_character_info_id(self, focusing_character_id):
+        if self.focusing_character_id != focusing_character_id:
+            self.draw_focusing_character_info_box(
+                self.focusing_character_id, is_focus=False
+            )
+            self.draw_focusing_character_info_box(focusing_character_id, is_focus=True)
+        self.focusing_character_id = focusing_character_id
+
+    # TODO: Need refactoring, avoid hard-code
+    def draw_focusing_character_info_box(self, focusing_character_id, is_focus=True):
+        if is_focus:
+            # Set forcusing character info box border
+            border_color = (255, 0, 0)  # red
+        else:
+            # Un-focus character info box border
+            border_color = (0, 0, 0)
+        if (
+            focusing_character_id
+            and focusing_character_id in self.character_info_surfaces
+        ):
+            pygame.draw.rect(
+                self.character_info_surfaces[focusing_character_id],
+                border_color,
+                self.character_info_surfaces[focusing_character_id].get_rect(),
+                5,
+            )
 
     # TODO: The bar need rollable when there are too many tracking characters
     def draw(

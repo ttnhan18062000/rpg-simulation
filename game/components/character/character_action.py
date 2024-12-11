@@ -37,15 +37,30 @@ class CharacterAction:
         self.actions = {}
         self.base_actions = {}
         self.kwargs = kwargs
-        self.last_action_result: ActionResult = None
+
+        # TODO: this is a workaround for a bug
+        # When character actively set the new character action (combat, find item)
+        # the last action result doesn't contain the move
+        last_action_results = kwargs.get("last_action_results", None)
+        if last_action_results:
+            last_action_results.append(ActionResult.MOVED_INTO_NEW_TILE)
+            self.last_action_results = last_action_results
+        else:
+            self.last_action_results: list = [ActionResult.MOVED_INTO_NEW_TILE]
 
     @classmethod
     def get_name(cls):
         return cls.__name__
 
     # TODO: Should we change this to character_action_management?
-    def get_last_action_result(self):
-        return self.last_action_result
+    def get_last_action_results(self):
+        return self.last_action_results
+
+    def add_last_action_result(self, action_result: ActionResult):
+        if self.last_action_results:
+            self.last_action_results.append(action_result)
+        else:
+            self.last_action_results = [action_result]
 
     def get_modified_actions(self, character):
         return self.actions
@@ -66,12 +81,12 @@ class CharacterAction:
 
     def do_action(self, character):
         next_action = self.get_next_action(character)
-        is_changed_location, last_action_result = next_action.execute(
+        is_changed_location, last_action_results = next_action.execute(
             character, **self.kwargs
         )
         self.on_action_done()
-        if last_action_result:
-            self.last_action_result = last_action_result
+        if last_action_results:
+            self.last_action_results = last_action_results
         return is_changed_location
 
     def on_action_done(self):
@@ -143,7 +158,7 @@ class CharacterAction:
 
 class BasicMobCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
-        super().__init__()
+        super().__init__(**kwargs)
         self.base_actions = {
             ActionType.MOVE: {"class": Move, "prob": 20},
             ActionType.STANDBY: {"class": Standby, "prob": 80},
@@ -152,12 +167,11 @@ class BasicMobCharacterAction(CharacterAction):
             ActionType.MOVE: {"class": Move, "prob": 20},
             ActionType.STANDBY: {"class": Standby, "prob": 80},
         }
-        self.kwargs = kwargs
 
 
 class BasicCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
-        super().__init__()
+        super().__init__(**kwargs)
         self.base_actions = {
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
@@ -166,12 +180,11 @@ class BasicCharacterAction(CharacterAction):
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
         }
-        self.kwargs = kwargs
 
 
 class CombatCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
-        super().__init__()
+        super().__init__(**kwargs)
         self.base_actions = {
             ActionType.FIGHT: {"class": Fight, "prob": 100},
             ActionType.ESCAPE: {"class": Escape, "prob": 0},
@@ -214,7 +227,7 @@ class CombatCharacterAction(CharacterAction):
 
 class FindItemCharacterAction(CharacterAction):
     def __init__(self, **kwargs) -> None:
-        super().__init__()
+        super().__init__(**kwargs)
         self.base_actions = {
             ActionType.MOVE: {"class": Move, "prob": 0},
             ActionType.SEARCH: {"class": Search, "prob": 100},
