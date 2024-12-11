@@ -150,6 +150,8 @@ class Game:
 
         self.world.update_focusing_character_status()
 
+        if self.world.is_just_select_focusing_character():
+            self.is_display_changed = True
         # If is in focusing specific character mode
         # set the offset to keep character in the center
         selected_character = self.world.get_focusing_character()

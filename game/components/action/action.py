@@ -221,10 +221,6 @@ class Fight(Action):
         # TODO: smarter target selection
         target_character_id = random.choice(target_character_ids)
         target_character = store.get(EntityType.CHARACTER, target_character_id)
-        target_character.character_stats.update_stat(
-            StatDefinition.CURRENT_HEALTH,
-            -character.character_stats.get_stat(StatDefinition.POWER).value,
-        )
         character_power = character.character_stats.get_stat_value(StatDefinition.POWER)
         target_character_defense = target_character.character_stats.get_stat_value(
             StatDefinition.DEFENSE
@@ -232,6 +228,10 @@ class Fight(Action):
         damage_dealt = get_final_damage_output(
             source_power=character_power,
             target_defense=target_character_defense,
+        )
+        target_character.character_stats.update_stat(
+            StatDefinition.CURRENT_HEALTH,
+            -damage_dealt,
         )
         target_character_remaining_health = target_character.character_stats.get_stat(
             StatDefinition.CURRENT_HEALTH

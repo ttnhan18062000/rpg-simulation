@@ -88,7 +88,7 @@ class HumanGenerator(CharacterGenerator):
             1,
         )
         new_human.set_character_action(BasicCharacterAction())
-        new_human.set_vision_range(15)
+        new_human.set_vision_range(7)
 
         new_human.add_item(SteelArmor())
         new_human.add_item(SteelSword())
@@ -130,7 +130,7 @@ class DemonGenerator(CharacterGenerator):
             1,
         )
         new_demon.set_character_action(BasicCharacterAction())
-        new_demon.set_vision_range(15)
+        new_demon.set_vision_range(7)
 
         new_demon.add_item(SteelArmor())
         new_demon.add_item(SteelSword())

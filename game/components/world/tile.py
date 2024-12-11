@@ -34,6 +34,9 @@ class Tile:
     def is_obstacle(self):
         return False
 
+    def is_block_vision(self):
+        return False
+
     def is_combat_happen(self):
         return self.is_combat
 
@@ -140,7 +143,7 @@ class VillageTile(Tile):
         super().__init__()
 
     def is_obstacle(self):
-        return True
+        return False
 
 
 class TownTile(Tile):
