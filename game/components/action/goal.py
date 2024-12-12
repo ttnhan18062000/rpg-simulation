@@ -1,3 +1,5 @@
+from enum import Enum
+
 from components.character.character_action import (
     ActionType,
     CharacterActionModifyReason,
@@ -38,6 +40,9 @@ class Goal:
     def __str__(self):
         return "Goal"
 
+    def update_with_goal(self, other_goal):
+        pass
+
 
 class TrainingGoal(Goal):
     # Keep training until reach a given level
@@ -61,7 +66,7 @@ class TrainingGoal(Goal):
 
     def apply_to_actions(self, character):
         character.get_character_action().modify_probabilities(
-            ActionType.TRAIN, 5, CharacterActionModifyReason.APPLY_GOAL
+            ActionType.TRAIN, 5, "multiply", CharacterActionModifyReason.APPLY_GOAL
         )
 
     def __str__(self):
@@ -104,7 +109,7 @@ class FightingGoal(Goal):
 
     def apply_to_actions(self, character):
         character.get_character_action().modify_probabilities(
-            ActionType.MOVE, 5, CharacterActionModifyReason.APPLY_GOAL
+            ActionType.MOVE, 5, "multiply", CharacterActionModifyReason.APPLY_GOAL
         )
 
     def __str__(self):
@@ -191,8 +196,79 @@ class FindingItemGoal(Goal):
 
     # def apply_to_actions(self, character):
     #     character.get_character_action().modify_probabilities(
-    #         ActionType.MOVE, 5, CharacterActionModifyReason.APPLY_GOAL
+    #         ActionType.MOVE, 5, "multiply", CharacterActionModifyReason.APPLY_GOAL
     #     )
 
-    # def __str__(self):
-    #     return f"{self.get_name()} for Level {self.target_level}"
+    def __str__(self):
+        return f"{self.get_name()} for Item {self.target_items}"
+
+
+class RecoveryGoal(Goal):
+    target_debuff_classes_key = "debuff"
+    target_health_ratio_key = "health_ratio"
+    # recovery_targets_key = "recovery_targets"
+
+    # class RecovertyTarget(Enum):
+    #     HEALTH = 1
+    #     DEBUFF = 2
+
+    # kwargs:
+    # {target_debuff_classes_key: [status_class.INJURY], target_health_ratio_key: 0.9}
+
+    # Keep recover until no longer has debuff or fully health
+    def __init__(self, **kwargs) -> None:
+        super().__init__()
+        # self.recovery_targets = kwargs.get(RecoveryGoal.recovery_targets_key)
+        self.target_debuff_classes = kwargs.get(
+            RecoveryGoal.target_debuff_classes_key, None
+        )
+        self.target_health_ratio = kwargs.get(
+            RecoveryGoal.target_health_ratio_key, None
+        )
+
+    def is_complete(self, character):
+        if self.target_debuff_classes:
+            for target_debuff_class in self.target_debuff_classes:
+                if character.get_character_status().has_status_class(
+                    target_debuff_class
+                ):
+                    return False
+        if self.target_health_ratio:
+            if (
+                character.get_character_stat().get_health_ratio()
+                < self.target_health_ratio
+            ):
+                return False
+        return True
+
+    def on_complete(self, character):
+        character.get_character_action().reset_probabilities(
+            CharacterActionModifyReason.APPLY_GOAL
+        )
+
+    def can_apply_to(self, character):
+        return character.get_character_action().has_action(ActionType.RECOVER)
+
+    def apply_to_actions(self, character):
+        character.get_character_action().modify_probabilities(
+            ActionType.RECOVER, 100, "fixed", CharacterActionModifyReason.APPLY_GOAL
+        )
+
+    def update_with_goal(self, other_goal):
+        # Add debuff classes not in the goal target
+        if other_goal.target_debuff_classes:
+            if not self.target_debuff_classes:
+                self.target_debuff_classes = []
+            for debuff_class in other_goal.target_debuff_classes:
+                if debuff_class not in self.target_debuff_classes:
+                    self.target_debuff_classes.append(debuff_class)
+
+        # Update the higher target health ratio
+        if other_goal.target_health_ratio:
+            if not self.target_health_ratio:
+                self.target_health_ratio = 0
+            if other_goal.target_health_ratio > self.target_health_ratio:
+                self.target_health_ratio = other_goal.target_health_ratio
+
+    def __str__(self):
+        return f"{self.get_name()} for Debuff {[dc.name for dc in self.target_debuff_classes]}, Health ratio {self.target_health_ratio}"

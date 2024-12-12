@@ -32,10 +32,7 @@ class CharacterStatus:
     def is_empty(self):
         return len(self.statuses) == 0
 
-    def change_duration(self, duration_value: int):
-        for status_name, status in self.get_statuses().items():
-            status.change_duration(duration_value)
-
+    def check_expired_statuses(self):
         # Remove expired status
         expired_statuses = {
             status_name: status
@@ -50,6 +47,23 @@ class CharacterStatus:
             for status_name, status in self.statuses.items()
             if not status.is_expired()
         }
+
+    def change_duration(self, duration_value: int):
+        for status_name, status in self.get_statuses().items():
+            if status.can_be_expired():
+                status.change_duration(duration_value)
+
+        self.check_expired_statuses()
+
+    def recover_debuff(self, duration_value: int):
+        for status_name, status in self.get_statuses().items():
+            if status.is_debuff() and status.can_be_recovered():
+                status.change_duration(duration_value)
+
+        self.check_expired_statuses()
+
+    def has_status_class(self, status_class):
+        return status_class in self.statuses
 
     def __str__(self):
         return " ".join([status.get_name() for status in self.statuses.values()])

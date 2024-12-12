@@ -159,22 +159,20 @@ class CombatEvent(Event):
 
     def get_hostile_power(self, faction):
         store = get_store()
-        other_factions = [f for f in self.character_faction_ids.keys() if f != faction]
+        target_character_ids = self.get_target_character_ids_of_faction(faction)
+        target_characters = [
+            store.get(EntityType.CHARACTER, cid) for cid in target_character_ids
+        ]
         sum_power = 0
-        # Calculate total power of factions, that hostile with the target faction
-        for other_faction in other_factions:
-            character_of_faction = store.get(
-                EntityType.CHARACTER, self.character_faction_ids[other_faction][0]
-            )
-            # TODO: create faction class that can get hostile faction directly
-            if character_of_faction.is_hostile_with(faction):
-                sum_power += self.get_total_power_by_faction(other_faction)
+        for target_character in target_characters:
+            sum_power += target_character.get_power()
         return sum_power
 
     def get_total_power_by_faction(self, faction):
         store = get_store()
         sum_power = 0
-        for cid in self.character_faction_ids[faction]:
+        character_ids = self.get_character_ids_with_faction(faction)
+        for cid in character_ids:
             power = store.get(
                 EntityType.CHARACTER,
                 cid,

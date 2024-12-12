@@ -7,6 +7,7 @@ from components.common.game_object import GameObject
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
 from components.action.strategy.base_strategy import BaseStrategy
 from components.action.action import ActionResult
+from components.action.goal import RecoveryGoal
 from components.world.tile import Tile
 from components.character.character_info import CharacterInfo
 from components.character.character_action_management import CharacterActionManagement
@@ -310,11 +311,35 @@ class Character(GameObject):
                 f"{self.get_info()} suffered from HeavyInjury after exit combat"
             )
             self.character_status.add_status(HeavyInjury(5))
+            # TODO: Later add more complexity or consider about refactoring
+            # TODO: NOT APPLY to mobs
+            self.add_goal(
+                1,
+                RecoveryGoal(
+                    **{
+                        RecoveryGoal.target_debuff_classes_key: [
+                            HeavyInjury.get_status_class()
+                        ],
+                        RecoveryGoal.target_health_ratio_key: 0.95,
+                    }
+                ),
+            )
         elif health_ratio < 0.5:
             logger.debug(
                 f"{self.get_info()} suffered from LightInjury after exit combat"
             )
             self.character_status.add_status(LightInjury(5))
+            self.add_goal(
+                1,
+                RecoveryGoal(
+                    **{
+                        RecoveryGoal.target_debuff_classes_key: [
+                            LightInjury.get_status_class()
+                        ],
+                        RecoveryGoal.target_health_ratio_key: 0.95,
+                    }
+                ),
+            )
         self.set_character_action(BasicCharacterAction())
         self.set_redraw_status(True)
 
@@ -339,7 +364,7 @@ class Character(GameObject):
         if self.is_just_changed_location == False:
             self.is_just_changed_location = is_just_changed_location
 
-        # Decrease all statuses' duration by one
+        # Decrease all statuses' duration by one, only for status that can be expired overtime
         self.character_status.change_duration(-1)
 
         # Check goal is done yet

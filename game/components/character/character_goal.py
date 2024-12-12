@@ -1,21 +1,14 @@
-from queue import PriorityQueue
 from enum import Enum
 
 from components.action.goal import Goal
+from components.common.priority_dict import PriorityDict
 
 from data.logs.logger import logger
 
 
-class GoalPriorityQueue(PriorityQueue):
+class GoalPriorityDict:
     def __init__(self):
-        super().__init__()
-        # self.lowest_priority = float("inf")  # Start with the highest possible value
-        self.lowest_priority = 1000
-
-    def put_with_highest_priority(self, item):
-        # Add the new item with a priority smaller than the current smallest
-        self.lowest_priority -= 1
-        self.put((self.lowest_priority, item))
+        self.dict = {}
 
 
 class CharacterGoalStatus(Enum):
@@ -26,17 +19,27 @@ class CharacterGoalStatus(Enum):
 
 class CharacterGoal:
     def __init__(self) -> None:
-        self.goals = GoalPriorityQueue()
+        self.goals = PriorityDict()
         self.current_goal: Goal = None
         self.current_apply_status: CharacterGoalStatus = CharacterGoalStatus.NOTHING
 
     def add(self, priority: int, goal: Goal):
-        self.goals.put_with_highest_priority(goal)
-        self.load_current_goal()
-        logger.debug(f"Added new goal {goal}")
+        goal_name = goal.get_name()
+        existing_duplicated_goal = None
+        if self.goals.has(goal_name):
+            existing_duplicated_goal = self.goals.get(goal_name)
+        if self.current_goal and self.current_goal.get_name() == goal_name:
+            existing_duplicated_goal = self.current_goal
+        if existing_duplicated_goal:
+            existing_duplicated_goal.update_with_goal(goal)
+            logger.debug(f"Updated existing goal {existing_duplicated_goal}")
+        else:
+            self.goals.set_with_highest_priority(goal.get_name(), goal)
+            self.load_current_goal()
+            logger.debug(f"Added new goal {goal}")
 
     def get(self):
-        return self.goals.get()
+        return self.goals.get_highest_priority()
 
     def get_current_apply_status(self):
         return self.current_apply_status

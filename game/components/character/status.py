@@ -34,6 +34,8 @@ class Status:
     type: StatusType = None
     categories = []
     img = None
+    expirable = True
+    recoverable = True
 
     def __init__(self, duration: int) -> None:
         self.duration = duration
@@ -67,12 +69,28 @@ class Status:
         return cls.type
 
     @classmethod
+    def is_buff(cls):
+        return cls.type == StatusType.BUFF
+
+    @classmethod
+    def is_debuff(cls):
+        return cls.type == StatusType.DEBUFF
+
+    @classmethod
     def get_categories(cls):
         return cls.categories
 
     @classmethod
     def is_stat_effect_status(cls):
         return StatusCategory.STAT_AFFECT in cls.get_categories()
+
+    @classmethod
+    def can_be_expired(cls):
+        return cls.expirable
+
+    @classmethod
+    def can_be_recovered(cls):
+        return cls.recoverable
 
     def change_duration(self, delta_duration: int):
         self.duration += delta_duration
@@ -108,6 +126,8 @@ class LightInjury(Status):
     }
     type = StatusType.DEBUFF
     categories = [StatusCategory.STAT_AFFECT]
+    expirable = False
+    recoverable = True
 
     def __init__(self, duration: int) -> None:
         super().__init__(duration)
@@ -134,6 +154,8 @@ class HeavyInjury(Status):
     }
     type = StatusType.DEBUFF
     categories = [StatusCategory.STAT_AFFECT]
+    expirable = False
+    recoverable = True
 
     def __init__(self, duration: int) -> None:
         super().__init__(duration)
@@ -153,6 +175,8 @@ class TownTileBuff(Status):
     }
     type = StatusType.BUFF
     categories = [StatusCategory.STAT_AFFECT]
+    expirable = True
+    recoverable = True
 
     def __init__(self, duration: int) -> None:
         super().__init__(duration)
@@ -172,6 +196,8 @@ class GroundTileBuff(Status):
     }
     type = StatusType.BUFF
     categories = [StatusCategory.STAT_AFFECT]
+    expirable = True
+    recoverable = True
 
     def __init__(self, duration: int) -> None:
         super().__init__(duration)
