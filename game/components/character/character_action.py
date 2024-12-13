@@ -10,6 +10,7 @@ from components.action.action import (
     Fight,
     Escape,
     Search,
+    Recover,
     ActionResult,
 )
 from components.character.character_behavior import FightingBehavior
@@ -26,6 +27,7 @@ class ActionType(Enum):
     FIGHT = 5
     ESCAPE = 6
     SEARCH = 7
+    RECOVER = 8
 
 
 class CharacterActionModifyReason(Enum):
@@ -95,51 +97,100 @@ class CharacterAction:
     def modify_probabilities(
         self,
         target: ActionType,
-        multiplier: int,
+        value: int,
+        mode: str,  # "multiply" or "fixed"
         reason: CharacterActionModifyReason,
         **kwargs,
     ):
-        # if reason == CharacterActionModifyReason.APPLY_GOAL:
-        #     if self.applied_goal:
-        #         logger.debug(f"Already applied goal")
-        #     else:
-        #         self.applied_goal = kwargs.get("goal")
+        """
+        Modify the probabilities of actions.
+
+        Parameters:
+        - target (ActionType): The action to modify.
+        - value (int): The multiplier or fixed probability value.
+        - mode (str): "multiply" to adjust by a multiplier, "fixed" to set a fixed probability.
+        - reason (CharacterActionModifyReason): The reason for modification.
+        - **kwargs: Additional arguments.
+        """
+        # Validate target action
         if target not in self.base_actions:
-            logger.debug(f"Cannot find action '{target}'")
+            logger.debug(f"Cannot find action '{target}' in base actions.")
+            return
 
-        new_total_prob = self.base_actions[target]["prob"] * multiplier + (
-            100 - self.base_actions[target]["prob"]
-        )
-
+        # Determine the new probability for the target action
+        original_target_prob = self.base_actions[target]["prob"]
         total_assigned_prob = 0
         last_action_type = None
-        for idx, action_type in enumerate(self.base_actions.keys()):
-            if idx == len(self.base_actions) - 1:
-                # Save the last action to adjust later
-                last_action_type = action_type
-                continue
+        if mode == "multiply":
+            adjusted_target_prob = max(0, original_target_prob * value)
 
-            if action_type == target:
-                new_prob = int(
-                    100
-                    * self.base_actions[action_type]["prob"]
-                    * multiplier
-                    / new_total_prob
-                )
-            else:
-                new_prob = int(
-                    100 * self.base_actions[action_type]["prob"] / new_total_prob
-                )
+            # Calculate the total probability of other actions
+            other_prob_sum = sum(
+                self.base_actions[action]["prob"]
+                for action in self.base_actions
+                if action != target
+            )
 
-            self.actions[action_type]["prob"] = new_prob
-            total_assigned_prob += new_prob
+            if other_prob_sum == 0:
+                logger.debug("Cannot adjust probabilities: no other actions defined.")
+                return
+
+            # Normalize probabilities
+            total_prob = adjusted_target_prob + other_prob_sum
+
+            for idx, (action_type, action_data) in enumerate(self.base_actions.items()):
+                if idx == len(self.base_actions) - 1:
+                    last_action_type = action_type
+                    continue
+
+                if action_type == target:
+                    new_prob = int(100 * adjusted_target_prob / total_prob)
+                else:
+                    new_prob = int(
+                        100 * self.base_actions[action_type]["prob"] / total_prob
+                    )
+
+                self.actions[action_type]["prob"] = new_prob
+                total_assigned_prob += new_prob
+
+        elif mode == "fixed":
+            adjusted_target_prob = max(0, min(100, int(value)))
+
+            remaining_prob = 100 - adjusted_target_prob
+
+            other_prob_sum = sum(
+                self.base_actions[action]["prob"]
+                for action in self.base_actions
+                if action != target
+            )
+
+            for idx, (action_type, action_data) in enumerate(self.base_actions.items()):
+                if idx == len(self.base_actions) - 1:
+                    last_action_type = action_type
+                    continue
+
+                if action_type == target:
+                    new_prob = adjusted_target_prob
+                else:
+                    new_prob = int(
+                        remaining_prob
+                        * self.base_actions[action_type]["prob"]
+                        / other_prob_sum
+                    )
+
+                self.actions[action_type]["prob"] = new_prob
+                total_assigned_prob += new_prob
+        else:
+            logger.debug(f"Invalid mode '{mode}'. Use 'multiply' or 'fixed'.")
+            return
 
         # Assign remaining probability to the last action
         if last_action_type:
-            self.actions[last_action_type]["prob"] = 100 - total_assigned_prob
+            self.actions[last_action_type]["prob"] = max(0, 100 - total_assigned_prob)
 
         logger.debug(
-            f"Applied multiplier to action: {target}={self.actions[target]['prob']}"
+            f"Modified probabilities for action '{target}' "
+            f"to {self.actions[target]['prob']} using mode '{mode}' (reason: {reason})"
         )
 
     def on_change(self):
@@ -175,10 +226,12 @@ class BasicCharacterAction(CharacterAction):
         self.base_actions = {
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
+            ActionType.RECOVER: {"class": Recover, "prob": 0},
         }
         self.actions = {
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
+            ActionType.RECOVER: {"class": Recover, "prob": 0},
         }
 
 
@@ -202,13 +255,7 @@ class CombatCharacterAction(CharacterAction):
             self.escape_threshold = 0.25
 
     def get_modified_actions(self, character):
-        cur_health = (
-            character.get_final_stat().get_stat(StatDefinition.CURRENT_HEALTH).value
-        )
-        max_health = (
-            character.get_final_stat().get_stat(StatDefinition.MAX_HEALTH).value
-        )
-        health_ratio = cur_health / max_health
+        health_ratio = character.get_character_stat().get_health_ratio()
         if health_ratio < self.escape_threshold:
             new_fight_prob = int(100 * (health_ratio / 2))
             return {
@@ -242,7 +289,7 @@ class FindItemCharacterAction(CharacterAction):
 
     def get_modified_actions(self, character):
         if self.attempt_counter < self.max_attempt:
-            return self.base_actions
+            return self.actions
         else:
             return {
                 ActionType.MOVE: {"class": Move, "prob": 100},

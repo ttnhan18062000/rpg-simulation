@@ -36,6 +36,7 @@ class ActionResult(Enum):
     TRAINED = 7
     HIT_ENEMY = 8
     MOVED_INTO_NEW_TILE = 9
+    RECOVERED = 10
 
 
 class Action:
@@ -189,12 +190,27 @@ class Train(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        TrainingEvent().execute(character)
+        character.gain_experience(100)
         character.gain_proficiency(Vitality.get_name(), 20)
         character.gain_proficiency(Strength.get_name(), 10)
         character.gain_proficiency(Endurance.get_name(), 5)
         character.gain_proficiency(Agility.get_name(), 5)
         return False, [ActionResult.TRAINED]
+
+
+class Recover(Action):
+    action_name = "Recover"
+
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        recover_health = character.character_stats.get_stat_value(
+            StatDefinition.REGENATION
+        )
+        character.character_stats.update_stat(
+            StatDefinition.CURRENT_HEALTH, recover_health
+        )
+        character.get_character_status().recover_debuff(duration_value=-1)
+        return False, [ActionResult.RECOVERED]
 
 
 class Standby(Action):
