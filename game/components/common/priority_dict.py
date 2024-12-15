@@ -1,60 +1,109 @@
 import heapq
 
+from data.logs.logger import logger
+
+
+class PriorityDictItem:
+    # Allow multiple values of a same key
+    def __init__(self, priority, value):
+        self.priority = priority
+        self.value = value
+
+    def set_priority(self, new_priority):
+        self.priority = new_priority
+
+    def get_priority(self):
+        return self.priority
+
+    def get_value(self):
+        return self.value
+
 
 class PriorityDict:
     def __init__(self):
-        self.heap = []  # Min-heap to store priorities and keys
-        self.entry_map = {}  # Map to store the key-value pairs
-        self.counter = 0  # Counter to break ties for elements with the same priority
+        self.dict: dict[str, list[PriorityDictItem]] = {}
 
-    def set(self, key, value, priority):
-        """Add or update a key with a given value and priority."""
-        if key in self.entry_map:
-            self.remove(key)  # Remove the old entry
-        # Add the new entry to the heap and map
-        entry = (priority, self.counter, key, value)
-        self.entry_map[key] = entry
-        heapq.heappush(self.heap, entry)
-        self.counter += 1
+    def set(self, priority, key, value):
+        new_item = PriorityDictItem(priority, value)
+        if key in self.dict:
+            self.dict[key].append(new_item)
+        else:
+            self.dict[key] = [new_item]
+        logger.debug(f"Added item {key} to priority dict with priority {priority}")
 
-    def set_with_highest_priority(self, key, value):
-        """Add or update a key with the highest priority (lowest numeric value)."""
-        highest_priority = min(self.heap[0][0], 0) if self.heap else 0
-        self.set(key, value, highest_priority - 1)
+    def set_with_highest_priority(self, target_key, target_value):
+        highest_priority = float("inf")
+        for key, values in self.dict.items():
+            for value in values:
+                cur_priority = value.get_priority()
+                if cur_priority < highest_priority:
+                    highest_priority = cur_priority
+                value.set_priority(cur_priority + 1)
+        if highest_priority == float("inf"):
+            highest_priority = 1
+        self.set(highest_priority, target_key, target_value)
+        return highest_priority
+
+    # Push an item to the middle of the priority queue, after a specific priority
+    # Push away all the items has lower priority
+    def set_to_priority(self, priority, target_key, target_value):
+        for key, values in self.dict.items():
+            for value in values:
+                cur_priority = value.get_priority()
+                if cur_priority >= priority:
+                    value.set_priority(cur_priority + 2)
+        self.set(priority + 1, target_key, target_value)
+        return priority + 1
 
     def get(self, key):
-        """Retrieve the value associated with the given key."""
-        if key in self.entry_map:
-            return self.entry_map[key][3]  # Return the value part of the entry
+        if key in self.dict:
+            return self.dict[key]
         raise KeyError(f"Key {key} not found.")
 
-    def has(self, key):
-        return key in self.entry_map
+    def has(self, key, target_value=None):
+        if key in self.dict:
+            if target_value:
+                for value in self.dict[key]:
+                    if target_value == value.get_value():
+                        return True
+            else:
+                return True
+        return False
 
     def empty(self):
-        return len(self.entry_map) == 0
+        return len(self.dict) == 0
 
-    def remove(self, key):
-        """Remove a key from the priority dictionary."""
-        if key in self.entry_map:
-            entry = self.entry_map.pop(key)
-            # Mark the entry as removed by invalidating its key
-            invalid_entry = (entry[0], entry[1], None, None)
-            heapq.heappush(self.heap, invalid_entry)
+    # TODO: Temporary use the priority as unique key to remove element
+    def remove_with_priority(self, target_priority):
+        for key, values in self.dict.items():
+            self.dict[key] = [
+                value for value in values if value.get_priority() != target_priority
+            ]
 
     def get_highest_priority(self):
-        """Retrieve the key-value pair with the highest priority."""
-        while self.heap:
-            priority, _, key, value = heapq.heappop(self.heap)
-            if key is not None:  # Skip invalidated entries
-                del self.entry_map[key]
-                return key, value
-        raise KeyError("Priority dictionary is empty.")
+        highest_priority = float("inf")
+        highest_priority_value = None
+        highest_idx = -1
+        highest_key = ""
+        for key, values in self.dict.items():
+            for idx, value in enumerate(values):
+                cur_priority = value.get_priority()
+                if cur_priority < highest_priority:
+                    highest_priority = cur_priority
+                    highest_priority_value = value.get_value()
+                    highest_idx = idx
+                    highest_key = key
+
+        self.dict[highest_key].pop(highest_idx)
+        if len(self.dict[highest_key]) == 0:
+            self.dict.pop(highest_key)
+
+        return highest_priority, highest_priority_value
 
     def __contains__(self, key):
         """Check if the key exists in the dictionary."""
-        return key in self.entry_map
+        return key in self.dict
 
     def __len__(self):
         """Get the number of valid entries in the dictionary."""
-        return len(self.entry_map)
+        return len(self.dict)

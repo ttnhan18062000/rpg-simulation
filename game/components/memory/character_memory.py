@@ -1,7 +1,7 @@
 from enum import Enum
 
 from components.world.store import EntityType, Store
-from components.character.memory.memory import (
+from components.memory.memory import (
     Memory,
     MemoryCharacter,
     MemoryEvent,

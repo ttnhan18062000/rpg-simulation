@@ -130,9 +130,9 @@ class GroundTile(Tile):
         return False
 
     def check_and_apply_status(self, character):
-        from components.character.character_class import Demon
+        from components.race.race import Demon
 
-        if character.get_faction() is Demon.__name__:
+        if character.get_race() is Demon.__name__:
             character.add_status(GroundTileBuff(3))
 
 
@@ -156,9 +156,9 @@ class TownTile(Tile):
         return False
 
     def check_and_apply_status(self, character):
-        from components.character.character_class import Human
+        from components.race.race import Human
 
-        if character.get_faction() is Human.__name__:
+        if character.get_race() is Human.__name__:
             character.add_status(TownTileBuff(3))
 
 

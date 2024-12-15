@@ -59,7 +59,7 @@ class Game:
         pygame.init()
         self.surface = pygame.display.set_mode(self.display_setting.window_size)
         self.font = pygame.font.Font(None, 20)
-        self.info_font = pygame.font.Font(None, 30)
+        self.info_font = pygame.font.Font(None, 25)
 
     def initialize_generators(self, grid_data):
         demon_spawn = False

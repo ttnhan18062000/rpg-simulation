@@ -46,16 +46,16 @@ class Monitoring:
         dead_count = {}
         alive_count = {}
         for character in all_characters:
-            character_class = character.get_faction()
+            character_race = character.get_race()
             if character.is_alive():
-                if character_class not in alive_count:
-                    alive_count[character_class] = 1
+                if character_race not in alive_count:
+                    alive_count[character_race] = 1
                 else:
-                    alive_count[character_class] += 1
+                    alive_count[character_race] += 1
             else:
-                if character_class not in dead_count:
-                    dead_count[character_class] = 1
+                if character_race not in dead_count:
+                    dead_count[character_race] = 1
                 else:
-                    dead_count[character_class] += 1
+                    dead_count[character_race] += 1
         logger.debug(f"DEAD: {dead_count}")
         logger.debug(f"ALIVE: {alive_count}")

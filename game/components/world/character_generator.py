@@ -2,7 +2,9 @@ import time
 import random
 import pygame
 
-from components.character.character_class import Human, Demon, RuinMob, ForestMob
+from components.race.race import Human, Demon, Ruin, Forest
+from components.archetype.archetype import Mob, Player
+from components.archetype.swordman_lineage import SwordTrainee
 from components.character.character import Character
 from components.character.character_info import CharacterInfo
 from components.character.character_stat import CharacterStat, StatDefinition
@@ -19,6 +21,10 @@ from components.action.strategy.move_strategy import (
     AgressiveMobMove,
     PassiveMobMove,
 )
+from components.action.strategy.use_skill_strategy import (
+    SaveEnergy,
+    HighestDamageOutput,
+)
 from components.character.character_action import (
     CharacterAction,
     BasicCharacterAction,
@@ -26,7 +32,7 @@ from components.character.character_action import (
     BasicMobCharacterAction,
 )
 from components.item.equipment import SteelArmor, SteelSword
-from components.action.goal import TrainingGoal
+from components.action.goal.goal import TrainingGoal
 from components.character.character_strategy import CharacterStrategyType
 from components.common.point import Point
 from components.world.store import get_store, EntityType
@@ -87,6 +93,9 @@ class HumanGenerator(CharacterGenerator):
             Human(),
             1,
         )
+        new_human.add_archetype(Player)
+        new_human.add_archetype(SwordTrainee)
+
         new_human.set_character_action(BasicCharacterAction())
         new_human.set_vision_range(7)
 
@@ -94,6 +103,7 @@ class HumanGenerator(CharacterGenerator):
         new_human.add_item(SteelSword())
 
         new_human.add_strategy(CharacterStrategyType.Move, ThinkingMove())
+        new_human.add_strategy(CharacterStrategyType.USE_SKILL, SaveEnergy())
         new_human.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
@@ -129,6 +139,8 @@ class DemonGenerator(CharacterGenerator):
             Demon(),
             1,
         )
+        new_demon.add_archetype(Player)
+        new_demon.add_archetype(SwordTrainee)
         new_demon.set_character_action(BasicCharacterAction())
         new_demon.set_vision_range(7)
 
@@ -136,6 +148,7 @@ class DemonGenerator(CharacterGenerator):
         new_demon.add_item(SteelSword())
 
         new_demon.add_strategy(CharacterStrategyType.Move, ThinkingMove())
+        new_demon.add_strategy(CharacterStrategyType.USE_SKILL, HighestDamageOutput())
         new_demon.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
@@ -168,9 +181,10 @@ class RuinMobGenerator(CharacterGenerator):
             CharacterInfo("RuinMob"),
             # stat,
             attributes,
-            RuinMob(),
+            Ruin(),
             1,
         )
+        new_mob.add_archetype(Mob)
         new_mob.set_character_action(BasicMobCharacterAction())
         new_mob.add_strategy(CharacterStrategyType.Move, AgressiveMobMove())
         new_mob.add_behavior(FightingBehavior.name, AggressiveBehavior())
@@ -202,9 +216,10 @@ class ForsetMobGenerator(CharacterGenerator):
             CharacterInfo("ForestMob"),
             # stat,
             attributes,
-            ForestMob(),
+            Forest(),
             1,
         )
+        new_mob.add_archetype(Mob)
         new_mob.set_character_action(BasicMobCharacterAction())
         new_mob.add_strategy(CharacterStrategyType.Move, PassiveMobMove())
         new_mob.add_behavior(FightingBehavior.name, PassiveBehavior())

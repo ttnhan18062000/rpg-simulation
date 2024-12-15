@@ -8,9 +8,9 @@ from components.common.path_finding import (
 )
 from components.world.store import get_store, EntityType
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
-from components.character.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
+from components.memory.memory import MemoryCharacter, MemoryEvent, PowerEst
 from components.utils.tile_utils import get_tile_object
-from components.action.goal import FindingItemGoal
+from components.action.goal.goal import FindingItemGoal
 
 from data.logs.logger import logger
 from data.game_settings import ACTION
@@ -105,7 +105,7 @@ class ThinkingMove(MoveStrategy):
             EntityType.CHARACTER, character.get_location(), is_sorted_distance=True
         )
         for memory_character in characters_in_memory:
-            if character.is_hostile_with(memory_character.get_faction()):
+            if character.is_hostile_with(memory_character.get_race()):
                 # TODO: Path finding movement, avoid obstacle
                 # TODO: smarter escape
                 # TODO: Add characteristic for complex movement
@@ -167,7 +167,7 @@ class AgressiveMobMove(MoveStrategy):
             EntityType.CHARACTER, character.get_location(), is_sorted_distance=True
         )
         for memory_character in characters_in_memory:
-            if character.is_hostile_with(memory_character.get_faction()):
+            if character.is_hostile_with(memory_character.get_race()):
                 # if memory_character.get_power_est() in [
                 #     PowerEst.MUCH_WEAKER,
                 #     PowerEst.WEAKER,
@@ -194,7 +194,7 @@ class PassiveMobMove(MoveStrategy):
             EntityType.CHARACTER, character.get_location(), is_sorted_distance=True
         )
         for memory_character in characters_in_memory:
-            if not character.is_ally_with(memory_character.get_faction()):
+            if not character.is_ally_with(memory_character.get_race()):
                 if memory_character.get_power_est() in [
                     PowerEst.STRONGER,
                     PowerEst.MUCH_STRONGER,

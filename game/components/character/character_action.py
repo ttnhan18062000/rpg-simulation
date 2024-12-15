@@ -11,6 +11,7 @@ from components.action.action import (
     Escape,
     Search,
     Recover,
+    LearnSkill,
     ActionResult,
 )
 from components.character.character_behavior import FightingBehavior
@@ -28,6 +29,7 @@ class ActionType(Enum):
     ESCAPE = 6
     SEARCH = 7
     RECOVER = 8
+    LEARN_SKILL = 9
 
 
 class CharacterActionModifyReason(Enum):
@@ -188,10 +190,7 @@ class CharacterAction:
         if last_action_type:
             self.actions[last_action_type]["prob"] = max(0, 100 - total_assigned_prob)
 
-        logger.debug(
-            f"Modified probabilities for action '{target}' "
-            f"to {self.actions[target]['prob']} using mode '{mode}' (reason: {reason})"
-        )
+        logger.debug(f"Modified probabilities for action '{target}': {self.actions}")
 
     def on_change(self):
         # Trigger when the character action is being replaced
@@ -202,6 +201,13 @@ class CharacterAction:
         #     self.is_applied_goal = False
         #     logger.debug(f"Reset applied goal")
         self.actions = copy.deepcopy(self.base_actions)
+        logger.debug(f"Reset probabilities: {self.actions}")
+
+    def set_kwargs(self, key, value):
+        self.kwargs[key] = value
+
+    def reset_kwargs_key(self, key):
+        self.kwargs[key] = None
 
     def has_action(self, action_type: ActionType):
         return action_type in self.base_actions
@@ -227,11 +233,13 @@ class BasicCharacterAction(CharacterAction):
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
             ActionType.RECOVER: {"class": Recover, "prob": 0},
+            ActionType.LEARN_SKILL: {"class": LearnSkill, "prob": 0},
         }
         self.actions = {
             ActionType.MOVE: {"class": Move, "prob": 50},
             ActionType.TRAIN: {"class": Train, "prob": 50},
             ActionType.RECOVER: {"class": Recover, "prob": 0},
+            ActionType.LEARN_SKILL: {"class": LearnSkill, "prob": 0},
         }
 
 

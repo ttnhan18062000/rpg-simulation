@@ -5,6 +5,7 @@ from components.action.strategy.base_strategy import BaseStrategy
 
 class CharacterStrategyType(Enum):
     Move = 1
+    USE_SKILL = 2
 
 
 class CharacterStrategy:
@@ -13,7 +14,7 @@ class CharacterStrategy:
 
     def get(self, strategy_type: CharacterStrategyType):
         if strategy_type not in self.strategies:
-            raise Exception(f"{strategy_type} is not found")
+            return None
         return self.strategies.get(strategy_type)
 
     def add(self, strategy_type: CharacterStrategyType, strategy: BaseStrategy):

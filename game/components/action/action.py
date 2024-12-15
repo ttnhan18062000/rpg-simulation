@@ -12,16 +12,22 @@ from components.common.path_finding import (
     get_move_from_target,
     check_valid_step,
 )
-from components.character.memory.memory import (
+from components.memory.memory import (
     MemoryCharacter,
     MemoryEvent,
     PowerEst,
     MemoryTile,
 )
-from components.character.memory.character_memory import CharacterMemoryType
+from components.memory.character_memory import CharacterMemoryType
 from components.utils.tile_utils import get_tile_object
 from components.character.character_strategy import CharacterStrategyType
-from components.attribute.attribute import Vitality, Endurance, Strength, Agility
+from components.attribute.attribute import (
+    Attribute,
+    Vitality,
+    Endurance,
+    Strength,
+    Agility,
+)
 from data.logs.logger import logger
 from data.game_settings import ACTION
 
@@ -37,6 +43,8 @@ class ActionResult(Enum):
     HIT_ENEMY = 8
     MOVED_INTO_NEW_TILE = 9
     RECOVERED = 10
+    LEARNING_SKILL = 11
+    LEARNED_SKILL = 12
 
 
 class Action:
@@ -87,7 +95,7 @@ class Action:
             if tile.is_combat_happen():
                 combat_id = tile.get_event(EventType.COMBAT)
                 combat = store.get(EntityType.EVENT, combat_id)
-                if character.get_faction() in combat.get_factions():
+                if character.get_race() in combat.get_factions():
                     memory = MemoryEvent(combat_id, point, event_type=EventType.COMBAT)
                     memory.remember_power(character, combat, perception_accuracy=90)
                     character.get_memory().add(
@@ -105,7 +113,7 @@ class Action:
                 for cid in character_ids_on_tile:
                     other_character = store.get(EntityType.CHARACTER, cid)
                     memory = MemoryCharacter(
-                        cid, other_character.pos, other_character.get_faction()
+                        cid, other_character.pos, other_character.get_race()
                     )
                     memory.remember_power(
                         character,
@@ -190,12 +198,40 @@ class Train(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        character.gain_experience(100)
-        character.gain_proficiency(Vitality.get_name(), 20)
-        character.gain_proficiency(Strength.get_name(), 10)
-        character.gain_proficiency(Endurance.get_name(), 5)
-        character.gain_proficiency(Agility.get_name(), 5)
+        # TODO: resolve the circular import
+        from components.action.goal.basic_development_goal import AttributeTrainingGoal
+
+        target_attr: Attribute = kwargs.get(
+            AttributeTrainingGoal.target_attribute_key, None
+        )
+
+        if target_attr:
+            target_attr_name = target_attr.get_name()
+            logger.debug(f"{character.get_info()} Training for {target_attr_name}")
+            character.gain_proficiency(target_attr_name, 20)
+        else:
+            logger.debug(f"{character.get_info()} Training for overall")
+            character.gain_experience(50)
+            character.gain_proficiency(Vitality.get_name(), 5)
+            character.gain_proficiency(Strength.get_name(), 5)
+            character.gain_proficiency(Endurance.get_name(), 5)
+            character.gain_proficiency(Agility.get_name(), 5)
         return False, [ActionResult.TRAINED]
+
+
+class LearnSkill(Action):
+    action_name = "LearnSkill"
+
+    @classmethod
+    def do_action(cls, character, **kwargs):
+        # TODO: this seems fucked up, better link between goal -> decide target skill to learn
+        is_success, reason = character.gain_mastery_proficiency(
+            character.get_current_goal().get_target_skill(), 25
+        )
+        # TODO: later thinking about learn failed, or learn specific mastery level
+        if is_success and reason == "Learned":
+            return False, [ActionResult.LEARNED_SKILL]
+        return False, [ActionResult.LEARNING_SKILL]
 
 
 class Recover(Action):
@@ -203,11 +239,14 @@ class Recover(Action):
 
     @classmethod
     def do_action(cls, character, **kwargs):
-        recover_health = character.character_stats.get_stat_value(
+        recover_value = character.character_stats.get_stat_value(
             StatDefinition.REGENATION
         )
         character.character_stats.update_stat(
-            StatDefinition.CURRENT_HEALTH, recover_health
+            StatDefinition.CURRENT_HEALTH, recover_value
+        )
+        character.character_stats.update_stat(
+            StatDefinition.CURRENT_ENERGY, recover_value
         )
         character.get_character_status().recover_debuff(duration_value=-1)
         return False, [ActionResult.RECOVERED]
@@ -229,7 +268,7 @@ class Fight(Action):
         store = get_store()
         combat_event_id = kwargs.get("combat_event_id")
         combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
-        charcter_faction = character.get_faction()
+        charcter_faction = character.get_race()
         # TODO: Proritize factions or specific targets
         target_character_ids = combat_event.get_target_character_ids_of_faction(
             charcter_faction
@@ -241,10 +280,29 @@ class Fight(Action):
         target_character_defense = target_character.character_stats.get_stat_value(
             StatDefinition.DEFENSE
         )
-        damage_dealt = get_final_damage_output(
-            source_power=character_power,
-            target_defense=target_character_defense,
-        )
+
+        # Select skill or basic attack
+        use_skill_strategy = character.get_strategy(CharacterStrategyType.USE_SKILL)
+        is_used_skill = False
+        if use_skill_strategy:
+            next_skill, skill_damage = use_skill_strategy.get_next_skill(character)
+            if next_skill and character.can_use_skill(next_skill):
+                is_used_skill = True
+                character.use_skill(next_skill)
+                damage_dealt = get_final_damage_output(
+                    source_damage=skill_damage,
+                    target_defense=target_character_defense,
+                )
+                logger.debug(
+                    f"{character.get_info()} used {next_skill.get_name()} cost {next_skill.get_energy_cost()}"
+                )
+        if not is_used_skill:
+            # Use basic attack, with multiplier is 1
+            damage_dealt = get_final_damage_output(
+                source_damage=character_power,
+                target_defense=target_character_defense,
+            )
+            logger.debug(f"{character.get_info()} used basic attack")
         target_character.character_stats.update_stat(
             StatDefinition.CURRENT_HEALTH,
             -damage_dealt,
@@ -280,7 +338,7 @@ class Escape(Action):
         combat_event_id = kwargs.get("combat_event_id")
         combat_event: CombatEvent = store.get(EntityType.EVENT, combat_event_id)
 
-        total_hostile_power = combat_event.get_hostile_power(character.get_faction())
+        total_hostile_power = combat_event.get_hostile_power(character.get_race())
         character_power = character.get_power()
         escape_chance = ACTION.BASE_ESCAPE_CHANCE
         if total_hostile_power > ACTION.LOW_ESCAPE_POWER_THRESHOLD * character_power:
@@ -294,7 +352,7 @@ class Escape(Action):
         if random.random() < escape_chance:
             logger.debug(f"{character.get_info()} escape successfully")
             character_id = character.get_info().id
-            combat_event.remove_character_id(character.get_faction(), character_id)
+            combat_event.remove_character_id(character.get_race(), character_id)
 
             character.exit_combat()
 
