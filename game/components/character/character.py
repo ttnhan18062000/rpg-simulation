@@ -25,6 +25,7 @@ from components.character.character_strategy import (
     CharacterStrategyType,
 )
 from components.character.character_stat import CharacterStat, StatDefinition
+from components.character.stat import NumericalStat
 from components.attribute.attribute import AttributeProficiencyResult, Attribute
 from components.attribute.character_attribute import CharacterAttribute
 from components.character.character_status import CharacterStatus
@@ -195,6 +196,9 @@ class Character(GameObject):
 
     def get_final_stat(self):
         return self.get_character_stat().get_final_stat(self)
+
+    def get_final_attributes(self):
+        return self.get_character_attributes().get_final_attributes()
 
     def gain_proficiency(self, attr_name: str, value: int):
         attr = self.get_character_attributes().get_base_attr(attr_name)
@@ -584,14 +588,28 @@ class Character(GameObject):
     def add_skill(self, skill):
         self.character_archetype.add_skill(skill)
 
-    def get_all_skills(self):
-        return self.character_archetype.get_all_skills()
-
     def get_skill(self, skill):
         return self.character_archetype.get_skill(skill)
 
+    def get_skills(self):
+        return self.character_archetype.get_skills()
+
     def has_skill(self, skill):
         return self.character_archetype.has_skill(skill)
+
+    def can_use_skill(self, skill):
+        energy_cost = skill.get_energy_cost()
+        return (
+            self.character_stats.get_stat_value(StatDefinition.CURRENT_ENERGY)
+            >= energy_cost
+        )
+
+    def use_skill(self, skill):
+        energy_cost = skill.get_energy_cost()
+        self.character_stats.get_stat(StatDefinition.CURRENT_ENERGY).modify_with_value(
+            -energy_cost, NumericalStat.NumericalType.REAL
+        )
+        return True
 
     def gain_mastery_proficiency(self, skill, mastery_point: int):
         return self.character_archetype.gain_mastery_proficiency(skill, mastery_point)

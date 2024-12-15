@@ -33,7 +33,7 @@ class CharacterArchetype:
     def get_character_skill(self):
         return self.character_skill
 
-    def get_all_skills(self):
+    def get_skills(self):
         return self.character_skill.get_skills()
 
     def get_skill_names_string(self):

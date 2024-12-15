@@ -21,6 +21,10 @@ from components.action.strategy.move_strategy import (
     AgressiveMobMove,
     PassiveMobMove,
 )
+from components.action.strategy.use_skill_strategy import (
+    SaveEnergy,
+    HighestDamageOutput,
+)
 from components.character.character_action import (
     CharacterAction,
     BasicCharacterAction,
@@ -99,6 +103,7 @@ class HumanGenerator(CharacterGenerator):
         new_human.add_item(SteelSword())
 
         new_human.add_strategy(CharacterStrategyType.Move, ThinkingMove())
+        new_human.add_strategy(CharacterStrategyType.USE_SKILL, SaveEnergy())
         new_human.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )
@@ -143,6 +148,7 @@ class DemonGenerator(CharacterGenerator):
         new_demon.add_item(SteelSword())
 
         new_demon.add_strategy(CharacterStrategyType.Move, ThinkingMove())
+        new_demon.add_strategy(CharacterStrategyType.USE_SKILL, HighestDamageOutput())
         new_demon.add_behavior(
             FightingBehavior.name, FightingBehavior.create_random_behavior()
         )

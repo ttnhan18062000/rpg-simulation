@@ -59,12 +59,18 @@ class Skill:
     def get_mastery(self):
         return self.mastery
 
-    def get_damage(self, character_stat, character_final_attrs):
-        return (
-            character_stat.get_stat_value(StatDefinition.POWER)
-            * self.get_scale_factor(character_final_attrs)
+    def is_learned(self):
+        return self.mastery != SkillMastery.LEARNING
+
+    def get_damage(self, character_stat, character_final_attrs) -> int:
+        total_multiplier = (
+            self.get_scale_factor(character_final_attrs)
             * self.mastery_multipliers[self.mastery]
             * self.base_multiplier
+        )
+        logger.debug(f"Total multiplier of {self.get_name()}: {total_multiplier}")
+        return int(
+            character_stat.get_stat_value(StatDefinition.POWER) * total_multiplier
         )
 
     def increase_mastery_level(self):

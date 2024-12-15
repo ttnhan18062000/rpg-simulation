@@ -280,10 +280,29 @@ class Fight(Action):
         target_character_defense = target_character.character_stats.get_stat_value(
             StatDefinition.DEFENSE
         )
-        damage_dealt = get_final_damage_output(
-            source_power=character_power,
-            target_defense=target_character_defense,
-        )
+
+        # Select skill or basic attack
+        use_skill_strategy = character.get_strategy(CharacterStrategyType.USE_SKILL)
+        is_used_skill = False
+        if use_skill_strategy:
+            next_skill, skill_damage = use_skill_strategy.get_next_skill(character)
+            if next_skill and character.can_use_skill(next_skill):
+                is_used_skill = True
+                character.use_skill(next_skill)
+                damage_dealt = get_final_damage_output(
+                    source_damage=skill_damage,
+                    target_defense=target_character_defense,
+                )
+                logger.debug(
+                    f"{character.get_info()} used {next_skill.get_name()} cost {next_skill.get_energy_cost()}"
+                )
+        if not is_used_skill:
+            # Use basic attack, with multiplier is 1
+            damage_dealt = get_final_damage_output(
+                source_damage=character_power,
+                target_defense=target_character_defense,
+            )
+            logger.debug(f"{character.get_info()} used basic attack")
         target_character.character_stats.update_stat(
             StatDefinition.CURRENT_HEALTH,
             -damage_dealt,

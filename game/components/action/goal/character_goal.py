@@ -80,7 +80,8 @@ class CharacterGoal:
             and self.current_goal.can_apply_to(character)
         ):
             self.current_apply_status = CharacterGoalStatus.ALREADY_APPLIED
-            self.current_goal.apply_to_character(character)
+            if not self.current_goal.is_applied_to_character():
+                self.current_goal.apply_to_character(character)
             self.current_goal.apply_to_actions(character)
             logger.debug(f"Applied goal {self.current_goal}")
 
