@@ -57,6 +57,12 @@ class NumericalStat(Stat):
         elif other.numerical_type is NumericalStat.NumericalType.PERCENTAGE:
             self.value += self.value * other.value
 
+    def modify_with_value(self, value, numerical_type: "NumericalStat.NumericalType"):
+        if numerical_type is NumericalStat.NumericalType.REAL:
+            self.value += value
+        elif numerical_type is NumericalStat.NumericalType.PERCENTAGE:
+            self.value += self.value * value
+
     def clone(self):
         return NumericalStat(
             self.value, **{NumericalStat.numerical_type_key: self.numerical_type}

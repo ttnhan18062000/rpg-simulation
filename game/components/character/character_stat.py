@@ -17,11 +17,15 @@ class StatDefinition(Enum):
     REGENATION = 5
     DEFENSE = 6
     RESISTANCE = 7
+    MAX_ENERGY = 8
+    CURRENT_ENERGY = 9
 
 
 stat_class = {
     StatDefinition.MAX_HEALTH: NumericalStat,
+    StatDefinition.MAX_ENERGY: NumericalStat,
     StatDefinition.CURRENT_HEALTH: NumericalStat,
+    StatDefinition.CURRENT_ENERGY: NumericalStat,
     StatDefinition.POWER: NumericalStat,
     StatDefinition.SPEED: NumericalStat,
     StatDefinition.REGENATION: NumericalStat,
@@ -61,6 +65,22 @@ class CharacterStat:
         total_stat_effect = attr.get_total_stat_effect()
         # TODO: optimize later, here is slightly hard-code
         for stat_def, stat in total_stat_effect.items():
+            if stat_def == StatDefinition.MAX_HEALTH:
+                max_health = (
+                    self.get_stat_value(StatDefinition.MAX_HEALTH) + stat.get_value()
+                )
+                cur_health_value = min(1, int(self.get_health_ratio()) * max_health)
+                self.get_stat(StatDefinition.CURRENT_HEALTH).modify_with_value(
+                    cur_health_value, NumericalStat.NumericalType.REAL
+                )
+            if stat_def == StatDefinition.MAX_ENERGY:
+                max_energy = (
+                    self.get_stat_value(StatDefinition.MAX_ENERGY) + stat.get_value()
+                )
+                cur_energy_value = min(1, int(self.get_health_ratio()) * max_energy)
+                self.get_stat(StatDefinition.CURRENT_ENERGY).modify_with_value(
+                    cur_energy_value, NumericalStat.NumericalType.REAL
+                )
             if stat_def in self.stats_list:
                 self.get_stat(stat_def).modify(stat)
             else:
@@ -79,10 +99,15 @@ class CharacterStat:
                     else:
                         self.stats_list[stat_def] = stat
 
-        # TODO: Currently inefficiently when first initialization, we need to set current health = max health
+        # TODO: Currently inefficiently when first initialization, we need to set current health/energy = max health/energy
         self.stats_list[StatDefinition.CURRENT_HEALTH] = CharacterStat.create_stat(
             StatDefinition.CURRENT_HEALTH,
             self.get_stat_value(StatDefinition.MAX_HEALTH),
+            **{NumericalStat.numerical_type_key: NumericalStat.NumericalType.REAL},
+        )
+        self.stats_list[StatDefinition.CURRENT_ENERGY] = CharacterStat.create_stat(
+            StatDefinition.CURRENT_ENERGY,
+            self.get_stat_value(StatDefinition.MAX_ENERGY),
             **{NumericalStat.numerical_type_key: NumericalStat.NumericalType.REAL},
         )
 
@@ -129,6 +154,12 @@ class CharacterStat:
             if stat_def == StatDefinition.CURRENT_HEALTH:
                 self.stats_list[stat_def].value = min(
                     self.stats_list[StatDefinition.MAX_HEALTH].value,
+                    self.stats_list[stat_def].value,
+                )
+
+            if stat_def == StatDefinition.CURRENT_ENERGY:
+                self.stats_list[stat_def].value = min(
+                    self.stats_list[StatDefinition.MAX_ENERGY].value,
                     self.stats_list[stat_def].value,
                 )
         else:
@@ -187,8 +218,18 @@ class CharacterStat:
             / self.get_stat(StatDefinition.MAX_HEALTH).value
         )
 
+    def get_energy_ratio(self):
+        return (
+            self.get_stat(StatDefinition.CURRENT_ENERGY).value
+            / self.get_stat(StatDefinition.MAX_ENERGY).value
+        )
+
     def get_health_visualization(self):
-        visualization = convert_to_progress_string(self.get_health_ratio(), 20)
+        visualization = convert_to_progress_string(self.get_health_ratio(), 15)
+        return visualization
+
+    def get_energy_visualization(self):
+        visualization = convert_to_progress_string(self.get_energy_ratio(), 15)
         return visualization
 
     def __str__(self) -> str:

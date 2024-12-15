@@ -76,7 +76,7 @@ class CombatEvent(Event):
                 #     )
                 #     if not any(
                 #         hostile_faction in all_factions
-                #         for hostile_faction in character_of_faction.get_hostile_factions()
+                #         for hostile_faction in character_of_faction.get_hostile_races()
                 #     ):
                 #         self.exit_combat_faction(faction)
 
@@ -142,7 +142,7 @@ class CombatEvent(Event):
 
         # TODO: Clean killed character and end combat for ally characters should be handled by another component
         # Remove dead character corpse
-        target_faction = killed_character.get_faction()
+        target_faction = killed_character.get_race()
         killed_character_id = killed_character.get_info().id
         killed_character.set_state("dead")
         tile_id = killed_character.tile_id
@@ -152,7 +152,7 @@ class CombatEvent(Event):
         self.remove_character_id(target_faction, killed_character_id)
 
         # if len(self.get_character_ids_with_faction(target_faction)) == 0:
-        #     self.exit_combat_faction(character.get_faction())
+        #     self.exit_combat_faction(character.get_race())
         #     return True
 
         # return False

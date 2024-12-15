@@ -16,7 +16,7 @@ from components.common.point import Point
 from components.character.character import Character
 from components.character.character_stat import StatDefinition
 from components.utils.tile_utils import get_tile_object
-from components.character.character_class import Human, Demon
+from components.race.race import Human, Demon
 
 from data.logs.logger import logger
 
@@ -122,7 +122,7 @@ class World:
                         EntityType.CHARACTER
                     )
                     if (
-                        recently_added_character.get_faction()
+                        recently_added_character.get_race()
                         in self.tracking_info_character_factions
                     ):
                         self.tracking_info_characters[

@@ -28,13 +28,13 @@ class Attribute:
         attr_name = cls.get_name()
         return attr_name[:3].upper() if len(attr_name) >= 3 else attr_name.upper()
 
-    def __init__(self, value: int, cap=None) -> None:
+    def __init__(self, value: int, cap=None, proficiency=0) -> None:
         self.value = value
         if cap:
             self.cap = cap
         else:
-            self.cap = value * 2
-        self.current_proficiency = 0
+            self.cap = value + 2
+        self.current_proficiency = proficiency
 
     def __add__(self, other):
         if self.get_name() != other.get_name():
@@ -54,6 +54,26 @@ class Attribute:
                 return self.__class__(self.value * other.value)
         return NotImplemented
 
+    def __lt__(self, other):
+        if isinstance(other, Attribute):
+            return self.value < other.value
+        raise TypeError(f"Cannot compare CustomObject with {type(other)}")
+
+    def __le__(self, other):
+        if isinstance(other, Attribute):
+            return self.value <= other.value
+        raise TypeError(f"Cannot compare CustomObject with {type(other)}")
+
+    def __gt__(self, other):
+        if isinstance(other, Attribute):
+            return self.value > other.value
+        raise TypeError(f"Cannot compare CustomObject with {type(other)}")
+
+    def __ge__(self, other):
+        if isinstance(other, Attribute):
+            return self.value >= other.value
+        raise TypeError(f"Cannot compare CustomObject with {type(other)}")
+
     def get_info(self):
         return f"{self.get_proficiency_visualization()} {self.value} ({self.cap})"
 
@@ -71,7 +91,7 @@ class Attribute:
         return 10 * (self.value + 1)
 
     def clone(self):
-        return self.__class__(self.value, self.cap)
+        return self.__class__(self.value, self.cap, self.current_proficiency)
 
     def set_value(self, value: int):
         self.value = value
@@ -93,12 +113,14 @@ class Attribute:
         )
 
     def increase_proficiency(self, value: int):
+        if self.is_capped():
+            return AttributeProficiencyResult.IS_CAPPED
         self.current_proficiency += value
         next_level_proficiency = self.get_next_level_proficiency()
         if self.current_proficiency >= next_level_proficiency:
             if not self.is_capped():
                 self.increase_level()
-                self.current_proficiency -= next_level_proficiency
+                self.current_proficiency = 0
                 return AttributeProficiencyResult.IS_LEVELED_UP
             else:
                 return AttributeProficiencyResult.IS_CAPPED
@@ -149,10 +171,11 @@ class Attribute:
 
 
 class Vitality(Attribute):
-    description = "Tankiness of the character"
+    description = "HP/MP of the character"
     stat_effect_mutlipliers = {
         StatDefinition.MAX_HEALTH: 20,
-        StatDefinition.REGENATION: 2,
+        StatDefinition.MAX_ENERGY: 20,
+        StatDefinition.REGENATION: 1,
     }
     contain_stat_effect = True
     contain_special_effect = False
@@ -161,8 +184,9 @@ class Vitality(Attribute):
 class Endurance(Attribute):
     description = "Tankiness of the character"
     stat_effect_mutlipliers = {
-        StatDefinition.DEFENSE: 1,
-        StatDefinition.RESISTANCE: 1,
+        StatDefinition.MAX_HEALTH: 20,
+        StatDefinition.DEFENSE: 2,
+        StatDefinition.RESISTANCE: 2,
     }
     contain_stat_effect = True
     contain_special_effect = False

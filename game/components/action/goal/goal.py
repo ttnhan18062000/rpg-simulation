@@ -12,16 +12,44 @@ from data.logs.logger import logger
 
 
 class Goal:
+    # TODO: Allow multiple goals added, for the case of Archetype Unlocking
+    unique = False
+
     def __init__(self) -> None:
+        self.applied_to_character = False
         pass
 
     def is_complete(self, character):
         pass
 
+    def is_block(self, character):
+        return False
+
+    def resolve_block(self, character):
+        self.on_complete(character)
+        lowest_priority = self.add_resolve_block_goals(character)
+        character.add_goal(lowest_priority, self)
+
+    def add_resolve_block_goals(self, character):
+        pass
+
+    def is_applied_to_character(self):
+        return self.applied_to_character
+
+    def set_applied_to_character(self):
+        self.applied_to_character = True
+
+    @classmethod
+    def is_unique(cls):
+        return cls.unique
+
     def can_apply_to(self, character):
         pass
 
     def apply_to_actions(self, character):
+        pass
+
+    def apply_to_character(self, character):
         pass
 
     def on_complete(self, character):
@@ -45,6 +73,9 @@ class Goal:
 
 
 class TrainingGoal(Goal):
+    target_level_key = "target_level"
+
+    # TODO: need refactor to use the target_level_key
     # Keep training until reach a given level
     def __init__(self, **kwargs) -> None:
         super().__init__()
@@ -57,16 +88,16 @@ class TrainingGoal(Goal):
         character.get_character_action().reset_probabilities(
             CharacterActionModifyReason.APPLY_GOAL
         )
-        character.add_goal(
-            1, FightingGoal(**{"target_level": character.get_current_level() + 1})
-        )
+        # character.add_goal(
+        #     1, FightingGoal(**{"target_level": character.get_current_level() + 1})
+        # )
 
     def can_apply_to(self, character):
         return character.get_character_action().has_action(ActionType.TRAIN)
 
     def apply_to_actions(self, character):
         character.get_character_action().modify_probabilities(
-            ActionType.TRAIN, 5, "multiply", CharacterActionModifyReason.APPLY_GOAL
+            ActionType.TRAIN, 80, "fixed", CharacterActionModifyReason.APPLY_GOAL
         )
 
     def __str__(self):
@@ -109,7 +140,7 @@ class FightingGoal(Goal):
 
     def apply_to_actions(self, character):
         character.get_character_action().modify_probabilities(
-            ActionType.MOVE, 5, "multiply", CharacterActionModifyReason.APPLY_GOAL
+            ActionType.MOVE, 80, "fixed", CharacterActionModifyReason.APPLY_GOAL
         )
 
     def __str__(self):

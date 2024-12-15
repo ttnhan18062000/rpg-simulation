@@ -5,7 +5,7 @@ from components.character.character_action import (
     CharacterActionModifyReason,
 )
 
-from components.character.character_goal import CharacterGoalStatus, CharacterGoal
+from components.action.goal.character_goal import CharacterGoalStatus, CharacterGoal
 
 
 from data.logs.logger import logger

@@ -34,7 +34,7 @@ class MemoryCharacter(Memory):
         self.power_value_est: PowerEst = PowerEst.UNKNOWN
         self.faction = faction
 
-    def get_faction(self):
+    def get_race(self):
         return self.faction
 
     def remember_power(self, character, target_character, perception_accuracy=90):
@@ -77,7 +77,7 @@ class MemoryEvent(Memory):
     # since remember_power only belong to combat event
     def remember_power(self, character, combat, perception_accuracy=90):
         # Calculate power ratio
-        character_faction = character.get_faction()
+        character_faction = character.get_race()
         ratio = combat.get_hostile_power(character_faction) / (
             character.get_power() + combat.get_total_power_by_faction(character_faction)
         )
