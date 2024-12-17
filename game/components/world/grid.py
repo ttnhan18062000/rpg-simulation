@@ -21,11 +21,14 @@ class Grid:
 
     def initialize_tiles(self, grid_data):
         store = get_store()
-        # self.tiles = [
-        #     [tile_map[tile_id]() for tile_id in row]
-        #     for row in self.convert_grid_data(grid_data)
-        # ]
-        self.tiles = [[tile_map[tile_id]() for tile_id in row] for row in grid_data]
+        # TODO: The tile should contain its own location
+        self.tiles = []
+        for x in range(len(grid_data)):
+            tile_row = []
+            for y in range(len(grid_data[x])):
+                tile_row.append(tile_map[grid_data[x][y]](Point(x, y)))
+            self.tiles.append(tile_row)
+        # self.tiles = [[tile_map[tile_id]() for tile_id in row] for row in grid_data]
         for row in self.tiles:
             for tile in row:
                 store.add(EntityType.TILE, tile.id, tile)
@@ -39,7 +42,7 @@ class Grid:
     def get_tile(self, pos: Point):
         if self.is_valid_location(pos):
             return self.tiles[pos.x][pos.y]
-        raise Exception(f"The povided location {pos.x},{pos.y} is not valid")
+        return None
 
     def is_moveable_tile(self, pos: Point):
         if not self.is_valid_location(pos):

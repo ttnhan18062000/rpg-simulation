@@ -4,8 +4,9 @@ import sys
 # Set up logging with UTF-8 encoding for the StreamHandler
 logging.basicConfig(
     level=logging.DEBUG,  # Set the log level
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",  # Log message format
-    datefmt="%Y-%m-%d %H:%M:%S",  # Date format
+    format="%(asctime)s - %(levelname)s - %(module)s - %(funcName)s\n%(message)s",  # Log message format
+    # datefmt="%Y-%m-%d %H:%M:%S",  # Date format
+    datefmt="%H:%M:%S",
     handlers=[
         logging.FileHandler(
             "app.log", encoding="utf-8"
@@ -15,6 +16,3 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger(__name__)
-
-# Example log with special characters
-logger.info("This is a test log with special characters: ñ, é, ü")

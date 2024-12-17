@@ -5,6 +5,7 @@ from components.common.point import Point
 from components.common.path_finding import (
     get_move_from_target,
     check_valid_step,
+    compute_shortest_path,
 )
 from components.world.store import get_store, EntityType
 from components.action.event import Event, CombatEvent, TrainingEvent, EventType
@@ -51,6 +52,15 @@ class ThinkingMove(MoveStrategy):
     def get_next_move(cls, character):
         # TODO: Prioritize between goals or decisions
         # Currently finding items first
+
+        # All the tiles have seen, even in the past
+        all_visible_tiles = character.get_memory().get_all(EntityType.TILE)
+        # Because the checking for obstacle is perform inside the path_finding module, we don't need to provide it here
+        # So we just set all tile visible value is 0
+        visible_tiles_dict = {
+            memory_tile.get_tile().get_pos(): 0 for memory_tile in all_visible_tiles
+        }
+
         if character.has_goal():
             current_goal = character.get_current_goal()
             if current_goal.is_finding_item():
@@ -73,11 +83,16 @@ class ThinkingMove(MoveStrategy):
                         logger.debug(
                             f"{character.get_info()} has the memory about the {tile.get_name()} contain the satisfied items, moving into it"
                         )
-                        return get_move_from_target(
+                        next_move = compute_shortest_path(
                             character,
+                            visible_tiles_dict,
                             character.pos,
                             memory_tile.get_location(),
-                            is_chasing=True,
+                        )
+                        return (
+                            next_move
+                            if next_move
+                            else RandomMove.get_next_move(character)
                         )
 
         # Join nearby combat of own faction if favorable
@@ -93,11 +108,14 @@ class ThinkingMove(MoveStrategy):
                     logger.debug(
                         f"{character.get_info()}:{character.get_power()} is joining combat {memory_event.get_id()}:{memory_event.get_location()}:{memory_event.get_power_est()}"
                     )
-                    return get_move_from_target(
+                    next_move = compute_shortest_path(
                         character,
+                        visible_tiles_dict,
                         character.pos,
                         memory_event.get_location(),
-                        is_chasing=True,
+                    )
+                    return (
+                        next_move if next_move else RandomMove.get_next_move(character)
                     )
 
         # Chase or escape nearby enemies
@@ -128,11 +146,14 @@ class ThinkingMove(MoveStrategy):
                     logger.debug(
                         f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
                     )
-                    return get_move_from_target(
+                    next_move = compute_shortest_path(
                         character,
+                        visible_tiles_dict,
                         character.pos,
                         memory_character.get_location(),
-                        is_chasing=True,
+                    )
+                    return (
+                        next_move if next_move else RandomMove.get_next_move(character)
                     )
 
         # Not found any enemy, random movement
@@ -142,6 +163,14 @@ class ThinkingMove(MoveStrategy):
 class AgressiveMobMove(MoveStrategy):
     @classmethod
     def get_next_move(cls, character):
+        # All the tiles have seen, even in the past
+        all_visible_tiles = character.get_memory().get_all(EntityType.TILE)
+        # Because the checking for obstacle is perform inside the path_finding module, we don't need to provide it here
+        # So we just set all tile visible value is 0
+        visible_tiles_dict = {
+            memory_tile.get_tile().get_pos(): 0 for memory_tile in all_visible_tiles
+        }
+
         # Join nearby combat of own faction if favorable
         events_in_memory = character.get_memory().get_all(
             EntityType.EVENT, character.get_location(), is_sorted_distance=True
@@ -155,12 +184,13 @@ class AgressiveMobMove(MoveStrategy):
                 logger.debug(
                     f"{character.get_info()}:{character.get_power()} is joining combat {memory_event.get_id()}:{memory_event.get_location()}:{memory_event.get_power_est()}"
                 )
-                return get_move_from_target(
+                next_move = compute_shortest_path(
                     character,
+                    visible_tiles_dict,
                     character.pos,
                     memory_event.get_location(),
-                    is_chasing=True,
                 )
+                return next_move if next_move else RandomMove.get_next_move(character)
 
         # Chase or escape nearby enemies
         characters_in_memory = character.get_memory().get_all(
@@ -175,12 +205,13 @@ class AgressiveMobMove(MoveStrategy):
                 logger.debug(
                     f"{character.get_info()}:{character.get_power()} is chasing {memory_character.get_power_est()}"
                 )
-                return get_move_from_target(
+                next_move = compute_shortest_path(
                     character,
+                    visible_tiles_dict,
                     character.pos,
                     memory_character.get_location(),
-                    is_chasing=True,
                 )
+                return next_move if next_move else RandomMove.get_next_move(character)
 
         # Not found any enemy, random movement
         return RandomMove.get_next_move(character)

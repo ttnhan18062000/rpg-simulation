@@ -49,16 +49,19 @@ class CharacterMemory:
         if key in self.memories:
             self.memories.pop(key)
 
-    def get_all(self, entity_type: EntityType):
-        return [
-            obj
-            for key, obj in self.temporary_memories.items()
-            if key.startswith(f"{entity_type.value}")
-        ]
+    # def get_all(self, entity_type: EntityType):
+    #     return [
+    #         obj
+    #         for key, obj in self.temporary_memories.items()
+    #         if key.startswith(f"{entity_type.value}")
+    #     ]
 
     # TODO: Better management for temporary and permanent memories
     def get_all(
-        self, entity_type: EntityType, target_point: Point, is_sorted_distance=True
+        self,
+        entity_type: EntityType,
+        target_point: Point = None,
+        is_sorted_distance=False,
     ):
         if entity_type is EntityType.TILE:
             unsorted_memories = [

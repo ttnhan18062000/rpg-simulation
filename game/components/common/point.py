@@ -37,6 +37,14 @@ class Point:
             return not self.__eq__(other)
         return True
 
+    def __lt__(self, other):
+        if isinstance(other, Point):
+            return self.x == other.x and self.y == other.y
+        return False
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
     def reverse(self):
         self.x = -self.x
         self.y = -self.y

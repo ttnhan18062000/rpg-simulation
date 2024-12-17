@@ -138,6 +138,8 @@ class Move(Action):
         next_move = character.get_strategy(CharacterStrategyType.Move).get_next_move(
             character
         )
+        if not character.is_mob():
+            logger.debug(f"1111111 {character.pos} -> {next_move}")
 
         previous_tile = get_tile_object(character.pos)
         previous_tile.remove_character_id(character.get_info().id)
@@ -210,12 +212,12 @@ class Train(Action):
             logger.debug(f"{character.get_info()} Training for {target_attr_name}")
             character.gain_proficiency(target_attr_name, 20)
         else:
-            logger.debug(f"{character.get_info()} Training for overall")
+            logger.debug(f"{character.get_info()} Training for experience")
             character.gain_experience(50)
-            character.gain_proficiency(Vitality.get_name(), 5)
-            character.gain_proficiency(Strength.get_name(), 5)
-            character.gain_proficiency(Endurance.get_name(), 5)
-            character.gain_proficiency(Agility.get_name(), 5)
+            # character.gain_proficiency(Vitality.get_name(), 5)
+            # character.gain_proficiency(Strength.get_name(), 5)
+            # character.gain_proficiency(Endurance.get_name(), 5)
+            # character.gain_proficiency(Agility.get_name(), 5)
         return False, [ActionResult.TRAINED]
 
 

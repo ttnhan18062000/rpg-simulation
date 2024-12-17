@@ -161,9 +161,10 @@ class Game:
         ):
             self.world.set_already_focused_on_character()
             cell_size = self.display_setting.cell_size
-            main_screen_width, main_screen_height = (
-                self.display_setting.main_screen_size
-            )
+            (
+                main_screen_width,
+                main_screen_height,
+            ) = self.display_setting.main_screen_size
             character_pos = selected_character.get_pos()
             offset_x = int(character_pos.x * cell_size - main_screen_width / 2)
             offset_y = int(character_pos.y * cell_size - main_screen_height / 2)
